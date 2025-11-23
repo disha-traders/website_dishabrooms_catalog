@@ -35,10 +35,10 @@ export default function Products() {
 
   return (
     <Layout>
-      <div className="bg-brand-cetacean text-white py-12">
+      <div className="hero-custom py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-heading font-bold mb-4">Our Products</h1>
-          <p className="text-gray-300 max-w-2xl">
+          <p className="max-w-2xl opacity-90">
             Explore our wide range of high-quality cleaning products designed for durability and efficiency.
           </p>
         </div>

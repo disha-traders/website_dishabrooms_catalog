@@ -21,11 +21,10 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-brand-cetacean to-brand-blue text-white overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        <div className="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-black/40 to-transparent z-0 hidden lg:block"></div>
+      <section className="hero-custom relative overflow-hidden">
+        {/* Removed background overlays to let the CSS gradient shine through as requested */}
         
-        <div className="container mx-auto px-4 py-20 lg:py-32 relative z-10">
+        <div className="container mx-auto px-4 py-12 lg:py-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6 animate-in slide-in-from-left duration-700">
               <div className="inline-block bg-brand-teal/20 border border-brand-teal/30 backdrop-blur-sm px-4 py-1 rounded-full text-brand-chartreuse text-sm font-bold uppercase tracking-widest">
@@ -34,20 +33,18 @@ export default function Home() {
               <h1 className="text-4xl lg:text-6xl font-heading font-bold leading-tight">
                 {config.hero.title}
               </h1>
-              <p className="text-lg lg:text-xl text-gray-200 max-w-xl leading-relaxed">
+              <p className="text-lg lg:text-xl max-w-xl leading-relaxed">
                 {config.tagline} <br/>
                 Manufacturing grass brooms, coco brooms, yarn mops, and more with pride in Tamil Nadu.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link href="/products">
-                  <Button size="lg" className="bg-brand-chartreuse text-brand-cetacean hover:bg-brand-chartreuse/90 font-bold text-base px-8 rounded-full h-14 shadow-lg shadow-brand-chartreuse/20 transition-all hover:scale-105">
+                  <a className="btn-primary-custom">
                     View Product Catalog
-                  </Button>
+                  </a>
                 </Link>
-                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="lg" className="border-brand-teal text-brand-teal hover:bg-brand-green hover:text-white hover:border-brand-green font-bold text-base px-8 rounded-full h-14 backdrop-blur-sm bg-white/5 w-full sm:w-auto transition-all">
-                    Enquire on WhatsApp
-                  </Button>
+                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-whatsapp-custom">
+                  Enquire on WhatsApp
                 </a>
               </div>
             </div>
@@ -64,7 +61,6 @@ export default function Home() {
                    Premium Quality<br/>Since 2024
                  </div>
                </div>
-               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-brand-blue/30 rounded-full blur-3xl -z-10"></div>
             </div>
           </div>
         </div>
@@ -81,7 +77,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat, idx) => (
               <Link key={idx} href={`/products?category=${encodeURIComponent(cat.name)}`}>
-                <a className="group bg-white p-8 rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-brand-blue/20 text-center block h-full">
+                <a className="group card-custom p-8 text-center block h-full hover:-translate-y-1 transition-transform duration-300">
                   <div className="w-16 h-16 bg-brand-blue/5 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-blue group-hover:text-white transition-colors">
                     <cat.icon size={32} className="text-brand-blue group-hover:text-white" />
                   </div>

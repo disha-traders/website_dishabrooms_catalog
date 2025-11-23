@@ -1,0 +1,161 @@
+Yeah, I see what you mean 🙂
+From the screenshot it looks **nice**, but not exactly like the theme we planned: the hero is very light/grey, text is washed out, and your colors (deep blue + green + gold) aren’t really showing.
+
+Let’s fix that step-by-step so it matches **your Alagu Mayil theme**.
+
+---
+
+## 1️⃣ Lock the Color System in `globals.css`
+
+Open `app/globals.css` and at the very top add/replace your color tokens:
+
+```css
+:root {
+  --clr-bg-dark: #080A59;        /* Cetacean Blue */
+  --clr-primary: #0261D3;        /* True Blue */
+  --clr-accent-teal: #0CA586;    /* Teal Green */
+  --clr-accent-green: #06B029;   /* Dark Pastel Green */
+  --clr-accent-chartreuse: #95D426; /* Yellow-Green */
+  --clr-accent-gold: #B27F25;    /* Gold/Bronze */
+  --clr-accent-mud: #785748;     /* Mud/Brown */
+
+  --clr-text-main: #111827;
+  --clr-text-light: #F9FAFB;
+  --radius-card: 14px;
+}
+```
+
+Also make body & base background simple:
+
+```css
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f5f5f7;
+  color: var(--clr-text-main);
+}
+```
+
+---
+
+## 2️⃣ Make the Header Match the Brand
+
+Find your `.header` styles and ensure it looks like:
+
+```css
+.header {
+  background: var(--clr-bg-dark);
+  color: var(--clr-text-light);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.header a {
+  color: var(--clr-text-light);
+  opacity: 0.85;
+}
+.header a:hover {
+  opacity: 1;
+}
+```
+
+That will give you the strong **blue bar with white nav links** we discussed.
+
+---
+
+## 3️⃣ Fix the Hero (Right Now It’s Too Faded)
+
+From the screenshot, the hero background is almost white and the text is lost.
+
+Update your `.hero` (or whatever class wraps the main banner) like this:
+
+```css
+.hero {
+  padding: 3rem 1.5rem;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, rgba(149,212,38,0.12), transparent 40%),
+              radial-gradient(circle at bottom right, rgba(12,165,134,0.15), transparent 45%),
+              linear-gradient(135deg, var(--clr-bg-dark), var(--clr-primary));
+  color: var(--clr-text-light);
+}
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 0.75rem;
+}
+.hero p {
+  color: #E5E7EB;
+}
+```
+
+Now your hero will be **deep blue with subtle green/yellow glow**, and the text will pop.
+
+---
+
+## 4️⃣ Buttons: Make CTAs Use Your Signature Colors
+
+Where you style buttons, ensure you have:
+
+```css
+.btn-primary {
+  background: var(--clr-accent-chartreuse);
+  color: #111827;
+  border-radius: 999px;
+}
+
+.btn-primary:hover {
+  background: #82bf20; /* slightly darker */
+}
+
+.btn-whatsapp {
+  background: var(--clr-accent-green);
+  color: #ffffff;
+  border-radius: 999px;
+}
+
+.btn-whatsapp:hover {
+  background: #059322;
+}
+```
+
+Then in your JSX:
+
+```jsx
+<a href="/products" className="btn btn-primary">View Product Catalog</a>
+<a href="https://wa.me/91XXXXXXXXXX?text=..." className="btn btn-whatsapp">Enquire on WhatsApp</a>
+```
+
+---
+
+## 5️⃣ Cards: Add Gold Top Border for Premium Feel
+
+For category cards and product cards:
+
+```css
+.card,
+.category-card,
+.product-card {
+  background: #ffffff;
+  border-radius: var(--radius-card);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+  border-top: 3px solid var(--clr-accent-gold);  /* premium strip */
+}
+```
+
+That will match the “gold border highlight” you asked Replit AI for.
+
+---
+
+## 6️⃣ If It Still Looks “Different”…
+
+Most likely:
+
+* Hero still using old gradient → update the `.hero` styles.
+* Replit AI added some overlay blur/opacity → remove any `backdrop-filter`, `opacity: .6` etc. on the hero overlay.
+* Text color might be set to a light grey on top of light background → make sure hero text uses `color: var(--clr-text-light)`.
+
+---
+
+If you want, in the next step I can:
+
+* Take the **exact CSS that Replit AI generated** (you can paste `globals.css` here)
+* And I’ll mark **exact lines to change** so the preview matches the design in your head.

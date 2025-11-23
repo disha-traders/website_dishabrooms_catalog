@@ -19,7 +19,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col font-sans">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-brand-cetacean text-white shadow-md">
+      <header className="header-custom w-full shadow-md">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           {/* Brand */}
           <Link href="/">
@@ -49,13 +49,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ))}
             <Button 
               asChild 
-              className="bg-brand-green hover:bg-brand-green/90 text-white font-bold rounded-full px-6"
+              className="btn-whatsapp-custom rounded-full px-6"
             >
               <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
                 Enquire Now
               </a>
             </Button>
           </nav>
+
 
           {/* Mobile Menu Toggle */}
           <button
