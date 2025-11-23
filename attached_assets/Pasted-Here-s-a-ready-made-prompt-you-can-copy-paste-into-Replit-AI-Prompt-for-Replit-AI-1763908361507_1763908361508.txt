@@ -1,0 +1,334 @@
+Here’s a ready-made prompt you can **copy–paste into Replit AI** 👇
+
+---
+
+**Prompt for Replit AI:**
+
+> You are a senior full-stack Next.js developer helping me build a **production-ready marketing + catalog website** for my manufacturing client.
+>
+> ---
+>
+> ## 🏭 Business & Brand
+>
+> * **Company Name:** Disha Traders
+> * **Brand Name:** Alagu Mayil
+> * **Location:** Tamil Nadu, India
+> * **Business Type:** Manufacturer
+> * **Product Lines:**
+>
+>   * Grass Brooms
+>   * Coco Brooms
+>   * Yarn Mops
+>   * Wipers & Brushes
+> * **Tagline:** “All Cleaning Products in One Place – Manufactured with Pride in Tamil Nadu.”
+>
+> This is my **first customer**, so build it clean, maintainable, and easy to extend.
+>
+> ---
+>
+> ## 🎨 Design System
+>
+> Use this color palette and turn them into CSS variables/tokens:
+>
+> * Cetacean Blue – `#080A59`  (primary dark background, header/footer)
+> * True Blue – `#0261D3`  (primary accent, links, some buttons)
+> * Teal Green – `#0CA586`  (accent, success, pill badges)
+> * Dark Pastel Green – `#06B029`  (WhatsApp/enquiry buttons)
+> * Yellow-Green (Chartreuse) – `#95D426`  (CTA highlight)
+> * Gold/Bronze – `#B27F25`  (premium accents, borders)
+> * Mud/Brown – `#785748`  (neutral, subtle backgrounds, dividers)
+>
+> Typography:
+>
+> * Use a modern, clean sans-serif (e.g., system font stack or Inter).
+> * Headings: bold, slightly condensed, strong.
+> * Body: 14–16px, readable, good line-height.
+>
+> Layout:
+>
+> * Responsive, mobile-first.
+> * Max content width ~1100–1200px.
+> * Sticky header on top.
+> * Generous spacing and subtle shadows for cards.
+>
+> ---
+>
+> ## 🧱 Tech Stack & Project Setup
+>
+> * Use **Next.js 14 App Router**.
+> * Use **JavaScript** (not TypeScript).
+> * Use **app directory** (`/app`) with `layout.js` and route segments.
+> * Use a single global stylesheet (`app/globals.css`) with CSS variables for colors.
+> * Organize reusable components under `/components`.
+> * This project will be deployed to **Vercel**, so make sure `npm run build` works.
+>
+> For now:
+>
+> * Use **static/mock data** for products and settings (read from a local JS/JSON module).
+> * But architect it so later we can replace data layer with **Firebase Firestore + Storage** without changing UI components too much.
+>
+> ---
+>
+> ## 📂 Required Routes & Pages
+>
+> Build these pages:
+>
+> 1. `/` – **Home**
+> 2. `/products` – **Product Catalog**
+> 3. `/about` – **About / Factory**
+> 4. `/contact` – **Contact & Distributor Enquiry**
+> 5. `/admin` – **Private Admin Panel (for now, local-data based)**
+>
+> ### 1️⃣ Home (`/`)
+>
+> Sections:
+>
+> * **Hero section:**
+>
+>   * Left:
+>
+>     * Brand: “Alagu Mayil – Premium Brooms & Cleaning Products”
+>     * Text about manufacturing Grass Brooms, Coco Brooms, Yarn Mops, Wipers & Brushes.
+>     * Tagline: “All Cleaning Products in One Place – Manufactured with Pride in Tamil Nadu.”
+>     * Two buttons:
+>
+>       * Primary (filled, Yellow-Green): “View Product Catalog” → `/products`
+>       * Secondary (outline, Teal Green): “Enquire on WhatsApp” → placeholder link like `https://wa.me/91XXXXXXXXXX?...`
+>   * Right:
+>
+>     * Hero image area placeholder: a collage-style layout (just use a solid background + “Product image coming soon” box or generic broom image placeholder).
+>   * Background:
+>
+>     * Gradient from Cetacean Blue to True Blue with subtle shapes using Teal Green & Gold.
+> * **Product Categories section:**
+>
+>   * Title: “Our Product Range”
+>   * 4 category cards: Grass Brooms, Coco Brooms, Yarn Mops, Wipers & Brushes.
+>   * Each card: icon/placeholder, 1–2 line description, “View products →” linking to `/products` with category filter (you can implement filter via query param or client-side state).
+> * **Why Choose Us section:**
+>
+>   * 3–4 cards: “Factory-Direct Supply”, “Consistent Quality”, “Bulk & Custom Orders”, “Reliable Packing & Dispatch”.
+>   * Use Teal Green & Gold accents for icons/badges.
+> * **Ideal For strip:**
+>
+>   * Horizontal strip listing: Kirana Stores, Supermarkets, Wholesalers, Exporters.
+>   * Background with very soft Mud/Brown overlay and light icons.
+> * **Bottom CTA:**
+>
+>   * Text: “Looking for a reliable broom & mop supplier?”
+>   * Button: “Share Your Requirement on WhatsApp” (placeholder link).
+>
+> ### 2️⃣ Products (`/products`) – Catalog
+>
+> This is the core catalog page.
+>
+> * Top section:
+>
+>   * Page title: “Our Products”
+>   * Short intro text.
+>   * Filter bar:
+>
+>     * Category dropdown or horizontal pills: [All | Grass Brooms | Coco Brooms | Yarn Mops | Wipers & Brushes]
+> * Product grid:
+>
+>   * Use a **mock `products` array** imported from a separate module, something like:
+>
+>     ```js
+>     export const products = [
+>       {
+>         id: "am-gb-501",
+>         name: "Alagu Mayil Grass Broom 501",
+>         category: "Grass Brooms",
+>         code: "AM-GB-501",
+>         size: "Premium Soft, Long Handle",
+>         description: "Durable grass broom ideal for daily household sweeping.",
+>         imageUrl: "/images/placeholder-grass-501.jpg"
+>       },
+>       ...
+>     ];
+>     ```
+>   * Display as cards (2–3 columns on desktop, 1–2 on mobile).
+>   * Each card:
+>
+>     * Product image (use `<img>` with placeholder image from `/public/images` for now).
+>     * Name.
+>     * Category badge.
+>     * Size/variant.
+>     * Code (small).
+>     * Short description (max 2–3 lines).
+>     * “Enquire on WhatsApp” button with pre-filled message containing product name + code.
+>
+> Styling:
+>
+> * Card background: white, subtle shadow, rounded corners.
+> * Category badge: Teal Green pill with white text.
+> * Button: Dark Pastel Green with white text, rounded pill.
+>
+> ### 3️⃣ About (`/about`)
+>
+> Sections:
+>
+> * “About Disha Traders”
+>
+>   * Short story about being a manufacturer in Tamil Nadu.
+> * “Alagu Mayil Brand”
+>
+>   * Why the name, focus on quality & consistency.
+> * “Manufacturing & Quality”
+>
+>   * Brief points on sourcing material, handcrafting, quality checks.
+> * “Production & Supply”
+>
+>   * Mention serving distributors, retailers, supermarkets, exporters.
+>
+> Use more earthy tones (Mud/Brown + Gold accents) to give a grounded, factory feel.
+>
+> ### 4️⃣ Contact (`/contact`)
+>
+> Split layout (stack on mobile):
+>
+> * Left: Contact Info (data should come from a central config module)
+>
+>   * Company: Disha Traders
+>   * Brand: Alagu Mayil
+>   * Address (text from config)
+>   * Phone (from config)
+>   * WhatsApp link
+>   * Email
+>   * Optional map embed placeholder.
+> * Right: Distributor/Bulk Enquiry
+>
+>   * Short text inviting distributors, wholesalers, retailers, supermarkets, exporters.
+>   * For v1, just show a list of “Please share these details on WhatsApp:” (Name, Business Name, City/State, Products needed, Approx monthly requirement).
+>   * Button: “Send Enquiry on WhatsApp” with pre-filled template message.
+>
+> The key is to make this page simple, clean, and easy to understand.
+>
+> ---
+>
+> ## 🔐 Admin Panel (`/admin`)
+>
+> This page is **for me only**, not for the client. Implement a basic local-data-based admin UI now, but write it in a way that later we can wire it up to Firebase Firestore + Storage.
+>
+> ### Access
+>
+> * Route: `/admin`.
+> * Simple password gate:
+>
+>   * On first load, show a centered password form.
+>   * Compare input with an env value like `process.env.NEXT_PUBLIC_ADMIN_PASSWORD` or a hardcoded placeholder for now (we’ll secure it properly later).
+>   * If correct, store a flag in `localStorage` or React state for this session.
+>
+> ### Admin Layout
+>
+> Use a simple layout with tabs or sections:
+>
+> 1. **General Settings**
+>
+>    * Editable fields:
+>
+>      * Company name
+>      * Brand name
+>      * Phone number
+>      * WhatsApp number
+>      * Email
+>      * Address text
+>    * For now, these should update a local state and write back to a central config object stored in a local JS file or in-memory mock. (Don’t worry about persistence yet; we will replace this with Firestore later.)
+>    * This config should be what the public pages use for contact details.
+> 2. **Hero Section (optional simple controls)**
+>
+>    * Fields:
+>
+>      * Hero title
+>      * Hero subtitle
+>    * For now, just update local state/config.
+> 3. **Products Management**
+>
+>    * List all products from the same mock `products` data module.
+>    * For each product:
+>
+>      * Show current image thumbnail, name, code, category.
+>      * “Edit” button which opens a modal or inline form:
+>
+>        * Fields: name, code, category (dropdown), size, description.
+>        * **Image change:** file input to “upload new image” – for now, you can just simulate/image preview and store the filename/path in local state or config. Later, this will actually upload to Firebase Storage and update Firestore.
+>    * Implement the UI structure and handlers even if they just mutate local data in memory for now.
+>
+> Design:
+>
+> * Admin UI can be simple, but clean:
+>
+>   * White cards on light background.
+>   * Use the same color system but more muted.
+>
+> ---
+>
+> ## 🧩 Data Structure & Code Organization
+>
+> Create a simple modular structure:
+>
+> * `/app/layout.js` – global layout, header, footer.
+>
+> * `/app/page.js` – Home page.
+>
+> * `/app/products/page.js` – Product catalog page.
+>
+> * `/app/about/page.js` – About page.
+>
+> * `/app/contact/page.js` – Contact/Enquiry.
+>
+> * `/app/admin/page.js` – Admin panel.
+>
+> * `/components/Header.js`
+>
+> * `/components/Footer.js`
+>
+> * `/components/Hero.js` (optional)
+>
+> * `/components/ProductCard.js`
+>
+> * `/components/Admin/*` for admin-specific components (forms, lists, etc.).
+>
+> * `/lib/config.js` – central exported object for:
+>
+>   * companyName, brandName, phone, whatsappNumber, email, address, heroTitle, heroSubtitle.
+>   * For now these can be static JS exports, but admin UI should conceptually read/update these.
+>
+> * `/lib/products.js` – mock products array used by both public pages and admin.
+>
+> `app/globals.css`:
+>
+> * Define root CSS variables for colors.
+> * Base styles for body, headings, containers, grid, buttons, tags, etc.
+>
+> ---
+>
+> ## 🔧 Requirements & Quality
+>
+> * Make sure the app runs with:
+>
+>   * `npm install`
+>   * `npm run dev`
+>   * `npm run build`
+>
+> * Keep the code **clean, modular, and easy to read**.
+>
+> * Use functional components and React hooks.
+>
+> * No external CSS frameworks (no Tailwind, no Bootstrap) – use plain CSS for now.
+>
+> * Provide some initial placeholder images in `/public/images` and wire them in `products` data.
+>
+> * IMPORTANT: design everything with the assumption that later:
+>
+>   * `config.js` and `products.js` will be replaced by Firebase Firestore queries.
+>   * Product images will come from Firebase Storage URLs instead of `/public`.
+>
+> Please generate:
+>
+> 1. The full Next.js project structure (files + folders) needed.
+> 2. All page components and main UI components.
+> 3. Example mock data for products and config.
+> 4. Clean, readable CSS in `app/globals.css` using the given color palette.
+>
+> Focus on **good structure + clean design + easy future extension**.
