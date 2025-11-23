@@ -16,12 +16,12 @@ export function ProductCard({ product }: ProductCardProps) {
   const whatsappLink = `https://wa.me/${config.contact.whatsapp}?text=${whatsappMessage}`;
 
   return (
-    <div className="card-custom group hover:shadow-xl transition-all duration-300 h-full flex flex-col relative">
+    <div className="product-card h-full flex flex-col relative">
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         <img
           src={product.imageUrl}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute top-3 left-3">
           <Badge className="bg-brand-teal hover:bg-brand-teal text-white border-none">
@@ -55,9 +55,9 @@ export function ProductCard({ product }: ProductCardProps) {
           href={whatsappLink} 
           target="_blank" 
           rel="noopener noreferrer"
-          className="btn-whatsapp-custom w-full text-sm"
+          className="btn-whatsapp w-full justify-center"
         >
-          <MessageCircle className="w-4 h-4 mr-2" />
+          <MessageCircle className="w-4 h-4" />
           Enquire on WhatsApp
         </a>
       </CardFooter>

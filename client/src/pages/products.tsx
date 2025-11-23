@@ -46,14 +46,12 @@ export default function Products() {
 
       <div className="container mx-auto px-4 py-12">
         {/* Filters */}
-        <div className="flex flex-wrap gap-3 mb-10 justify-center md:justify-start">
+        <div className="filter-bar justify-center md:justify-start">
           <button
             onClick={() => handleCategoryClick("All")}
             className={cn(
-              "px-6 py-2 rounded-full text-sm font-bold transition-all",
-              activeCategory === "All" 
-                ? "bg-brand-cetacean text-white shadow-lg" 
-                : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+              "filter-pill",
+              activeCategory === "All" ? "active" : ""
             )}
           >
             All Products
@@ -63,10 +61,8 @@ export default function Products() {
               key={cat}
               onClick={() => handleCategoryClick(cat)}
               className={cn(
-                "px-6 py-2 rounded-full text-sm font-bold transition-all",
-                activeCategory === cat 
-                  ? "bg-brand-teal text-white shadow-lg" 
-                  : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"
+                "filter-pill",
+                activeCategory === cat ? "active" : ""
               )}
             >
               {cat}

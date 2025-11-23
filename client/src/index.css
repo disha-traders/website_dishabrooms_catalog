@@ -122,4 +122,102 @@
     border-top: 3px solid var(--clr-accent-gold);  /* premium strip */
     overflow: hidden;
   }
+
+  /* 6. Filter Pills */
+  .filter-bar {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 1rem 0 1.5rem;
+  }
+
+  .filter-pill {
+    padding: 0.45rem 1.1rem;
+    border-radius: 999px;
+    background: #f5f5f7;
+    border: 1px solid rgba(8, 10, 89, 0.08); /* soft blue border */
+    font-size: 0.85rem;
+    color: var(--clr-text-main);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--clr-primary);
+  }
+
+  .filter-pill.active {
+    background: var(--clr-accent-teal);
+    color: #fff;
+    border-color: var(--clr-accent-teal);
+    box-shadow: 0 4px 10px rgba(12, 165, 134, 0.35);
+  }
+
+  /* 7. Product Card Specifics (Gold Edge) */
+  .product-card {
+    border-radius: 18px;
+    background: #ffffff;
+    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+    border-top: 3px solid var(--clr-accent-gold);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
+  }
+
+  /* 8. WhatsApp Button (Dark Green) */
+  .btn-whatsapp {
+    background: var(--clr-accent-green);
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 0.5rem 1.2rem;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: none;
+    transition: background-color 0.2s;
+    cursor: pointer;
+  }
+
+  .btn-whatsapp:hover {
+    background: #059322; /* slightly darker */
+  }
+
+  /* 9. Footer */
+  .footer {
+    background: var(--clr-bg-dark);
+    color: var(--clr-text-light);
+    padding: 2rem 1.5rem 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .footer h4,
+  .footer h5 {
+    color: var(--clr-text-light);
+  }
+
+  .footer a {
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.85rem;
+    opacity: 0.9;
+    transition: opacity 0.2s;
+  }
+
+  .footer a:hover {
+    text-decoration: underline;
+    opacity: 1;
+  }
+
+  .footer-bottom {
+    margin-top: 1.5rem;
+    font-size: 0.75rem;
+    opacity: 0.8;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1.5rem;
+  }
 }

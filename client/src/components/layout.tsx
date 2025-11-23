@@ -103,13 +103,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-brand-cetacean text-white pt-16 pb-8">
+      <footer className="footer">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
             
             {/* Brand Column */}
             <div>
-              <h3 className="text-2xl font-heading font-bold mb-4">{config.brandName}</h3>
+              <h3 className="text-2xl font-heading font-bold mb-4 text-white">{config.brandName}</h3>
               <p className="text-gray-300 mb-6 max-w-sm leading-relaxed">
                 {config.tagline}
               </p>
@@ -133,7 +133,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {navItems.map((item) => (
                   <li key={item.path}>
                     <Link href={item.path}>
-                      <a className="text-gray-300 hover:text-white transition-colors flex items-center gap-2">
+                      <a className="flex items-center gap-2">
                         <span className="w-1.5 h-1.5 bg-brand-gold rounded-full"></span>
                         {item.label}
                       </a>
@@ -142,7 +142,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 ))}
                 <li>
                   <Link href="/admin">
-                    <a className="text-gray-500 hover:text-gray-400 text-sm flex items-center gap-2 mt-4">
+                    <a className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white">
                        Admin Login
                     </a>
                   </Link>
@@ -171,7 +171,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           </div>
           
-          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
+          <div className="footer-bottom flex flex-col md:flex-row justify-between items-center">
             <p>&copy; {new Date().getFullYear()} {config.companyName}. All rights reserved.</p>
             <p className="mt-2 md:mt-0 flex items-center gap-1">
               Built by <span className="text-brand-gold font-semibold">Ourcresta BusOps</span>

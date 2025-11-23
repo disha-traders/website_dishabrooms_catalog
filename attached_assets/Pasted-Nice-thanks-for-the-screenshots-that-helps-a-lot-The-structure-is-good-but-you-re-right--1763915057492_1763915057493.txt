@@ -1,0 +1,183 @@
+Nice, thanks for the screenshots – that helps a lot. 👍
+The structure is good, but you’re right: **colors + footer + filters** don’t fully match the Alagu Mayil theme we planned.
+
+I’ll give you **targeted fixes** you can drop into `globals.css` (or wherever the styles are).
+
+---
+
+## 1️⃣ Overall – Keep Using Your Color Tokens
+
+If you haven’t already, make sure these exist at the top of `globals.css`:
+
+```css
+:root {
+  --clr-bg-dark: #080A59;              /* Cetacean Blue */
+  --clr-primary: #0261D3;              /* True Blue */
+  --clr-accent-teal: #0CA586;          /* Teal Green */
+  --clr-accent-green: #06B029;         /* Dark Pastel Green (WhatsApp) */
+  --clr-accent-chartreuse: #95D426;    /* Yellow-Green CTA */
+  --clr-accent-gold: #B27F25;          /* Gold/Bronze */
+  --clr-accent-mud: #785748;           /* Mud/Brown */
+
+  --clr-text-main: #111827;
+  --clr-text-light: #F9FAFB;
+}
+```
+
+---
+
+## 2️⃣ Filter Pills (Category Tabs) – Now Too “Neutral”
+
+Right now they’re all flat white and don’t use your greens/blues.
+
+Add or adjust something like:
+
+```css
+.filter-bar {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin: 1rem 0 1.5rem;
+}
+
+.filter-pill {
+  padding: 0.45rem 1.1rem;
+  border-radius: 999px;
+  background: #f5f5f7;
+  border: 1px solid rgba(8, 10, 89, 0.08); /* soft blue border */
+  font-size: 0.85rem;
+  color: var(--clr-text-main);
+  cursor: pointer;
+}
+
+.filter-pill:hover {
+  border-color: var(--clr-primary);
+}
+
+.filter-pill.active {
+  background: var(--clr-accent-teal);
+  color: #fff;
+  border-color: var(--clr-accent-teal);
+  box-shadow: 0 4px 10px rgba(12, 165, 134, 0.35);
+}
+```
+
+That gives:
+
+* **Inactive** = soft light chip
+* **Active** = strong teal-green pill that matches brand.
+
+Make sure your JSX adds `active` class to the selected category.
+
+---
+
+## 3️⃣ Product Cards – Add the Premium Gold Edge
+
+Your cards look good, but they’re missing the gold touch.
+
+```css
+.product-card {
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  border-top: 3px solid var(--clr-accent-gold);
+  overflow: hidden;
+}
+```
+
+Optional: on hover:
+
+```css
+.product-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
+}
+```
+
+---
+
+## 4️⃣ WhatsApp Buttons – Use Your Dark Green (Not Neon)
+
+The current green looks like default / unrelated. Change to your **Dark Pastel Green**:
+
+```css
+.btn-whatsapp,
+.product-card .whatsapp-btn {
+  background: var(--clr-accent-green);
+  color: #ffffff;
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: none;
+}
+
+.btn-whatsapp:hover,
+.product-card .whatsapp-btn:hover {
+  background: #059322; /* slightly darker */
+}
+```
+
+Update the button class in your JSX to match (`className="whatsapp-btn"` etc.).
+
+---
+
+## 5️⃣ Footer – It’s Too Pale, Make It Strong & Readable
+
+In the screenshot the footer text is almost invisible. Make it **full Cetacean Blue** with white text.
+
+```css
+.footer {
+  background: var(--clr-bg-dark);
+  color: var(--clr-text-light);
+  padding: 2rem 1.5rem 1.5rem;
+  margin-top: 2rem;
+}
+
+.footer h4,
+.footer h5 {
+  color: var(--clr-text-light);
+}
+
+.footer a {
+  color: #e5e7eb;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  margin-top: 1.5rem;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+```
+
+Also check there is **no opacity** set on the whole footer container (e.g. `opacity: 0.4;`) – if you see that, remove it.
+
+---
+
+## 6️⃣ Header & Hero Are Mostly Correct
+
+From the screenshot, header + product-hero gradient already look close to our plan. Just ensure:
+
+```css
+.header {
+  background: var(--clr-bg-dark);
+  color: var(--clr-text-light);
+}
+
+.products-hero {
+  background: linear-gradient(135deg, var(--clr-bg-dark), var(--clr-primary));
+  color: var(--clr-text-light);
+}
+```
+
+---
+
+If you paste your `globals.css` here later, I can mark exact lines to replace. But if you apply these 4–5 blocks, the **products page, filters, and footer will snap into your Alagu Mayil / Ourcresta theme**.
