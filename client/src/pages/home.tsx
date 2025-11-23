@@ -40,12 +40,12 @@ export default function Home() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <Link href="/products">
-                  <Button size="lg" className="bg-brand-chartreuse text-brand-cetacean hover:bg-brand-chartreuse/90 font-bold text-base px-8 rounded-full h-14">
+                  <Button size="lg" className="bg-brand-chartreuse text-brand-cetacean hover:bg-brand-chartreuse/90 font-bold text-base px-8 rounded-full h-14 shadow-lg shadow-brand-chartreuse/20 transition-all hover:scale-105">
                     View Product Catalog
                   </Button>
                 </Link>
                 <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" size="lg" className="border-brand-teal text-brand-teal hover:bg-brand-teal hover:text-white font-bold text-base px-8 rounded-full h-14 backdrop-blur-sm bg-white/5 w-full sm:w-auto">
+                  <Button variant="outline" size="lg" className="border-brand-teal text-brand-teal hover:bg-brand-green hover:text-white hover:border-brand-green font-bold text-base px-8 rounded-full h-14 backdrop-blur-sm bg-white/5 w-full sm:w-auto transition-all">
                     Enquire on WhatsApp
                   </Button>
                 </a>

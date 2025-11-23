@@ -16,7 +16,8 @@ export function ProductCard({ product }: ProductCardProps) {
   const whatsappLink = `https://wa.me/${config.contact.whatsapp}?text=${whatsappMessage}`;
 
   return (
-    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-gray-100 h-full flex flex-col">
+    <Card className="overflow-hidden group hover:shadow-xl transition-all duration-300 border-gray-100 hover:border-brand-gold/50 h-full flex flex-col relative">
+      <div className="absolute top-0 left-0 w-full h-1 bg-brand-gold opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div className="relative aspect-[4/3] overflow-hidden bg-gray-100">
         <img
           src={product.imageUrl}

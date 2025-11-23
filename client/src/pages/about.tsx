@@ -22,13 +22,13 @@ export default function About() {
         <div className="max-w-4xl mx-auto space-y-16">
           
           {/* Story */}
-          <section>
+          <section className="bg-brand-mud/5 p-8 rounded-2xl border-l-4 border-brand-gold">
             <h2 className="text-2xl font-heading font-bold text-brand-cetacean mb-6 flex items-center gap-3">
               <span className="w-8 h-8 bg-brand-cetacean text-white flex items-center justify-center rounded-full text-sm">01</span>
               Our Story
             </h2>
-            <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
-              <p className="text-gray-600 leading-relaxed mb-4">
+            <div className="">
+              <p className="text-gray-700 leading-relaxed mb-4 font-medium">
                 Established in Tamil Nadu, <strong>{config.companyName}</strong> began with a simple mission: to manufacture high-quality cleaning tools that last. We recognized a gap in the market for reliable, durable brooms and mops that could withstand the rigors of daily use in Indian homes and businesses.
               </p>
               <p className="text-gray-600 leading-relaxed">

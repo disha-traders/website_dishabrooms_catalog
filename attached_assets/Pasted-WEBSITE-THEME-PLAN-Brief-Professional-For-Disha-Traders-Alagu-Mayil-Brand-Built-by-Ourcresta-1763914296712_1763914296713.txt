@@ -1,0 +1,218 @@
+WEBSITE THEME PLAN (Brief & Professional)
+For: Disha Traders – Alagu Mayil Brand
+Built by: Ourcresta BusOps
+🎨 1. Theme Style & Mood
+
+The website theme will be Premium + Traditional + Modern Industrial, reflecting a Tamil Nadu–based manufacturer with a strong brand identity.
+
+The tone of the site will be:
+
+Strong & Trustworthy (manufacturer feel)
+
+Clean & Premium (to differentiate from cheap trading sites)
+
+Eco-friendly & Natural (brooms/mops are nature-based products)
+
+Alive & Attractive (good colors, modern layout)
+
+We will use your 7 chosen colors as a structured palette:
+
+Primary Foundation
+
+Cetacean Blue (#080A59) → Header, Footer, Strong backgrounds
+
+True Blue (#0261D3) → Links, accents, highlights
+
+Eco/Natural Accents
+
+Teal Green (#0CA586) → Badges, category markers
+
+Dark Pastel Green (#06B029) → WhatsApp buttons, success
+
+Yellow-Green (#95D426) → CTA buttons (View Products, Enquire)
+
+Premium Touch
+
+Gold/Bronze (#B27F25) → Borders, highlights, special labels
+
+Natural/Earthy
+
+Mud/Brown (#785748) → light backgrounds, product dividers
+
+🏠 2. Page-by-Page Theme Plan
+🟦 Home Page Theme
+
+The homepage theme is bold + welcoming.
+
+Hero Banner:
+Deep blue gradient (Cetacean Blue → True Blue)
+Left: Brand headline text
+Right: Product collage or placeholder
+
+Buttons in Yellow-Green & Teal Green
+
+Category cards with clean white backgrounds + Teal accents
+
+Purpose: Immediately show trust, manufacturing quality, and product range.
+
+🟩 Products (Catalog) Page Theme
+
+Clean, simple grid showing:
+
+Product image
+
+Name
+
+Category badge (Teal Green)
+
+Description
+
+“Enquire on WhatsApp” (Dark Green button)
+
+Background is minimal white with small Mud/Brown dividers for a natural feel.
+
+Purpose: Catalog feels premium, not cluttered.
+
+🟫 About Page Theme
+
+Warm and earthy tones:
+
+Mud/Brown light backgrounds
+
+Gold/Bronze dividers
+
+Focus on:
+
+Manufacturing story
+
+Factory process
+
+Commitment to quality
+
+Purpose: Build trust & authenticity.
+
+🟨 Contact Page Theme
+
+Clear and strong:
+
+Left side on white background
+
+Right side on a soft Cetacean Blue block
+
+CTA button in Yellow-Green
+
+Address & phone shown cleanly
+
+Purpose: Make contacting the business easy and professional.
+
+🔐 Admin Page Theme
+
+Functional and simple:
+
+White background
+
+Blue or Grey header
+
+Clean cards
+
+No distractions
+
+Purpose: Easy for YOU to update content.
+
+⭐ 3. Layout & Components Theme
+Header Theme
+
+Background: Cetacean Blue
+
+Logo: Alagu Mayil
+
+Text: White / Off-white
+
+Sticky
+
+Navigation: Home | Products | About | Contact
+
+Footer Theme
+
+Dark blue background
+
+White text
+
+Small Ourcresta BusOps branding
+
+Cards Theme
+
+White background
+
+Soft shadows
+
+Gold border highlights
+
+Rounded corners
+
+Smooth hover effect
+
+Buttons Theme
+
+Primary: Yellow-Green (#95D426)
+
+WhatsApp: Dark Green (#06B029)
+
+Outline: Teal Green borders
+
+📱 4. Mobile Theme
+
+One-column responsive layout
+
+Sticky bottom WhatsApp button on product page (optional)
+
+Large tap-friendly buttons
+
+Easy scroll sections
+
+Hero text sanitized for mobile
+
+🎯 5. Style Philosophy
+✔ Simple
+
+No heavy effects. Clean, neat, effective.
+
+✔ Professional
+
+Strong manufacturing brand presence.
+
+✔ Modern
+
+Next.js layout, grids, rounded cards.
+
+✔ Premium
+
+Gold + deep blue gives a quality feel.
+
+✔ Trust-Building
+
+Clear details, clean structure, strong product images.
+
+🧩 6. Admin Page Theme
+
+(Your internal tool)
+
+Blue & white theme
+
+Tabs:
+
+General Settings
+
+Products
+
+Address/Phone update
+
+Image upload
+
+Clean, functional layout
+
+No complex animations
+
+🔥 7. Summary (One Line)
+
+A premium, blue-green themed manufacturing website with clean catalog grids, strong branding, and an internal admin panel for easy updates—built for long-term scalability.

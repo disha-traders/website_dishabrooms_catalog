@@ -170,8 +170,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           </div>
           
-          <div className="border-t border-white/10 pt-8 text-center text-gray-400 text-sm">
+          <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
             <p>&copy; {new Date().getFullYear()} {config.companyName}. All rights reserved.</p>
+            <p className="mt-2 md:mt-0 flex items-center gap-1">
+              Built by <span className="text-brand-gold font-semibold">Ourcresta BusOps</span>
+            </p>
           </div>
         </div>
       </footer>
