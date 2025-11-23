@@ -8,6 +8,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { config } from "@/lib/config";
 import { products, categories } from "@/lib/products";
 import { Lock, Save, Plus, Trash2, Edit2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -17,6 +34,18 @@ export default function Admin() {
   // Local state for form management (mocking DB updates)
   const [localConfig, setLocalConfig] = useState(config);
   const [localProducts, setLocalProducts] = useState(products);
+  
+  // Product Form State
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "Grass Brooms",
+    code: "",
+    size: "",
+    description: "",
+    imageUrl: "/images/placeholder.jpg"
+  });
 
   useEffect(() => {
     const auth = localStorage.getItem("admin_auth");
@@ -38,6 +67,55 @@ export default function Admin() {
   const handleLogout = () => {
     setIsAuthenticated(false);
     localStorage.removeItem("admin_auth");
+  };
+
+  const handleAddProduct = () => {
+    setEditingProduct(null);
+    setFormData({
+      name: "",
+      category: "Grass Brooms",
+      code: "",
+      size: "",
+      description: "",
+      imageUrl: "/images/placeholder.jpg"
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleEditProduct = (product: any) => {
+    setEditingProduct(product);
+    setFormData({
+      name: product.name,
+      category: product.category,
+      code: product.code,
+      size: product.size,
+      description: product.description,
+      imageUrl: product.imageUrl
+    });
+    setIsDialogOpen(true);
+  };
+
+  const handleDeleteProduct = (id: string) => {
+    if (confirm("Are you sure you want to delete this product?")) {
+      setLocalProducts(localProducts.filter(p => p.id !== id));
+    }
+  };
+
+  const handleSaveProduct = () => {
+    if (editingProduct) {
+      // Edit existing
+      setLocalProducts(localProducts.map(p => 
+        p.id === editingProduct.id ? { ...p, ...formData } as any : p
+      ));
+    } else {
+      // Add new
+      const newProduct = {
+        id: `new-${Date.now()}`,
+        ...formData
+      };
+      setLocalProducts([newProduct as any, ...localProducts]);
+    }
+    setIsDialogOpen(false);
   };
 
   if (!isAuthenticated) {
@@ -94,7 +172,7 @@ export default function Admin() {
           <TabsContent value="products" className="space-y-6">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-bold">Product Management</h2>
-              <Button className="bg-brand-green text-white gap-2">
+              <Button onClick={handleAddProduct} className="bg-brand-green text-white gap-2">
                 <Plus size={16} /> Add New Product
               </Button>
             </div>
@@ -113,10 +191,10 @@ export default function Admin() {
                     </span>
                   </div>
                   <div className="flex gap-2 mt-4 sm:mt-0">
-                    <Button variant="outline" size="sm" className="gap-2">
+                    <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEditProduct(product)}>
                       <Edit2 size={14} /> Edit
                     </Button>
-                    <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600">
+                    <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => handleDeleteProduct(product.id)}>
                       <Trash2 size={14} />
                     </Button>
                   </div>
@@ -135,24 +213,39 @@ export default function Admin() {
                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                    <div className="space-y-2">
                      <Label>Company Name</Label>
-                     <Input defaultValue={localConfig.companyName} />
+                     <Input 
+                       value={localConfig.companyName}
+                       onChange={(e) => setLocalConfig({...localConfig, companyName: e.target.value})} 
+                     />
                    </div>
                    <div className="space-y-2">
                      <Label>Brand Name</Label>
-                     <Input defaultValue={localConfig.brandName} />
+                     <Input 
+                       value={localConfig.brandName} 
+                       onChange={(e) => setLocalConfig({...localConfig, brandName: e.target.value})}
+                     />
                    </div>
                    <div className="space-y-2">
                      <Label>Phone</Label>
-                     <Input defaultValue={localConfig.contact.phone} />
+                     <Input 
+                        value={localConfig.contact.phone}
+                        onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, phone: e.target.value}})}
+                     />
                    </div>
                    <div className="space-y-2">
                      <Label>WhatsApp</Label>
-                     <Input defaultValue={localConfig.contact.whatsapp} />
+                     <Input 
+                        value={localConfig.contact.whatsapp}
+                        onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, whatsapp: e.target.value}})}
+                     />
                    </div>
                  </div>
                  <div className="space-y-2">
                    <Label>Address</Label>
-                   <Input defaultValue={localConfig.contact.address} />
+                   <Input 
+                      value={localConfig.contact.address}
+                      onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, address: e.target.value}})}
+                   />
                  </div>
                  <div className="pt-4">
                    <Button className="bg-brand-cetacean gap-2">
@@ -166,6 +259,87 @@ export default function Admin() {
              </Card>
           </TabsContent>
         </Tabs>
+
+        {/* Product Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle>{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
+              <DialogDescription>
+                {editingProduct ? "Make changes to the product details here." : "Fill in the details for the new product."}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-right">
+                  Name
+                </Label>
+                <Input
+                  id="name"
+                  value={formData.name}
+                  onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="code" className="text-right">
+                  Code
+                </Label>
+                <Input
+                  id="code"
+                  value={formData.code}
+                  onChange={(e) => setFormData({...formData, code: e.target.value})}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="category" className="text-right">
+                  Category
+                </Label>
+                <Select 
+                  value={formData.category} 
+                  onValueChange={(val) => setFormData({...formData, category: val})}
+                >
+                  <SelectTrigger className="col-span-3">
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="size" className="text-right">
+                  Size
+                </Label>
+                <Input
+                  id="size"
+                  value={formData.size}
+                  onChange={(e) => setFormData({...formData, size: e.target.value})}
+                  className="col-span-3"
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="description" className="text-right">
+                  Desc
+                </Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({...formData, description: e.target.value})}
+                  className="col-span-3"
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button type="submit" className="bg-brand-green text-white" onClick={handleSaveProduct}>
+                {editingProduct ? "Save Changes" : "Add Product"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </main>
     </div>
   );

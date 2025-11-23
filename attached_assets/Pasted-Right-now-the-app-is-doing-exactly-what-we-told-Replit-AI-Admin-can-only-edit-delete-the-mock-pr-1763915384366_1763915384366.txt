@@ -1,0 +1,104 @@
+Right now the app is doing exactly what we told Replit AI:
+**Admin can only edit/delete the mock products that already exist.**
+The products themselves are coming from a static array in code, so there’s no real “Add” yet.
+
+Let’s fix this in two steps: **(A) quick way to handle 100 products today, (B) proper Add Product flow when we plug in Firebase.**
+
+---
+
+## A. Quick way: add many products *today*
+
+In your project you should have something like:
+
+* `lib/products.js` or `data/products.js`
+
+Open that file – you’ll see an array like:
+
+```js
+export const products = [
+  {
+    id: "am-gb-501",
+    name: "Alagu Mayil Grass Broom 501",
+    category: "Grass Brooms",
+    code: "AM-GB-501",
+    size: "Standard",
+    description: "Affordable grass broom for everyday use.",
+    imageUrl: "/images/grass-501.jpg",
+  },
+  // ...
+];
+```
+
+👉 For now, you can add as many products as you want just by **copy–pasting and editing** these objects (change id, name, category, code, imageUrl etc.).
+The admin page will automatically show **all** items from this array – so Disha Traders’ 100 SKUs can all be listed.
+
+This is the **safest immediate solution** until we wire Firebase.
+
+---
+
+## B. Make “Add New Product” work in Admin (local-only for now)
+
+On the admin page (`/admin`) you already see a greyed out “Add New Product” in the screenshot.
+
+In the admin products component (something like `components/admin/AdminProducts.js`):
+
+1. Make sure products are held in state:
+
+```js
+import { useState } from "react";
+import { products as initialProducts } from "@/lib/products";
+
+export default function AdminProducts() {
+  const [items, setItems] = useState(initialProducts);
+
+  // ...
+}
+```
+
+2. Add a working **Add New Product** button:
+
+```jsx
+<button
+  className="btn admin-add"
+  onClick={() => {
+    const newProduct = {
+      id: `new-${Date.now()}`,
+      name: "New Product",
+      category: "Grass Brooms",
+      code: "NEW-CODE",
+      size: "",
+      description: "",
+      imageUrl: "/images/placeholder.jpg",
+    };
+    setItems([newProduct, ...items]);
+  }}
+>
+  + Add New Product
+</button>
+```
+
+3. Make sure your admin “Edit” form edits the `items` state, not the original import.
+
+> ⚠️ Important:
+> This will **not persist after refresh** (because we’re still using mock data). It’s just to make the UI flow ready.
+> When we connect Firebase, this same “Add New Product” will instead:
+>
+> * upload image to Firebase Storage
+> * create a product document in Firestore
+
+---
+
+## C. What I’d suggest as your sequence
+
+1. **Right now:**
+
+   * Manually add all 100 products to `products.js` so Disha Traders can see their full catalog.
+2. **Next:**
+
+   * We wire Firebase Firestore + Storage.
+   * Convert admin Add / Edit / Delete to actually read/write Firestore.
+3. **Then:**
+
+   * You never touch code again for products – just use `/admin`.
+
+If you want, in the next step I can outline **the exact Firestore `products` structure** we’ll use so your current `products.js` matches it 1:1 (migration will be easy later).
