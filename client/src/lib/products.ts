@@ -1,0 +1,82 @@
+import imgGrass from "@assets/stock_images/traditional_indian_g_876c367c.jpg";
+import imgCoco from "@assets/stock_images/coco_broom_hard_bris_7cd14983.jpg";
+import imgMop from "@assets/stock_images/cotton_yarn_floor_mo_ee5de9fc.jpg";
+import imgWiper from "@assets/stock_images/cleaning_floor_wiper_0a87dd09.jpg";
+
+export interface Product {
+  id: string;
+  name: string;
+  category: "Grass Brooms" | "Coco Brooms" | "Yarn Mops" | "Wipers & Brushes";
+  code: string;
+  size: string;
+  description: string;
+  imageUrl: string;
+  isFeatured?: boolean;
+}
+
+export const categories = [
+  "Grass Brooms", 
+  "Coco Brooms", 
+  "Yarn Mops", 
+  "Wipers & Brushes"
+] as const;
+
+export const products: Product[] = [
+  {
+    id: "am-gb-501",
+    name: "Alagu Mayil Grass Broom 501",
+    category: "Grass Brooms",
+    code: "AM-GB-501",
+    size: "Premium Soft, Long Handle",
+    description: "Durable grass broom ideal for daily household sweeping. Made from high-quality selected grass.",
+    imageUrl: imgGrass,
+    isFeatured: true,
+  },
+  {
+    id: "am-cb-202",
+    name: "Heavy Duty Coco Broom",
+    category: "Coco Brooms",
+    code: "AM-CB-202",
+    size: "Hard Bristles, Outdoor",
+    description: "Strong coconut fiber broom designed for rough surfaces and outdoor cleaning.",
+    imageUrl: imgCoco,
+    isFeatured: true,
+  },
+  {
+    id: "am-ym-303",
+    name: "Cotton Yarn Floor Mop",
+    category: "Yarn Mops",
+    code: "AM-YM-303",
+    size: "300g, 4ft Handle",
+    description: "Super absorbent cotton yarn mop for efficient floor cleaning. Durable plastic holder.",
+    imageUrl: imgMop,
+    isFeatured: true,
+  },
+  {
+    id: "am-wb-404",
+    name: "Floor Wiper Classic",
+    category: "Wipers & Brushes",
+    code: "AM-WB-404",
+    size: "16 inch",
+    description: "High-quality rubber lip floor wiper for instant water removal. Sturdy grip.",
+    imageUrl: imgWiper,
+  },
+  {
+    id: "am-gb-505",
+    name: "Alagu Mayil Grass Broom Economy",
+    category: "Grass Brooms",
+    code: "AM-GB-505",
+    size: "Standard",
+    description: "Affordable grass broom for everyday use. Lightweight and easy to handle.",
+    imageUrl: imgGrass,
+  },
+  {
+    id: "am-cb-206",
+    name: "Coco Yard Broom",
+    category: "Coco Brooms",
+    code: "AM-CB-206",
+    size: "Wide Head",
+    description: "Wide head coco broom for covering large areas quickly. Perfect for gardens and driveways.",
+    imageUrl: imgCoco,
+  }
+];
