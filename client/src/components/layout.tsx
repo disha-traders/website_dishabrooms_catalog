@@ -1,11 +1,12 @@
 import { Link, useLocation } from "wouter";
-import { config } from "@/lib/config";
+import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, Mail, MapPin } from "lucide-react";
 import { useState } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const config = useConfig();
   const [location] = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 

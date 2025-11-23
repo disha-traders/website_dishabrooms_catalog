@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { config } from "@/lib/config";
+import { useConfig } from "@/hooks/use-config";
 import { products } from "@/lib/products";
 import { Link } from "wouter";
 import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck } from "lucide-react";
@@ -10,6 +10,7 @@ import heroBg from "@assets/stock_images/manufacturing_factor_f5c4b17f.jpg";
 import { Sparkles, Brush, Eraser } from "lucide-react";
 
 export default function Home() {
+  const config = useConfig();
   const featuredProducts = products.filter(p => p.isFeatured);
   const categories = [
     { name: "Grass Brooms", icon: Sparkles, desc: "Premium soft grass brooms" },

@@ -1,8 +1,9 @@
 import { Layout } from "@/components/layout";
-import { config } from "@/lib/config";
+import { useConfig } from "@/hooks/use-config";
 import heroBg from "@assets/stock_images/manufacturing_factor_f5c4b17f.jpg";
 
 export default function About() {
+  const config = useConfig();
   return (
     <Layout>
        {/* Header */}

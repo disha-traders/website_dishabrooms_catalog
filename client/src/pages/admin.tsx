@@ -5,9 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { config } from "@/lib/config";
-import { products, categories } from "@/lib/products";
-import { Lock, Save, Plus, Trash2, Edit2 } from "lucide-react";
+import { useConfig } from "@/hooks/use-config";
+import { categories, Product } from "@/lib/products";
+import { Lock, Save, Plus, Trash2, Edit2, Upload, Loader2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,6 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -25,19 +24,26 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { db, storage } from "@/lib/firebase";
+import { collection, addDoc, updateDoc, deleteDoc, doc, setDoc, onSnapshot, query, orderBy } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Local state for form management (mocking DB updates)
-  const [localConfig, setLocalConfig] = useState(config);
-  const [localProducts, setLocalProducts] = useState(products);
+  // Data state
+  const liveConfig = useConfig();
+  const [localConfig, setLocalConfig] = useState(liveConfig);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   
   // Product Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     category: "Grass Brooms",
@@ -52,9 +58,35 @@ export default function Admin() {
     if (auth === "true") setIsAuthenticated(true);
   }, []);
 
+  // Sync config
+  useEffect(() => {
+    setLocalConfig(liveConfig);
+  }, [liveConfig]);
+
+  // Fetch products
+  useEffect(() => {
+    if (!db) {
+      setLoading(false);
+      return;
+    }
+    try {
+      const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
+      const unsub = onSnapshot(q, (snapshot) => {
+        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+        setProducts(items);
+        setLoading(false);
+      }, (err) => {
+        console.error("Failed to fetch products", err);
+        setLoading(false);
+      });
+      return () => unsub();
+    } catch (e) {
+      setLoading(false);
+    }
+  }, []);
+
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple mock password
     if (password === "admin123") {
       setIsAuthenticated(true);
       localStorage.setItem("admin_auth", "true");
@@ -71,6 +103,7 @@ export default function Admin() {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
+    setImageFile(null);
     setFormData({
       name: "",
       category: "Grass Brooms",
@@ -82,8 +115,9 @@ export default function Admin() {
     setIsDialogOpen(true);
   };
 
-  const handleEditProduct = (product: any) => {
+  const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
+    setImageFile(null);
     setFormData({
       name: product.name,
       category: product.category,
@@ -95,27 +129,66 @@ export default function Admin() {
     setIsDialogOpen(true);
   };
 
-  const handleDeleteProduct = (id: string) => {
+  const handleDeleteProduct = async (id: string) => {
+    if (!db) return alert("Firebase not connected");
     if (confirm("Are you sure you want to delete this product?")) {
-      setLocalProducts(localProducts.filter(p => p.id !== id));
+      try {
+        await deleteDoc(doc(db, "products", id));
+      } catch (e) {
+        alert("Error deleting product");
+      }
     }
   };
 
-  const handleSaveProduct = () => {
-    if (editingProduct) {
-      // Edit existing
-      setLocalProducts(localProducts.map(p => 
-        p.id === editingProduct.id ? { ...p, ...formData } as any : p
-      ));
-    } else {
-      // Add new
-      const newProduct = {
-        id: `new-${Date.now()}`,
-        ...formData
+  const handleSaveProduct = async () => {
+    if (!db) return alert("Firebase not connected");
+    setSaving(true);
+    try {
+      let imageUrl = formData.imageUrl;
+
+      if (imageFile) {
+        const storageRef = ref(storage, `product-images/${Date.now()}-${imageFile.name}`);
+        await uploadBytes(storageRef, imageFile);
+        imageUrl = await getDownloadURL(storageRef);
+      }
+
+      const productData = {
+        ...formData,
+        imageUrl,
+        updatedAt: new Date(),
+        sortOrder: (editingProduct as any)?.sortOrder || Date.now(),
+        isActive: true
       };
-      setLocalProducts([newProduct as any, ...localProducts]);
+
+      if (editingProduct) {
+        await updateDoc(doc(db, "products", editingProduct.id), productData);
+      } else {
+        await addDoc(collection(db, "products"), {
+          ...productData,
+          createdAt: new Date()
+        });
+      }
+      setIsDialogOpen(false);
+    } catch (e) {
+      console.error("Error saving product", e);
+      alert("Failed to save product: " + (e as Error).message);
+    } finally {
+      setSaving(false);
     }
-    setIsDialogOpen(false);
+  };
+
+  const handleSaveSettings = async () => {
+    if (!db) return alert("Firebase not connected");
+    setSaving(true);
+    try {
+      await setDoc(doc(db, "settings", "dishaTraders"), localConfig);
+      alert("Settings saved!");
+    } catch (e) {
+      console.error("Error saving settings", e);
+      alert("Failed to save settings");
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (!isAuthenticated) {
@@ -162,6 +235,13 @@ export default function Admin() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {!db && (
+          <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 p-4 rounded-md mb-6">
+            <strong>Firebase Warning:</strong> Firebase is not configured. Changes will not be saved. 
+            Please check your .env configuration.
+          </div>
+        )}
+
         <Tabs defaultValue="products" className="space-y-6">
           <TabsList className="bg-white border shadow-sm p-1">
             <TabsTrigger value="products">Products</TabsTrigger>
@@ -177,30 +257,39 @@ export default function Admin() {
               </Button>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
-              {localProducts.map((product) => (
-                <Card key={product.id} className="flex flex-col sm:flex-row items-center p-4 gap-6 overflow-hidden">
-                  <div className="w-full sm:w-24 h-24 bg-gray-100 rounded-md shrink-0 overflow-hidden">
-                    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+            {loading ? (
+              <div className="text-center py-12 text-gray-500">Loading products...</div>
+            ) : (
+              <div className="grid grid-cols-1 gap-4">
+                {products.length === 0 && (
+                  <div className="text-center py-12 text-gray-500 border-2 border-dashed rounded-lg">
+                    No products found. Add your first product!
                   </div>
-                  <div className="flex-1 text-center sm:text-left">
-                    <h3 className="font-bold text-lg text-brand-cetacean">{product.name}</h3>
-                    <p className="text-xs text-gray-500 font-mono mb-1">{product.code}</p>
-                    <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal rounded text-xs font-bold">
-                      {product.category}
-                    </span>
-                  </div>
-                  <div className="flex gap-2 mt-4 sm:mt-0">
-                    <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEditProduct(product)}>
-                      <Edit2 size={14} /> Edit
-                    </Button>
-                    <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => handleDeleteProduct(product.id)}>
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
-            </div>
+                )}
+                {products.map((product) => (
+                  <Card key={product.id} className="flex flex-col sm:flex-row items-center p-4 gap-6 overflow-hidden">
+                    <div className="w-full sm:w-24 h-24 bg-gray-100 rounded-md shrink-0 overflow-hidden relative">
+                      <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                    </div>
+                    <div className="flex-1 text-center sm:text-left">
+                      <h3 className="font-bold text-lg text-brand-cetacean">{product.name}</h3>
+                      <p className="text-xs text-gray-500 font-mono mb-1">{product.code}</p>
+                      <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal rounded text-xs font-bold">
+                        {product.category}
+                      </span>
+                    </div>
+                    <div className="flex gap-2 mt-4 sm:mt-0">
+                      <Button variant="outline" size="sm" className="gap-2" onClick={() => handleEditProduct(product)}>
+                        <Edit2 size={14} /> Edit
+                      </Button>
+                      <Button variant="ghost" size="sm" className="text-red-500 hover:bg-red-50 hover:text-red-600" onClick={() => handleDeleteProduct(product.id)}>
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
           </TabsContent>
 
           {/* Settings Tab */}
@@ -248,12 +337,10 @@ export default function Admin() {
                    />
                  </div>
                  <div className="pt-4">
-                   <Button className="bg-brand-cetacean gap-2">
-                     <Save size={16} /> Save Changes
+                   <Button onClick={handleSaveSettings} disabled={saving} className="bg-brand-cetacean gap-2">
+                     {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />} 
+                     Save Settings
                    </Button>
-                   <p className="text-xs text-gray-400 mt-2">
-                     (Note: In this mock version, changes are not persisted to a database)
-                   </p>
                  </div>
                </CardContent>
              </Card>
@@ -262,7 +349,7 @@ export default function Admin() {
 
         {/* Product Dialog */}
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent className="sm:max-w-[500px]">
+          <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
               <DialogDescription>
@@ -332,10 +419,28 @@ export default function Admin() {
                   className="col-span-3"
                 />
               </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="image" className="text-right">
+                  Image
+                </Label>
+                <div className="col-span-3 space-y-2">
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                  />
+                  {formData.imageUrl && (
+                    <div className="text-xs text-gray-500">
+                      Current: {formData.imageUrl.split('/').pop()?.substring(0, 20)}...
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
             <DialogFooter>
-              <Button type="submit" className="bg-brand-green text-white" onClick={handleSaveProduct}>
-                {editingProduct ? "Save Changes" : "Add Product"}
+              <Button type="submit" className="bg-brand-green text-white" onClick={handleSaveProduct} disabled={saving}>
+                {saving ? <Loader2 className="animate-spin" /> : (editingProduct ? "Save Changes" : "Add Product")}
               </Button>
             </DialogFooter>
           </DialogContent>

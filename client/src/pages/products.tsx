@@ -1,13 +1,40 @@
 import { Layout } from "@/components/layout";
 import { ProductCard } from "@/components/product-card";
-import { products, categories } from "@/lib/products";
+import { products as staticProducts, categories, Product } from "@/lib/products";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
+import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 export default function Products() {
   const [location, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [products, setProducts] = useState<Product[]>(staticProducts);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from Firebase
+  useEffect(() => {
+    if (!db) return;
+
+    try {
+      // Assuming 'sortOrder' field exists, otherwise might need composite index or just remove orderBy for now
+      const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
+      const unsub = onSnapshot(q, (snapshot) => {
+        if (!snapshot.empty) {
+          const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+          setProducts(items);
+        }
+        setLoading(false);
+      }, (err) => {
+        console.log("Using static products (Firebase not ready)", err);
+        setLoading(false);
+      });
+      return () => unsub();
+    } catch (e) {
+      setLoading(false);
+    }
+  }, []);
 
   // Parse query param for initial category
   useEffect(() => {

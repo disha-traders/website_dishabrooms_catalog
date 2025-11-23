@@ -1,9 +1,10 @@
 import { Layout } from "@/components/layout";
-import { config } from "@/lib/config";
+import { useConfig } from "@/hooks/use-config";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin, MessageSquare } from "lucide-react";
 
 export default function Contact() {
+  const config = useConfig();
   const enquiryTemplate = encodeURIComponent(
     "Hello Disha Traders, I would like to make a distributor/bulk enquiry.\n\nName: \nBusiness Name: \nCity: \nProducts Interested: \nApprox Qty: "
   );
