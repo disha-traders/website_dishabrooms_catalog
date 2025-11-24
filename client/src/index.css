@@ -15,18 +15,18 @@
   /* We will rely on the CSS variables defined in :root below for colors to match the brief exactly */
 }
 
-/* 1. Lock the Color System */
+/* 1. Lock the Color System - PEACOCK THEME */
 :root {
-  --clr-bg-dark: #080A59;        /* Cetacean Blue */
-  --clr-primary: #0261D3;        /* True Blue */
-  --clr-accent-teal: #0CA586;    /* Teal Green */
-  --clr-accent-green: #06B029;   /* Dark Pastel Green */
-  --clr-accent-chartreuse: #95D426; /* Yellow-Green */
-  --clr-accent-gold: #B27F25;    /* Gold/Bronze */
+  --clr-bg-dark: #002147;        /* Deep Peacock Blue */
+  --clr-primary: #00A896;        /* Vibrant Teal */
+  --clr-accent-teal: #00A896;    /* Teal Green */
+  --clr-accent-green: #00A896;   /* Unified Teal/Green for primary actions */
+  --clr-accent-chartreuse: #95D426; /* Yellow-Green (Complementary highlight) */
+  --clr-accent-gold: #CD7F32;    /* Bronze/Gold */
   --clr-accent-mud: #785748;     /* Mud/Brown */
 
   --clr-text-main: #111827;
-  --clr-text-light: #F9FAFB;
+  --clr-text-light: #F0F4F8;     /* Cool White/Blue-gray */
   --radius-card: 14px;
 }
 
@@ -34,7 +34,7 @@
   body {
     margin: 0;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: #f5f5f7;
+    background: #F0F4F8;
     color: var(--clr-text-main);
   }
   
@@ -65,11 +65,10 @@
 
   /* 3. Hero Styling */
   .hero-custom {
-    padding: 3rem 1.5rem;
-    /* border-radius: 24px; - Removed border radius for full width or handled in container */
-    background: radial-gradient(circle at top left, rgba(149,212,38,0.12), transparent 40%),
-                radial-gradient(circle at bottom right, rgba(12,165,134,0.15), transparent 45%),
-                linear-gradient(135deg, var(--clr-bg-dark), var(--clr-primary));
+    padding: 4rem 1.5rem;
+    background: radial-gradient(circle at top left, rgba(0, 168, 150, 0.15), transparent 40%),
+                radial-gradient(circle at bottom right, rgba(149, 212, 38, 0.1), transparent 45%),
+                linear-gradient(135deg, var(--clr-bg-dark), #00152e); /* Deep gradient */
     color: var(--clr-text-light);
   }
   
@@ -83,23 +82,7 @@
 
   /* 4. Button Styling */
   .btn-primary-custom {
-    background: var(--clr-accent-chartreuse);
-    color: #111827;
-    border-radius: 999px;
-    font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.2s;
-  }
-
-  .btn-primary-custom:hover {
-    background: #82bf20; /* slightly darker */
-  }
-
-  .btn-whatsapp-custom {
-    background: var(--clr-accent-green);
+    background: var(--clr-accent-teal);
     color: #ffffff;
     border-radius: 999px;
     font-weight: 600;
@@ -107,19 +90,37 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 168, 150, 0.3);
+  }
+
+  .btn-primary-custom:hover {
+    background: #008c7d; /* darker teal */
+    transform: translateY(-1px);
+  }
+
+  .btn-whatsapp-custom {
+    background: #25D366; /* Official WhatsApp Green for recognition */
+    color: #ffffff;
+    border-radius: 999px;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
   }
 
   .btn-whatsapp-custom:hover {
-    background: #059322;
+    background: #128C7E;
   }
 
   /* 5. Card Styling */
   .card-custom {
     background: #ffffff;
     border-radius: var(--radius-card);
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
-    border-top: 3px solid var(--clr-accent-gold);  /* premium strip */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border-top: 3px solid var(--clr-accent-teal);
     overflow: hidden;
   }
 
@@ -134,8 +135,8 @@
   .filter-pill {
     padding: 0.45rem 1.1rem;
     border-radius: 999px;
-    background: #f5f5f7;
-    border: 1px solid rgba(8, 10, 89, 0.08); /* soft blue border */
+    background: #ffffff;
+    border: 1px solid rgba(0, 33, 71, 0.1);
     font-size: 0.85rem;
     color: var(--clr-text-main);
     cursor: pointer;
@@ -143,56 +144,39 @@
   }
 
   .filter-pill:hover {
-    border-color: var(--clr-primary);
+    border-color: var(--clr-accent-teal);
+    color: var(--clr-accent-teal);
   }
 
   .filter-pill.active {
     background: var(--clr-accent-teal);
     color: #fff;
     border-color: var(--clr-accent-teal);
-    box-shadow: 0 4px 10px rgba(12, 165, 134, 0.35);
+    box-shadow: 0 4px 10px rgba(0, 168, 150, 0.25);
   }
 
-  /* 7. Product Card Specifics (Gold Edge) */
+  /* 7. Product Card Specifics */
   .product-card {
-    border-radius: 18px;
+    border-radius: 12px;
     background: #ffffff;
-    box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
-    border-top: 3px solid var(--clr-accent-gold);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0,0,0,0.03);
+    border-top: 3px solid var(--clr-accent-teal);
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .product-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.14);
-  }
-
-  /* 8. WhatsApp Button (Dark Green) */
-  .btn-whatsapp {
-    background: var(--clr-accent-green);
-    color: #ffffff;
-    border-radius: 999px;
-    padding: 0.5rem 1.2rem;
-    font-size: 0.85rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    border: none;
-    transition: background-color 0.2s;
-    cursor: pointer;
-  }
-
-  .btn-whatsapp:hover {
-    background: #059322; /* slightly darker */
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 33, 71, 0.1);
   }
 
   /* 9. Footer */
   .footer {
     background: var(--clr-bg-dark);
     color: var(--clr-text-light);
-    padding: 2rem 1.5rem 1.5rem;
-    margin-top: 2rem;
+    padding: 3rem 1.5rem 2rem;
+    margin-top: auto;
   }
 
   .footer h4,
@@ -203,20 +187,21 @@
   .footer a {
     color: #e5e7eb;
     text-decoration: none;
-    font-size: 0.85rem;
-    opacity: 0.9;
+    font-size: 0.9rem;
+    opacity: 0.85;
     transition: opacity 0.2s;
   }
 
   .footer a:hover {
     text-decoration: underline;
     opacity: 1;
+    color: var(--clr-accent-chartreuse);
   }
 
   .footer-bottom {
-    margin-top: 1.5rem;
-    font-size: 0.75rem;
-    opacity: 0.8;
+    margin-top: 2.5rem;
+    font-size: 0.8rem;
+    opacity: 0.7;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
     padding-top: 1.5rem;
   }
