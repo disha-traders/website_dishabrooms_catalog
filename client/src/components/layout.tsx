@@ -138,11 +138,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     </Link>
                   </li>
                 ))}
-                <li>
-                  <Link href="/admin" className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white">
-                     Admin Login
-                  </Link>
-                </li>
               </ul>
             </div>
 
