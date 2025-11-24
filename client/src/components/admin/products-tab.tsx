@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { categories, Product } from "@/lib/products";
-import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle } from "lucide-react";
+import { categories, Product, products as mockProducts } from "@/lib/products";
+import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -22,13 +22,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { db, storage } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, writeBatch } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export function ProductsTab() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [seeding, setSeeding] = useState(false);
   
   // Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -69,6 +70,36 @@ export function ProductsTab() {
       setError("An unexpected error occurred.");
     }
   }, []);
+
+  const handleSeedData = async () => {
+    if (!db) return;
+    if (!confirm("This will add all default mock products to your database. Continue?")) return;
+    
+    setSeeding(true);
+    try {
+      // We use a batch or just simple loop since batch is limited to 500 operations (we have few)
+      // Let's use simple Promise.all for clarity
+      const promises = mockProducts.map((p, index) => {
+        // Create a clean object without the ID (Firestore generates it)
+        const { id, ...data } = p;
+        return addDoc(collection(db, "products"), {
+          ...data,
+          sortOrder: index,
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        });
+      });
+      
+      await Promise.all(promises);
+      alert("Successfully seeded " + mockProducts.length + " products!");
+    } catch (e) {
+      console.error("Seeding error", e);
+      alert("Failed to seed data: " + (e as Error).message);
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const handleAddProduct = () => {
     setEditingProduct(null);
@@ -153,12 +184,25 @@ export function ProductsTab() {
           <h2 className="text-xl font-bold text-brand-cetacean">Products Management</h2>
           <p className="text-sm text-gray-500">Manage your catalog items</p>
         </div>
-        <Button 
-          onClick={handleAddProduct} 
-          className="bg-brand-green hover:bg-green-600 text-white gap-2 rounded-full px-6 shadow-sm hover:shadow-md transition-all"
-        >
-          <Plus size={18} /> Add New Product
-        </Button>
+        <div className="flex gap-2">
+          {products.length === 0 && (
+            <Button 
+              onClick={handleSeedData} 
+              variant="outline"
+              disabled={seeding}
+              className="gap-2 border-brand-blue/30 text-brand-blue hover:bg-brand-blue/5"
+            >
+              {seeding ? <Loader2 className="animate-spin" size={16} /> : <Database size={16} />}
+              Seed Mock Data
+            </Button>
+          )}
+          <Button 
+            onClick={handleAddProduct} 
+            className="bg-brand-green hover:bg-green-600 text-white gap-2 rounded-full px-6 shadow-sm hover:shadow-md transition-all"
+          >
+            <Plus size={18} /> Add New Product
+          </Button>
+        </div>
       </div>
 
       {error && (
@@ -181,10 +225,15 @@ export function ProductsTab() {
                 <ImageIcon size={32} />
               </div>
               <h3 className="text-lg font-medium text-gray-900">No products yet</h3>
-              <p className="text-gray-500 mb-6">Get started by adding your first product to the catalog.</p>
-              <Button onClick={handleAddProduct} variant="outline" className="border-brand-blue text-brand-blue hover:bg-brand-blue/5">
-                Add Product
-              </Button>
+              <p className="text-gray-500 mb-6">Get started by adding your first product or seed with mock data.</p>
+              <div className="flex justify-center gap-4">
+                 <Button onClick={handleSeedData} variant="outline" disabled={seeding}>
+                    {seeding ? "Seeding..." : "Seed Mock Data"}
+                 </Button>
+                 <Button onClick={handleAddProduct} className="bg-brand-blue text-white">
+                   Add Product
+                 </Button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-4">
@@ -238,114 +287,116 @@ export function ProductsTab() {
 
       {/* Product Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
+        <DialogContent className="sm:max-w-[600px] h-[85vh] sm:h-auto sm:max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
+          <DialogHeader className="px-6 py-4 border-b bg-gray-50/50">
             <DialogTitle className="text-xl text-brand-cetacean">{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
             <DialogDescription>
               {editingProduct ? "Make changes to the product details here." : "Fill in the details for the new product."}
             </DialogDescription>
           </DialogHeader>
           
-          <div className="grid gap-6 py-4">
-            {/* Image Upload Section */}
-            <div className="flex flex-col items-center justify-center gap-4 bg-gray-50 p-6 rounded-lg border border-dashed border-gray-300">
-              {formData.imageUrl && formData.imageUrl !== "/images/placeholder.jpg" ? (
-                <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-white shadow-sm">
-                  <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+          <div className="flex-1 overflow-y-auto p-6">
+            <div className="grid gap-6">
+              {/* Image Upload Section */}
+              <div className="flex flex-col items-center justify-center gap-4 bg-gray-50 p-6 rounded-lg border border-dashed border-gray-300">
+                {formData.imageUrl && formData.imageUrl !== "/images/placeholder.jpg" ? (
+                  <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-white shadow-sm">
+                    <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
+                    <ImageIcon size={40} />
+                  </div>
+                )}
+                
+                <div className="w-full max-w-xs text-center">
+                  <Label htmlFor="image" className="cursor-pointer inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
+                    <Upload size={16} /> {editingProduct ? "Change Image" : "Upload Image"}
+                  </Label>
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      if (e.target.files?.[0]) {
+                        setImageFile(e.target.files[0]);
+                        // Create a local preview URL
+                        const previewUrl = URL.createObjectURL(e.target.files[0]);
+                        setFormData({...formData, imageUrl: previewUrl});
+                      }
+                    }}
+                    className="hidden"
+                  />
+                  {imageFile && <p className="mt-2 text-xs text-green-600 font-medium">Selected: {imageFile.name}</p>}
                 </div>
-              ) : (
-                <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                  <ImageIcon size={40} />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="name">Product Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    placeholder="e.g. Premium Grass Broom"
+                    className="focus:border-brand-blue"
+                  />
                 </div>
-              )}
-              
-              <div className="w-full max-w-xs text-center">
-                <Label htmlFor="image" className="cursor-pointer inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                  <Upload size={16} /> {editingProduct ? "Change Image" : "Upload Image"}
-                </Label>
-                <Input
-                  id="image"
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => {
-                    if (e.target.files?.[0]) {
-                      setImageFile(e.target.files[0]);
-                      // Create a local preview URL
-                      const previewUrl = URL.createObjectURL(e.target.files[0]);
-                      setFormData({...formData, imageUrl: previewUrl});
-                    }
-                  }}
-                  className="hidden"
-                />
-                {imageFile && <p className="mt-2 text-xs text-green-600 font-medium">Selected: {imageFile.name}</p>}
-              </div>
-            </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="code">Product Code</Label>
+                  <Input
+                    id="code"
+                    value={formData.code}
+                    onChange={(e) => setFormData({...formData, code: e.target.value})}
+                    placeholder="e.g. GB-001"
+                  />
+                </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2 col-span-2">
-                <Label htmlFor="name">Product Name</Label>
-                <Input
-                  id="name"
-                  value={formData.name}
-                  onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  placeholder="e.g. Premium Grass Broom"
-                  className="focus:border-brand-blue"
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="code">Product Code</Label>
-                <Input
-                  id="code"
-                  value={formData.code}
-                  onChange={(e) => setFormData({...formData, code: e.target.value})}
-                  placeholder="e.g. GB-001"
-                />
-              </div>
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category</Label>
+                  <Select 
+                    value={formData.category} 
+                    onValueChange={(val) => setFormData({...formData, category: val})}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
-                <Select 
-                  value={formData.category} 
-                  onValueChange={(val) => setFormData({...formData, category: val})}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="size">Size / Dimensions</Label>
+                  <Input
+                    id="size"
+                    value={formData.size}
+                    onChange={(e) => setFormData({...formData, size: e.target.value})}
+                    placeholder="e.g. 48 inches"
+                  />
+                </div>
 
-              <div className="space-y-2 col-span-2">
-                <Label htmlFor="size">Size / Dimensions</Label>
-                <Input
-                  id="size"
-                  value={formData.size}
-                  onChange={(e) => setFormData({...formData, size: e.target.value})}
-                  placeholder="e.g. 48 inches"
-                />
-              </div>
-
-              <div className="space-y-2 col-span-2">
-                <Label htmlFor="description">Description</Label>
-                <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  placeholder="Product details and specifications..."
-                  className="min-h-[100px]"
-                />
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    placeholder="Product details and specifications..."
+                    className="min-h-[100px]"
+                  />
+                </div>
               </div>
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="p-6 border-t bg-gray-50/50">
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-brand-blue text-white" onClick={handleSaveProduct} disabled={saving}>
+            <Button type="submit" className="bg-brand-blue text-white w-full sm:w-auto" onClick={handleSaveProduct} disabled={saving}>
               {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
               {editingProduct ? "Save Changes" : "Add Product"}
             </Button>
