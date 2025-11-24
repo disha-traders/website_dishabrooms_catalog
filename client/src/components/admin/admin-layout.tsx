@@ -19,11 +19,9 @@ export function AdminLayout({ children, onLogout }: AdminLayoutProps) {
           <h1 className="text-xl font-bold tracking-tight text-white">Disha Traders Admin</h1>
         </div>
         <div className="flex items-center gap-4">
-          <Link href="/">
-            <a className="text-sm text-gray-300 hover:text-[#00A896] flex items-center gap-1 transition-colors">
+          <Link href="/" className="text-sm text-gray-300 hover:text-[#00A896] flex items-center gap-1 transition-colors">
               <ExternalLink size={14} />
               View Site
-            </a>
           </Link>
           <div className="w-px h-4 bg-white/20"></div>
           <Button 
