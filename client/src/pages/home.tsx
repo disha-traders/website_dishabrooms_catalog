@@ -118,8 +118,8 @@ export default function Home() {
                  </div>
                  
                  <div className="mt-4 flex justify-center">
-                   <a href="#" className="pointer-events-none opacity-50 cursor-not-allowed" title="Catalog coming soon">
-                    <Button variant="outline" className="h-12 px-6 rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20 font-bold text-base gap-2 backdrop-blur-md shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+                   <a href="/catalog.pdf" download="Alagu_Mayil_Catalog.pdf" title="Download Catalog">
+                    <Button className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-[0_0_15px_rgba(0,168,150,0.4)] transition-all hover:scale-105 hover:shadow-xl backdrop-blur-md border border-white/20">
                       <Download className="w-4 h-4" />
                       Download Catalog PDF
                     </Button>
