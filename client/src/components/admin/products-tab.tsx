@@ -115,7 +115,7 @@ export function ProductsTab() {
       name: product.name,
       category: product.category,
       code: product.code,
-      size: product.size,
+      size: product.size || "",
       description: product.description,
       imageUrl: product.imageUrl,
       isActive: product.isActive ?? true,
