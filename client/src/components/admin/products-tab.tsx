@@ -506,7 +506,7 @@ export function ProductsTab() {
                           let val = e.target.value;
                           // Google Drive Auto-convert logic
                           if (val.includes("drive.google.com") && val.includes("/file/d/")) {
-                            const match = val.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                            const match = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
                             if (match && match[1]) {
                               val = `https://drive.google.com/uc?export=view&id=${match[1]}`;
                             }
