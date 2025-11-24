@@ -108,11 +108,16 @@ export default function Home() {
                     className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
                    />
                    
-                   {/* Floating Badge */}
-                   <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-[#002147] px-4 py-2 rounded-lg shadow-lg text-xs font-bold border border-white/50">Trusted by 10,000+ Shops & Distributors</div>
+                   {/* Floating Badge - Moved below */}
+                 </div>
+
+                 <div className="mt-6 flex justify-center">
+                   <div className="bg-white/10 backdrop-blur-md text-white px-6 py-2 rounded-full shadow-lg text-sm font-bold border border-white/20">
+                     Trusted by 10,000+ Shops & Distributors
+                   </div>
                  </div>
                  
-                 <div className="mt-6 flex justify-center">
+                 <div className="mt-4 flex justify-center">
                    <a href="#" className="pointer-events-none opacity-50 cursor-not-allowed" title="Catalog coming soon">
                     <Button variant="outline" className="h-12 px-6 rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20 font-bold text-base gap-2 backdrop-blur-md shadow-lg transition-all hover:scale-105 hover:shadow-xl">
                       <Download className="w-4 h-4" />
