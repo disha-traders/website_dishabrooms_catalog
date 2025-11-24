@@ -5,9 +5,9 @@ import { categories, Product } from "@/lib/products";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
+import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Loader2, Filter, Search, PackageX, Download } from "lucide-react";
+import { Loader2, Filter, Search, PackageX, Download, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 
@@ -17,30 +17,38 @@ export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   // Fetch products from Firebase
-  useEffect(() => {
+  const fetchProducts = async () => {
     if (!db) {
+      console.error("Firebase db not initialized");
       setLoading(false);
       return;
     }
 
+    setLoading(true);
+    setError(null);
     try {
-      // We fetch all and filter client side for speed in this scale
+      console.log("Fetching products...");
+      // Fetch once instead of snapshot to avoid potential listener issues
       const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
-      const unsub = onSnapshot(q, (snapshot) => {
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
-        setProducts(items);
-        setLoading(false);
-      }, (err) => {
-        console.error("Failed to fetch products", err);
-        setLoading(false);
-      });
-      return () => unsub();
-    } catch (e) {
-      console.error("Error setting up listener", e);
+      const snapshot = await getDocs(q);
+      
+      console.log("Products fetched", snapshot.size);
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+      console.log("Parsed products:", items);
+      setProducts(items);
+    } catch (e: any) {
+      console.error("Failed to fetch products", e);
+      setError(e.message || "Failed to load products");
+    } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   // Parse query param for initial category
@@ -61,11 +69,19 @@ export default function Products() {
 
   // Filter Logic
   const filteredProducts = products.filter(p => {
+    // If user selects "All", show all products (even if categories in DB don't match exact string, 
+    // though they should. But let's be safe).
+    // Actually, we should match strictly if not All.
     const matchesCategory = activeCategory === "All" || p.category === activeCategory;
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           p.code.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    // Only show active products on public page
+    const isActive = p.isActive !== false; // Default to true if undefined
+    
+    return matchesCategory && matchesSearch && isActive;
   });
+
+  console.log("Render products:", { loading, productsCount: products.length, filteredCount: filteredProducts.length });
 
   return (
     <Layout>
@@ -141,7 +157,22 @@ export default function Products() {
           </div>
 
           {/* Content Area */}
-          {loading ? (
+          {error ? (
+            <div className="flex flex-col items-center justify-center py-16 text-center bg-red-50 rounded-xl border border-red-100">
+              <div className="text-red-500 mb-4">
+                <PackageX size={48} />
+              </div>
+              <h3 className="text-xl font-bold text-red-700 mb-2">Unable to load products</h3>
+              <p className="text-red-600/80 max-w-md mb-6">{error}</p>
+              <Button 
+                onClick={fetchProducts} 
+                variant="outline" 
+                className="border-red-200 text-red-700 hover:bg-red-100 gap-2"
+              >
+                <RefreshCw size={16} /> Try Again
+              </Button>
+            </div>
+          ) : loading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="bg-white rounded-2xl p-4 space-y-4">
