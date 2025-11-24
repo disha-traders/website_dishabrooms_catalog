@@ -49,86 +49,72 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   
   // --- PAGE 1: COVER PAGE ---
   
-  const coverImageHeight = pageHeight * 0.8;
-  const footerHeight = pageHeight * 0.2;
+  const headerHeight = pageHeight * 0.25; // Top 25% for Header
+  const footerHeight = pageHeight * 0.15; // Bottom 15% for Footer
+  const contentHeight = pageHeight - headerHeight - footerHeight; // Middle 60% for Image
   
-  // 1. Image Section (Top 80%)
+  // 1. Header Section (Top 25%)
+  doc.setFillColor(0, 33, 71); // #002147 Dark Blue
+  doc.rect(0, 0, pageWidth, headerHeight, "F");
+  
+  // Header Content Centering
+  const headerCenterY = headerHeight / 2;
+  
+  // Brand Name
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(36);
+  doc.setFont("helvetica", "bold");
+  doc.text("Disha Traders", pageWidth / 2, headerCenterY - 10, { align: "center" });
+  
+  // Tagline
+  doc.setTextColor(0, 168, 150); // #00A896 Teal
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text("All Types of India's Premium Cleaning Brand in one Place", pageWidth / 2, headerCenterY + 5, { align: "center" });
+  
+  doc.setTextColor(200, 200, 200); // Light Gray
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Direct from Manufacturer", pageWidth / 2, headerCenterY + 15, { align: "center" });
+  
+
+  // 2. Image Section (Middle 60%)
   const coverImgBase64 = await loadImage(coverImageUrl);
   if (coverImgBase64) {
     try {
-      doc.addImage(coverImgBase64, "JPEG", 0, 0, pageWidth, coverImageHeight);
+      doc.addImage(coverImgBase64, "JPEG", 0, headerHeight, pageWidth, contentHeight);
     } catch (e) {
       console.warn("Error adding cover image", e);
       // Fallback
       doc.setFillColor(240, 240, 240);
-      doc.rect(0, 0, pageWidth, coverImageHeight, "F");
+      doc.rect(0, headerHeight, pageWidth, contentHeight, "F");
     }
   } else {
       doc.setFillColor(240, 240, 240);
-      doc.rect(0, 0, pageWidth, coverImageHeight, "F");
+      doc.rect(0, headerHeight, pageWidth, contentHeight, "F");
   }
 
-  // HEADER OVERLAY (Brand Box)
-  // Rectangle shape with text
-  const brandBoxWidth = pageWidth * 0.8;
-  const brandBoxHeight = 45;
-  const brandBoxX = (pageWidth - brandBoxWidth) / 2;
-  const brandBoxY = 40;
 
-  // Semi-transparent white box or solid white
-  doc.setFillColor(255, 255, 255);
-  // Add a slight shadow manually if needed, or just the box
-  doc.rect(brandBoxX, brandBoxY, brandBoxWidth, brandBoxHeight, "F");
+  // 3. Footer Section (Bottom 15%)
+  const footerY = pageHeight - footerHeight;
   
-  // Border for box
-  doc.setDrawColor(0, 33, 71); // #002147
-  doc.setLineWidth(0.5);
-  doc.rect(brandBoxX, brandBoxY, brandBoxWidth, brandBoxHeight, "S");
-
-  // Brand Name inside box
-  doc.setTextColor(0, 33, 71); // #002147
-  doc.setFontSize(24);
-  doc.setFont("helvetica", "bold");
-  doc.text("Disha Traders", pageWidth / 2, brandBoxY + 18, { align: "center" });
-
-  // Tagline inside box
-  doc.setTextColor(0, 168, 150); // #00A896
-  doc.setFontSize(11);
-  doc.setFont("helvetica", "bold");
-  const tagline = "All Types of India's Premium Cleaning Brand in one Place";
-  doc.text(tagline, pageWidth / 2, brandBoxY + 28, { align: "center" });
+  doc.setFillColor(0, 33, 71); // #002147 Dark Blue
+  doc.rect(0, footerY, pageWidth, footerHeight, "F");
   
-  doc.setTextColor(100, 100, 100); // Gray
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.text("Direct from Manufacturer", pageWidth / 2, brandBoxY + 36, { align: "center" });
-
-
-  // 2. Footer Section (Bottom 10% only as requested, rest is image/whitespace)
-  // Adjusting layout: Image 80%, Footer 10%
-  // Actually user asked: "Make Contact details Footer rectangle shap only 10% and selected image as Body 80%"
-  // So we will draw footer at bottom 10%
-  
-  const footerRectHeight = pageHeight * 0.15; // 15% looks better for text fitting, but visual weight is low
-  const footerY = pageHeight - footerRectHeight;
-  
-  doc.setFillColor(0, 33, 71); // #002147
-  doc.rect(0, footerY, pageWidth, footerRectHeight, "F");
-  
-  // Calculate vertical centering for text in the footer
-  const footerCenterY = footerY + (footerRectHeight / 2);
+  // Footer Content Centering
+  const footerCenterY = footerY + (footerHeight / 2);
   
   doc.setTextColor(255, 255, 255);
   
   // Company Name
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text(config.companyName, pageWidth / 2, footerCenterY - 5, { align: "center" });
+  doc.text(config.companyName, pageWidth / 2, footerCenterY - 8, { align: "center" });
   
   // Contact Details
-  doc.setFontSize(10);
+  doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text(`Contact: ${config.contact.phone} | ${config.contact.email}`, pageWidth / 2, footerCenterY + 5, { align: "center" });
+  doc.text(`Contact: ${config.contact.phone} | ${config.contact.email}`, pageWidth / 2, footerCenterY + 4, { align: "center" });
   doc.text(config.contact.address, pageWidth / 2, footerCenterY + 12, { align: "center" });
   
   // --- PRODUCT PAGES ---
