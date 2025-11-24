@@ -126,6 +126,19 @@ export default function Contact() {
                   Chat Now
                 </a>
               </div>
+
+               {/* Branches Section */}
+              <div className="pt-8 border-t border-gray-200">
+                <h2 className="text-xl font-bold text-[#002147] mb-4">Our Branches</h2>
+                <div className="flex flex-wrap gap-3">
+                  {config.branches && config.branches.map((branch: string, index: number) => (
+                    <div key={index} className="bg-white px-4 py-2 rounded-lg border border-gray-200 text-gray-600 shadow-sm font-medium flex items-center gap-2">
+                      <MapPin size={14} className="text-[#00A896]" />
+                      {branch}
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* Right: Form */}

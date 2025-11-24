@@ -7,7 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useConfig } from "@/hooks/use-config";
 import { db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
-import { Loader2, Save, CheckCircle, AlertCircle } from "lucide-react";
+import { Loader2, Save, CheckCircle, AlertCircle, Plus, X, MapPin } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export function SettingsTab() {
@@ -15,11 +15,31 @@ export function SettingsTab() {
   const [localConfig, setLocalConfig] = useState(liveConfig);
   const [saving, setSaving] = useState(false);
   const [status, setStatus] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
+  const [newBranch, setNewBranch] = useState("");
 
   // Sync config when loaded
   useEffect(() => {
     setLocalConfig(liveConfig);
   }, [liveConfig]);
+
+  const handleAddBranch = () => {
+    if (!newBranch.trim()) return;
+    
+    const currentBranches = localConfig.branches || [];
+    setLocalConfig({
+      ...localConfig,
+      branches: [...currentBranches, newBranch.trim()]
+    });
+    setNewBranch("");
+  };
+
+  const handleRemoveBranch = (indexToRemove: number) => {
+    const currentBranches = localConfig.branches || [];
+    setLocalConfig({
+      ...localConfig,
+      branches: currentBranches.filter((_, index) => index !== indexToRemove)
+    });
+  };
 
   const handleSaveSettings = async () => {
     if (!db) {
@@ -110,6 +130,46 @@ export function SettingsTab() {
              onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, address: e.target.value}})}
              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors min-h-[100px] focus:border-[#00A896]"
           />
+        </div>
+
+        {/* Branches Management */}
+        <div className="space-y-4 pt-4 border-t">
+          <Label className="text-gray-600 font-medium block">Branch Locations</Label>
+          <div className="flex gap-2">
+            <Input 
+              value={newBranch}
+              onChange={(e) => setNewBranch(e.target.value)}
+              placeholder="Add a branch city (e.g. Chennai)"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              onKeyDown={(e) => e.key === 'Enter' && handleAddBranch()}
+            />
+            <Button 
+              onClick={handleAddBranch}
+              type="button"
+              className="bg-[#00A896] hover:bg-[#008C7D] text-white shrink-0"
+            >
+              <Plus size={18} /> Add
+            </Button>
+          </div>
+          
+          <div className="flex flex-wrap gap-2 mt-2">
+            {localConfig.branches && localConfig.branches.length > 0 ? (
+              localConfig.branches.map((branch: string, index: number) => (
+                <div key={index} className="flex items-center gap-1 bg-blue-50 text-[#002147] px-3 py-1.5 rounded-lg border border-blue-100 text-sm font-medium group">
+                  <MapPin size={14} className="text-[#00A896]" />
+                  {branch}
+                  <button 
+                    onClick={() => handleRemoveBranch(index)}
+                    className="ml-1 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full p-0.5 transition-colors"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-gray-400 italic">No branches added yet.</p>
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">

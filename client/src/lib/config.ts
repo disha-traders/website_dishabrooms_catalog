@@ -15,5 +15,6 @@ export const config = {
   hero: {
     title: "Premium Brooms & Cleaning Products",
     subtitle: "Direct from the Manufacturer",
-  }
+  },
+  branches: ["Delhi", "Mumbai", "Tiruchi", "Coimbatore", "Krishnagiri"]
 };
