@@ -1,120 +1,246 @@
 import { Layout } from "@/components/layout";
 import { useConfig } from "@/hooks/use-config";
 import { Button } from "@/components/ui/button";
-import { Phone, Mail, MapPin, MessageSquare } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Phone, Mail, MapPin, MessageSquare, Send, Loader2, CheckCircle2, MessageCircle } from "lucide-react";
+import { useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function Contact() {
   const config = useConfig();
-  const enquiryTemplate = encodeURIComponent(
-    "Hello Disha Traders, I would like to make a distributor/bulk enquiry.\n\nName: \nBusiness Name: \nCity: \nProducts Interested: \nApprox Qty: "
-  );
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    subject: "Wholesale Enquiry",
+    message: ""
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    // Simulate network delay for better UX
+    setTimeout(() => {
+      setLoading(false);
+      setSubmitted(true);
+      
+      // Construct email body
+      const body = `Name: ${formData.name}%0D%0APhone: ${formData.phone}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+      
+      // Open mail client
+      window.location.href = `mailto:${config.contact.email}?subject=${encodeURIComponent(formData.subject)} - ${formData.name}&body=${body}`;
+    }, 1500);
+  };
 
   return (
     <Layout>
-      <div className="bg-gray-50 min-h-[calc(100vh-80px)] py-12">
+      {/* Hero Header */}
+      <div className="bg-[#002147] text-white py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-[#00A896]/20 to-transparent"></div>
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">Get in Touch</h1>
+          <p className="text-gray-300 max-w-2xl mx-auto text-lg">
+            Have questions about our products or want to place a bulk order? We are here to help.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-[#F0F4F8] py-12 md:py-20">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-heading font-bold text-brand-cetacean text-center mb-12">
-            Contact Us
-          </h1>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             
-            {/* Left: Info */}
-            <div className="bg-brand-cetacean text-white p-8 md:p-12 rounded-2xl shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
-              
-              <div className="relative z-10">
-                <h2 className="text-2xl font-heading font-bold mb-8 border-b border-white/20 pb-4">
-                  {config.companyName}
-                </h2>
-                
-                <div className="space-y-8">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shrink-0 text-brand-gold">
-                      <MapPin size={20} />
+            {/* Left: Contact Info Card */}
+            <div className="space-y-8">
+              <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border-t-4 border-[#00A896] relative overflow-hidden">
+                <div className="relative z-10">
+                  <h2 className="text-2xl font-heading font-bold text-[#002147] mb-8">
+                    Contact Information
+                  </h2>
+                  
+                  <div className="space-y-8">
+                    <div className="flex items-start gap-5 group">
+                      <div className="w-12 h-12 bg-[#CD7F32]/10 rounded-xl flex items-center justify-center shrink-0 text-[#CD7F32] group-hover:bg-[#CD7F32] group-hover:text-white transition-all duration-300">
+                        <MapPin size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Visit Factory</h3>
+                        <p className="text-gray-500 leading-relaxed">{config.contact.address}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-brand-gold mb-1">Visit Factory</h3>
-                      <p className="text-gray-300 leading-relaxed">{config.contact.address}</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shrink-0 text-brand-green">
-                      <Phone size={20} />
+                    <div className="flex items-start gap-5 group">
+                      <div className="w-12 h-12 bg-[#00A896]/10 rounded-xl flex items-center justify-center shrink-0 text-[#00A896] group-hover:bg-[#00A896] group-hover:text-white transition-all duration-300">
+                        <Phone size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Call Us</h3>
+                        <a href={`tel:${config.contact.phone}`} className="text-gray-500 font-mono text-lg hover:text-[#00A896] transition-colors">
+                          {config.contact.phone}
+                        </a>
+                        <p className="text-gray-400 text-sm mt-1">Mon - Sat, 9am - 6pm</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-brand-green mb-1">Call Us</h3>
-                      <p className="text-gray-300 font-mono text-lg">{config.contact.phone}</p>
-                      <p className="text-gray-400 text-sm mt-1">Mon - Sat, 9am - 6pm</p>
-                    </div>
-                  </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center shrink-0 text-brand-teal">
-                      <Mail size={20} />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-brand-teal mb-1">Email Us</h3>
-                      <p className="text-gray-300">{config.contact.email}</p>
+                    <div className="flex items-start gap-5 group">
+                      <div className="w-12 h-12 bg-[#002147]/10 rounded-xl flex items-center justify-center shrink-0 text-[#002147] group-hover:bg-[#002147] group-hover:text-white transition-all duration-300">
+                        <Mail size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Email Us</h3>
+                        <a href={`mailto:${config.contact.email}`} className="text-gray-500 hover:text-[#002147] transition-colors">
+                          {config.contact.email}
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
+              </div>
 
-                {/* Placeholder Map */}
-                <div className="mt-12 w-full h-48 bg-white/10 rounded-xl flex items-center justify-center text-gray-400 text-sm border border-white/5">
-                  Google Maps Embed Placeholder
+              {/* WhatsApp Card */}
+              <div className="bg-[#25D366]/10 border border-[#25D366]/20 p-8 rounded-2xl flex flex-col md:flex-row items-center gap-6 justify-between">
+                <div>
+                   <h3 className="font-bold text-[#075E54] text-xl mb-2 flex items-center gap-2">
+                     <MessageCircle className="w-6 h-6" />
+                     Quick Inquiry?
+                   </h3>
+                   <p className="text-[#075E54]/80">Chat directly with our sales team on WhatsApp.</p>
                 </div>
+                <a 
+                  href={config.social.whatsappLink}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn-whatsapp-custom whitespace-nowrap shadow-none"
+                >
+                  Chat Now
+                </a>
               </div>
             </div>
 
-            {/* Right: Enquiry */}
-            <div className="bg-white p-8 md:p-12 rounded-2xl shadow-xl border border-gray-100">
-              <h2 className="text-2xl font-heading font-bold text-brand-cetacean mb-2">
-                Distributor & Bulk Enquiry
-              </h2>
-              <p className="text-gray-500 mb-8">
-                Are you a Wholesaler, Retailer, or Exporter? Get the best factory rates.
-              </p>
-
-              <div className="space-y-6 mb-8">
-                <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
-                  <h3 className="font-bold text-brand-blue mb-4 flex items-center gap-2">
-                    <MessageSquare size={18} />
-                    Please share these details:
-                  </h3>
-                  <ul className="space-y-3 text-gray-700 text-sm">
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full"></span> Your Name
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full"></span> Business Name
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full"></span> City / State
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full"></span> Products Required
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <span className="w-1.5 h-1.5 bg-brand-blue rounded-full"></span> Approximate Monthly Quantity
-                    </li>
-                  </ul>
+            {/* Right: Form */}
+            <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border-t-4 border-[#002147]">
+              {submitted ? (
+                <div className="h-full flex flex-col items-center justify-center text-center py-12 animate-in fade-in zoom-in duration-500">
+                  <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-6">
+                    <CheckCircle2 size={40} />
+                  </div>
+                  <h2 className="text-3xl font-heading font-bold text-[#002147] mb-4">Message Sent!</h2>
+                  <p className="text-gray-500 max-w-md mb-8 text-lg">
+                    Thank you for contacting us. We have prepared an email for you to send, or our team will get back to you shortly if you chose another method.
+                  </p>
+                  <Button 
+                    onClick={() => setSubmitted(false)} 
+                    variant="outline"
+                    className="border-[#002147] text-[#002147] hover:bg-[#002147]/5"
+                  >
+                    Send Another Message
+                  </Button>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <h2 className="text-2xl font-heading font-bold text-[#002147] mb-6">
+                    Send us a Message
+                  </h2>
+                  <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <Label htmlFor="name" className="text-gray-700 font-medium">Your Name</Label>
+                        <Input 
+                          id="name" 
+                          placeholder="John Doe" 
+                          required
+                          value={formData.name}
+                          onChange={(e) => setFormData({...formData, name: e.target.value})}
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="phone" className="text-gray-700 font-medium">Phone Number</Label>
+                        <Input 
+                          id="phone" 
+                          placeholder="+91 98765 43210" 
+                          required
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                        />
+                      </div>
+                    </div>
 
-              <a 
-                href={`https://wa.me/${config.contact.whatsapp}?text=${enquiryTemplate}`}
-                target="_blank" 
-                rel="noopener noreferrer"
-              >
-                <Button className="w-full bg-brand-green hover:bg-brand-green/90 text-white font-bold py-6 text-lg rounded-xl shadow-lg shadow-brand-green/20 transition-all hover:scale-[1.02]">
-                  Start WhatsApp Chat
-                </Button>
-              </a>
-              <p className="text-center text-xs text-gray-400 mt-4">
-                Clicking will open WhatsApp with a pre-filled message template.
-              </p>
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-gray-700 font-medium">Email Address</Label>
+                      <Input 
+                        id="email" 
+                        placeholder="john@company.com" 
+                        required
+                        type="email"
+                        value={formData.email}
+                        onChange={(e) => setFormData({...formData, email: e.target.value})}
+                        className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="subject" className="text-gray-700 font-medium">Subject</Label>
+                      <Select 
+                        value={formData.subject} 
+                        onValueChange={(val) => setFormData({...formData, subject: val})}
+                      >
+                        <SelectTrigger className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12">
+                          <SelectValue placeholder="Select a subject" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Wholesale Enquiry">Wholesale / Distributor Enquiry</SelectItem>
+                          <SelectItem value="Retail Order">Retail Order</SelectItem>
+                          <SelectItem value="Custom Manufacturing">Custom Manufacturing</SelectItem>
+                          <SelectItem value="Export Enquiry">Export Enquiry</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="message" className="text-gray-700 font-medium">Message</Label>
+                      <Textarea 
+                        id="message" 
+                        placeholder="Please share details about your requirements..." 
+                        required
+                        value={formData.message}
+                        onChange={(e) => setFormData({...formData, message: e.target.value})}
+                        className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] min-h-[150px] resize-none"
+                      />
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      disabled={loading}
+                      className="w-full btn-primary-custom h-14 text-lg shadow-lg shadow-teal-900/20"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="animate-spin mr-2" /> Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="mr-2 w-5 h-5" /> Send Message
+                        </>
+                      )}
+                    </Button>
+                  </form>
+                </>
+              )}
             </div>
 
           </div>
