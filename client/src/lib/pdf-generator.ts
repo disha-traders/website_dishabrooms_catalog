@@ -49,11 +49,11 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   
   // --- PAGE 1: COVER PAGE ---
   
-  const headerHeight = pageHeight * 0.25; // Top 25% for Header
+  const headerHeight = pageHeight * 0.15; // Top 15% for Header (Reduced size)
   const footerHeight = pageHeight * 0.15; // Bottom 15% for Footer
-  const contentHeight = pageHeight - headerHeight - footerHeight; // Middle 60% for Image
+  const contentHeight = pageHeight - headerHeight - footerHeight; // Middle 70% for Image
   
-  // 1. Header Section (Top 25%)
+  // 1. Header Section (Top 15%)
   doc.setFillColor(0, 33, 71); // #002147 Dark Blue
   doc.rect(0, 0, pageWidth, headerHeight, "F");
   
@@ -62,20 +62,21 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   
   // Brand Name
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(36);
+  doc.setFontSize(28); // Slightly smaller to fit
   doc.setFont("helvetica", "bold");
-  doc.text("Disha Traders", pageWidth / 2, headerCenterY - 10, { align: "center" });
+  doc.text("Disha Traders", pageWidth / 2, headerCenterY - 6, { align: "center" });
   
   // Tagline
   doc.setTextColor(0, 168, 150); // #00A896 Teal
-  doc.setFontSize(14);
+  doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("All Types of India's Premium Cleaning Brand in one Place", pageWidth / 2, headerCenterY + 5, { align: "center" });
+  doc.text("All Types of India's Premium Cleaning Brand in one Place", pageWidth / 2, headerCenterY + 4, { align: "center" });
   
   doc.setTextColor(200, 200, 200); // Light Gray
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("Direct from Manufacturer", pageWidth / 2, headerCenterY + 15, { align: "center" });
+  doc.text("Direct from Manufacturer", pageWidth / 2, headerCenterY + 10, { align: "center" });
+
   
 
   // 2. Image Section (Middle 60%)
