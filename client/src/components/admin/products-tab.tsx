@@ -483,6 +483,7 @@ export function ProductsTab() {
                           src={formData.imageUrl} 
                           alt="Preview" 
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                          referrerPolicy="no-referrer"
                           onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
                         />
                         <div className="absolute inset-0 ring-1 ring-black/5 rounded-lg"></div>
