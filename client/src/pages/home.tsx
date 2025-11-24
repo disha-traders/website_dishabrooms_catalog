@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/hooks/use-config";
 import { Link } from "wouter";
-import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle, Download } from "lucide-react";
 import { useEffect, useState } from "react";
 import { collection, query, where, limit, getDocs, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -76,6 +76,12 @@ export default function Home() {
                     View Catalog
                   </Button>
                 </Link>
+                <a href="#" className="pointer-events-none opacity-50 cursor-not-allowed" title="Catalog coming soon">
+                  <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
+                    <Download className="w-5 h-5" />
+                    Download Catalog
+                  </Button>
+                </a>
                 <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
                     <MessageCircle className="w-5 h-5" />
