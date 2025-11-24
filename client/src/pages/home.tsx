@@ -44,40 +44,82 @@ export default function Home() {
   return (
     <Layout>
       {/* Hero Section */}
-      <section className="hero-custom relative overflow-hidden min-h-[80vh] flex items-center">
+      <section className="hero-custom relative overflow-hidden min-h-[85vh] flex items-center bg-gradient-to-br from-[#002147] via-[#003366] to-[#002147]">
+        {/* Abstract Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#00A896] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob"></div>
+          <div className="absolute top-0 -right-4 w-96 h-96 bg-[#CD7F32] rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-32 left-20 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000"></div>
+        </div>
+
         <div className="container mx-auto px-4 py-12 lg:py-20 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6 animate-in slide-in-from-left duration-700">
-              <div className="inline-block bg-[#00A896]/20 border border-[#00A896]/30 backdrop-blur-sm px-4 py-1 rounded-full text-[#95D426] text-sm font-bold uppercase tracking-widest shadow-sm">
-                Direct Manufacturer
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Text Content */}
+            <div className="lg:col-span-7 space-y-8 animate-in slide-in-from-left duration-700">
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-[#00A896] animate-pulse"></span>
+                <span className="text-[#00A896] font-bold uppercase tracking-widest text-xs">Since 1998</span>
               </div>
-              <h1 className="text-4xl lg:text-6xl font-heading font-bold leading-tight text-white">
-                {config.hero.title || "Quality Brooms & Mops"}
+              
+              <h1 className="text-4xl lg:text-6xl xl:text-7xl font-heading font-bold leading-tight text-white">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">India's Premium</span>
+                <span className="block text-[#00A896]">Cleaning Brand</span>
               </h1>
-              <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-200">
-                {config.hero.subtitle || config.tagline || "Manufacturing premium cleaning products with pride in Tamil Nadu."}
+              
+              <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-300 font-light border-l-4 border-[#CD7F32] pl-6">
+                {config.hero.subtitle || "Experience the superior quality of Alagu Mayil. Handcrafted brooms and mops designed for the modern Indian home."}
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Link href="/products" className="btn-primary-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl hover:bg-[#008c7d]">
-                  View Product Catalog
+
+              <div className="flex flex-col sm:flex-row gap-5 pt-4">
+                <Link href="/products">
+                  <Button className="h-14 px-8 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-lg shadow-[0_0_20px_rgba(0,168,150,0.3)] transition-all hover:scale-105">
+                    View Catalog
+                  </Button>
                 </Link>
-                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-whatsapp-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl gap-2">
-                  <MessageCircle className="w-6 h-6" />
-                  Enquire on WhatsApp
+                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
+                  <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
+                    <MessageCircle className="w-5 h-5" />
+                    WhatsApp Enquiry
+                  </Button>
                 </a>
+              </div>
+
+              <div className="pt-8 flex items-center gap-8 text-sm font-medium text-gray-400">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="text-[#CD7F32]" /> Quality Assured
+                </div>
+                <div className="flex items-center gap-2">
+                  <Truck className="text-[#CD7F32]" /> Pan-India Delivery
+                </div>
               </div>
             </div>
             
-            {/* Hero Image Collage */}
-            <div className="relative h-[400px] lg:h-[500px] hidden lg:block animate-in zoom-in duration-1000">
-               <div className="absolute top-10 right-10 w-72 h-96 bg-[#CD7F32] rounded-2xl shadow-2xl rotate-3 z-10 overflow-hidden border-4 border-white/20">
-                 <img src={heroBg} alt="Factory" className="w-full h-full object-cover opacity-90 mix-blend-overlay" />
-               </div>
-               <div className="absolute bottom-10 left-16 w-72 h-72 bg-[#00A896] rounded-2xl shadow-2xl -rotate-6 z-20 overflow-hidden border-4 border-white/20 flex items-center justify-center p-6">
-                 <div className="text-center text-white">
-                   <div className="text-5xl font-heading font-bold mb-2">100%</div>
-                   <div className="text-lg uppercase tracking-wider font-medium">Quality Guarantee</div>
+            {/* Hero Image */}
+            <div className="lg:col-span-5 relative animate-in zoom-in duration-1000 delay-200">
+               <div className="relative z-10 w-full max-w-md mx-auto lg:ml-auto">
+                 {/* Glow Effect */}
+                 <div className="absolute -inset-1 bg-gradient-to-r from-[#00A896] to-[#CD7F32] rounded-2xl blur opacity-30"></div>
+                 
+                 {/* Image Container */}
+                 <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-white/5 backdrop-blur-sm">
+                   <img 
+                    src="/images/hero-poster.png" 
+                    alt="Alagu Mayil Brand Ambassador" 
+                    className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700"
+                   />
+                   
+                   {/* Floating Badge */}
+                   <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-[#002147] px-4 py-2 rounded-lg shadow-lg text-xs font-bold border border-white/50">
+                     Trusted by 10,000+ Homes
+                   </div>
                  </div>
+               </div>
+               
+               {/* Decorative Dots */}
+               <div className="absolute -bottom-12 -left-12 grid grid-cols-6 gap-2 opacity-20">
+                 {[...Array(24)].map((_, i) => (
+                   <div key={i} className="w-1.5 h-1.5 rounded-full bg-white"></div>
+                 ))}
                </div>
             </div>
           </div>
