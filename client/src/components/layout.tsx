@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, Mail, MapPin, MessageCircle } from "lucide-react";
+import { Menu, X, Phone, Mail, MapPin, MessageCircle, Settings } from "lucide-react";
 import { useState } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -169,9 +169,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
           
           <div className="footer-bottom flex flex-col md:flex-row justify-between items-center">
             <p>&copy; {new Date().getFullYear()} {config.companyName}. All rights reserved.</p>
-            <p className="mt-2 md:mt-0 flex items-center gap-1">
-              Built by <span className="text-brand-gold font-semibold">Ourcresta BusOps</span>
-            </p>
+            <div className="flex items-center gap-2 mt-2 md:mt-0">
+               <Link href="/admin" className="text-gray-500 hover:text-brand-gold transition-colors" aria-label="Admin Login">
+                 <Settings size={14} />
+               </Link>
+               <p className="flex items-center gap-1">
+                  Built by <span className="text-brand-gold font-semibold">Ourcresta BusOps</span>
+               </p>
+            </div>
           </div>
         </div>
       </footer>
