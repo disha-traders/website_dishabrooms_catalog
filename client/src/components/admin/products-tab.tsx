@@ -123,13 +123,39 @@ export function ProductsTab() {
           for (const row of parsedProducts) {
             if (!row.name || !row.code) continue;
             
+            let imageUrl = row.imageUrl || "/images/placeholder.jpg";
+
+            // Google Drive Auto-convert logic
+            if (imageUrl.includes("drive.google.com") || imageUrl.includes("docs.google.com")) {
+              let fileId = null;
+              
+              // Case 1: /file/d/FILE_ID
+              const matchFile = imageUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+              if (matchFile && matchFile[1]) {
+                fileId = matchFile[1];
+              }
+              
+              // Case 2: id=FILE_ID
+              if (!fileId) {
+                const matchId = imageUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                if (matchId && matchId[1]) {
+                  fileId = matchId[1];
+                }
+              }
+
+              if (fileId) {
+                // Use lh3.googleusercontent.com for better embedding reliability
+                imageUrl = `https://lh3.googleusercontent.com/d/${fileId}`;
+              }
+            }
+
             await dbSaveProduct({
               name: row.name,
               category: row.category || "Uncategorized",
               code: row.code,
               size: row.size || "",
               description: row.description || "",
-              imageUrl: row.imageUrl || "/images/placeholder.jpg",
+              imageUrl: imageUrl,
               isActive: true,
               sortOrder: Number(row.sortOrder) || 0
             });
