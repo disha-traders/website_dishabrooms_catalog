@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Product, categories as defaultCategories } from "@/lib/products";
 import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon, Filter, ChevronLeft, ChevronRight, Upload, Download } from "lucide-react";
 import Papa from "papaparse";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -39,6 +40,7 @@ export function ProductsTab() {
 
   // Dynamic Categories State
   const [dynamicCategories, setDynamicCategories] = useState<string[]>([]);
+  const { toast } = useToast();
 
   // Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -87,9 +89,16 @@ export function ProductsTab() {
     try {
       localStorage.removeItem("disha_products");
       await refreshData();
-      alert("Data reset successfully!");
+      toast({
+        title: "Data Reset",
+        description: "Product data has been reset to defaults successfully.",
+      });
     } catch (e) {
-      alert("Failed to reset data");
+      toast({
+        title: "Reset Failed",
+        description: "Failed to reset product data.",
+        variant: "destructive",
+      });
     } finally {
       setSeeding(false);
     }
@@ -133,6 +142,7 @@ export function ProductsTab() {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleBulkUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -148,9 +158,13 @@ export function ProductsTab() {
           const parsedProducts = results.data as any[];
           let successCount = 0;
           let updateCount = 0;
+          let skippedCount = 0;
           
           for (const row of parsedProducts) {
-            if (!row.name || !row.code) continue;
+            if (!row.name || !row.code) {
+              skippedCount++;
+              continue;
+            }
             
             let imageUrl = row.imageUrl || "/images/placeholder.jpg";
 
@@ -203,15 +217,27 @@ export function ProductsTab() {
             successCount++;
           }
           
-          const msg = updateCount > 0 
-            ? `Processed ${successCount} products (${updateCount} updated, ${successCount - updateCount} new)!`
-            : `Successfully imported ${successCount} new products!`;
+          let msg = updateCount > 0 
+            ? `Processed ${successCount} products (${updateCount} updated, ${successCount - updateCount} new).`
+            : `Successfully imported ${successCount} new products.`;
+
+          if (skippedCount > 0) {
+            msg += ` ${skippedCount} rows were skipped (missing name or code).`;
+          }
             
-          alert(msg);
+          toast({
+            title: "Import Completed",
+            description: msg,
+            variant: skippedCount > 0 ? "default" : "default" // Could use warning if needed
+          });
           await refreshData();
         } catch (e) {
           console.error("Bulk upload failed", e);
-          alert("Failed to process CSV file");
+          toast({
+            title: "Import Failed",
+            description: "Failed to process CSV file. Please check the format.",
+            variant: "destructive",
+          });
         } finally {
           setUploading(false);
           // Reset input
@@ -220,7 +246,11 @@ export function ProductsTab() {
       },
       error: (error) => {
         console.error("CSV Parse Error", error);
-        alert("Failed to parse CSV file");
+        toast({
+          title: "CSV Error",
+          description: "Failed to parse CSV file. Please ensure it is a valid CSV.",
+          variant: "destructive",
+        });
         setUploading(false);
       }
     });
@@ -305,7 +335,11 @@ export function ProductsTab() {
       await refreshData();
     } catch (e) {
       console.error("Error saving product", e);
-      alert("Failed to save product");
+      toast({
+        title: "Save Failed",
+        description: "Failed to save product changes.",
+        variant: "destructive",
+      });
     } finally {
       setSaving(false);
     }
