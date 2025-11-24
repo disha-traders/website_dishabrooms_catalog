@@ -13,6 +13,20 @@ export default function Home() {
   const config = useConfig();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
   
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const slides = [
+    "/images/slideshow/slide-1.png",
+    "/images/slideshow/slide-2.png",
+    "/images/slideshow/slide-3.png"
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   const categories = [
     { name: "Grass Brooms", icon: Sparkles, desc: "Premium soft grass brooms" },
     { name: "Coco Brooms", icon: Brush, desc: "Hard bristles for outdoors" },
@@ -138,8 +152,26 @@ export default function Home() {
         </div>
       </section>
       {/* Categories Section */}
-      <section className="py-20 bg-[#F0F4F8]">
-        <div className="container mx-auto px-4">
+      <section className="py-20 relative overflow-hidden bg-[#F0F4F8]">
+        {/* Slideshow Background */}
+        <div className="absolute inset-0 w-full h-full z-0">
+          {slides.map((slide, index) => (
+             <div 
+               key={index} 
+               className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentSlide ? 'opacity-100' : 'opacity-0'}`}
+             >
+               <img 
+                 src={slide} 
+                 alt={`Background Slide ${index + 1}`} 
+                 className="w-full h-full object-cover"
+               />
+               {/* Overlay for readability */}
+               <div className="absolute inset-0 bg-white/90 backdrop-blur-[1px]"></div>
+             </div>
+          ))}
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-[#002147] mb-4">Our Product Range</h2>
             <div className="w-24 h-1 bg-[#00A896] mx-auto rounded-full"></div>
