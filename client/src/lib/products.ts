@@ -1,7 +1,3 @@
-import imgGrass from "@assets/stock_images/traditional_indian_g_876c367c.jpg";
-import imgCoco from "@assets/stock_images/coco_broom_hard_bris_7cd14983.jpg";
-import imgMop from "@assets/stock_images/cotton_yarn_floor_mo_ee5de9fc.jpg";
-import imgWiper from "@assets/stock_images/cleaning_floor_wiper_0a87dd09.jpg";
 
 export interface Product {
   id: string;
@@ -33,7 +29,7 @@ export const products: Product[] = [
     code: "AM-GB-501",
     size: "Premium Soft, Long Handle",
     description: "Durable grass broom ideal for daily household sweeping. Made from high-quality selected grass.",
-    imageUrl: imgGrass,
+    imageUrl: "/products/grass-broom.jpg",
     isFeatured: true,
   },
   {
@@ -43,7 +39,7 @@ export const products: Product[] = [
     code: "AM-CB-202",
     size: "Hard Bristles, Outdoor",
     description: "Strong coconut fiber broom designed for rough surfaces and outdoor cleaning.",
-    imageUrl: imgCoco,
+    imageUrl: "/products/coco-broom.jpg",
     isFeatured: true,
   },
   {
@@ -53,7 +49,7 @@ export const products: Product[] = [
     code: "AM-YM-303",
     size: "300g, 4ft Handle",
     description: "Super absorbent cotton yarn mop for efficient floor cleaning. Durable plastic holder.",
-    imageUrl: imgMop,
+    imageUrl: "/products/yarn-mop.jpg",
     isFeatured: true,
   },
   {
@@ -63,7 +59,7 @@ export const products: Product[] = [
     code: "AM-WB-404",
     size: "16 inch",
     description: "High-quality rubber lip floor wiper for instant water removal. Sturdy grip.",
-    imageUrl: imgWiper,
+    imageUrl: "/products/floor-wiper.jpg",
   },
   {
     id: "am-gb-505",
@@ -72,7 +68,7 @@ export const products: Product[] = [
     code: "AM-GB-505",
     size: "Standard",
     description: "Affordable grass broom for everyday use. Lightweight and easy to handle.",
-    imageUrl: imgGrass,
+    imageUrl: "/products/grass-broom.jpg",
   },
   {
     id: "am-cb-206",
@@ -81,6 +77,6 @@ export const products: Product[] = [
     code: "AM-CB-206",
     size: "Wide Head",
     description: "Wide head coco broom for covering large areas quickly. Perfect for gardens and driveways.",
-    imageUrl: imgCoco,
+    imageUrl: "/products/coco-broom.jpg",
   }
 ];
