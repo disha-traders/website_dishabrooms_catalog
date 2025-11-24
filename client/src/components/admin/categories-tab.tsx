@@ -198,40 +198,77 @@ export function CategoriesTab() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{editingCategory ? "Edit Category" : "Add Category"}</DialogTitle>
+        <DialogContent className="sm:max-w-[500px] bg-white rounded-xl shadow-2xl border-0 p-0 overflow-hidden gap-0">
+          <DialogHeader className="px-6 py-5 border-b border-gray-100 bg-white">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-[#E6F6F4] flex items-center justify-center text-[#00A896]">
+                {editingCategory ? <Edit2 size={18} /> : <Plus size={20} />}
+              </div>
+              <div>
+                <DialogTitle className="text-xl font-bold text-[#002147]">
+                  {editingCategory ? "Edit Category" : "Add New Category"}
+                </DialogTitle>
+                <DialogDescription className="text-gray-500 text-sm mt-0.5">
+                  {editingCategory ? "Modify category details below." : "Create a new product category."}
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
-          <div className="space-y-4 py-4">
+          
+          <div className="p-6 space-y-5 bg-gray-50/30">
             <div className="space-y-2">
-              <Label>Category Name</Label>
+              <Label htmlFor="cat-name" className="text-gray-700 font-medium">Category Name <span className="text-red-500">*</span></Label>
               <Input 
+                id="cat-name"
                 value={formData.name} 
                 onChange={(e) => setFormData({...formData, name: e.target.value})} 
                 placeholder="e.g. Grass Brooms"
+                className="h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all"
               />
             </div>
+            
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label htmlFor="cat-desc" className="text-gray-700 font-medium">Description</Label>
               <Textarea 
+                id="cat-desc"
                 value={formData.description} 
                 onChange={(e) => setFormData({...formData, description: e.target.value})}
-                placeholder="Optional description" 
+                placeholder="Brief description of this category..." 
+                className="min-h-[80px] bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all resize-none"
               />
             </div>
+            
             <div className="space-y-2">
-              <Label>Sort Order</Label>
-              <Input 
-                type="number" 
-                value={formData.sortOrder} 
-                onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})} 
-              />
+              <Label htmlFor="cat-sort" className="text-gray-700 font-medium">Sort Order</Label>
+              <div className="flex items-center gap-4">
+                <Input 
+                  id="cat-sort"
+                  type="number" 
+                  value={formData.sortOrder} 
+                  onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})} 
+                  className="h-11 w-24 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all"
+                />
+                <p className="text-xs text-gray-500 flex-1">
+                  Determines the display order in the catalog. Lower numbers appear first (0, 1, 2...).
+                </p>
+              </div>
             </div>
           </div>
-          <DialogFooter>
-             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-             <Button onClick={handleSaveCategory} disabled={saving} className="bg-[#00A896] hover:bg-[#008C7D]">
-               {saving ? <Loader2 className="animate-spin" /> : <Save size={16} className="mr-2" />}
+
+          <DialogFooter className="p-6 border-t border-gray-100 bg-white gap-3">
+             <Button 
+               variant="outline" 
+               onClick={() => setIsDialogOpen(false)}
+               className="h-11 px-6 border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium"
+             >
+               Cancel
+             </Button>
+             <Button 
+               onClick={handleSaveCategory} 
+               disabled={saving} 
+               className="h-11 px-8 bg-[#00A896] hover:bg-[#008C7D] text-white font-bold shadow-lg shadow-[#00A896]/20 transition-all hover:shadow-xl"
+             >
+               {saving ? <Loader2 className="animate-spin mr-2" size={18} /> : <Save size={18} className="mr-2" />}
                Save Category
              </Button>
           </DialogFooter>
