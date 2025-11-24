@@ -246,40 +246,45 @@ export default function Contact() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
-                      <Button 
-                        type="submit" 
-                        onClick={() => setSubmissionType('whatsapp')}
-                        disabled={loading}
-                        className="w-full bg-[#25D366] hover:bg-[#128C7E] h-14 text-lg shadow-lg text-white"
-                      >
-                        {loading && submissionType === 'whatsapp' ? (
-                          <>
-                            <Loader2 className="animate-spin mr-2" /> Opening...
-                          </>
-                        ) : (
-                          <>
-                            <MessageCircle className="mr-2 w-5 h-5" /> Send by WhatsApp
-                          </>
-                        )}
-                      </Button>
+                    <div className="pt-4">
+                      <div className="border-2 border-[#00A896]/30 rounded-xl p-4 bg-[#00A896]/5">
+                         <h3 className="text-center text-[#002147] font-bold mb-3 uppercase tracking-wide text-sm">Send Message By</h3>
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <Button 
+                            type="submit" 
+                            onClick={() => setSubmissionType('whatsapp')}
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-[#00A896] to-[#008C7D] hover:from-[#008C7D] hover:to-[#007A6E] h-12 text-base shadow-md text-white font-bold"
+                          >
+                            {loading && submissionType === 'whatsapp' ? (
+                              <>
+                                <Loader2 className="animate-spin mr-2 w-4 h-4" /> Opening...
+                              </>
+                            ) : (
+                              <>
+                                <MessageCircle className="mr-2 w-5 h-5" /> WhatsApp
+                              </>
+                            )}
+                          </Button>
 
-                      <Button 
-                        type="submit" 
-                        onClick={() => setSubmissionType('email')}
-                        disabled={loading}
-                        className="w-full btn-primary-custom h-14 text-lg shadow-lg shadow-teal-900/20"
-                      >
-                        {loading && submissionType === 'email' ? (
-                          <>
-                            <Loader2 className="animate-spin mr-2" /> Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Mail className="mr-2 w-5 h-5" /> Send by Email
-                          </>
-                        )}
-                      </Button>
+                          <Button 
+                            type="submit" 
+                            onClick={() => setSubmissionType('email')}
+                            disabled={loading}
+                            className="w-full bg-gradient-to-r from-[#00A896] to-[#008C7D] hover:from-[#008C7D] hover:to-[#007A6E] h-12 text-base shadow-md text-white font-bold"
+                          >
+                            {loading && submissionType === 'email' ? (
+                              <>
+                                <Loader2 className="animate-spin mr-2 w-4 h-4" /> Sending...
+                              </>
+                            ) : (
+                              <>
+                                <Mail className="mr-2 w-5 h-5" /> Email
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </form>
                 </>
