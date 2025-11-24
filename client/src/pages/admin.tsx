@@ -7,38 +7,76 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Lock } from "lucide-react";
-import { db } from "@/lib/firebase";
+import { Lock, Loader2 } from "lucide-react";
+import { db, auth } from "@/lib/firebase";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
 
 export default function Admin() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("products");
+  const [loginLoading, setLoginLoading] = useState(false);
 
   useEffect(() => {
-    const auth = localStorage.getItem("admin_auth");
-    if (auth === "true") setIsAuthenticated(true);
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
   }, []);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
-    if (password === adminPassword) {
-      setIsAuthenticated(true);
-      localStorage.setItem("admin_auth", "true");
-      setError("");
-    } else {
-      setError("Invalid password");
+    if (!auth) {
+      setError("Firebase Auth not initialized");
+      return;
+    }
+    
+    setLoginLoading(true);
+    setError("");
+    
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      // onAuthStateChanged will handle the redirect/state update
+    } catch (err: any) {
+      console.error("Login error:", err);
+      let msg = "Failed to login.";
+      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
+        msg = "Invalid email or password.";
+      } else if (err.code === "auth/too-many-requests") {
+        msg = "Too many failed attempts. Try again later.";
+      }
+      setError(msg);
+    } finally {
+      setLoginLoading(false);
     }
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem("admin_auth");
+  const handleLogout = async () => {
+    if (!auth) return;
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.error("Logout error", e);
+    }
   };
 
-  if (!isAuthenticated) {
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center">
+        <Loader2 className="animate-spin text-[#00A896]" size={32} />
+      </div>
+    );
+  }
+
+  if (!user) {
     return (
       <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center p-4">
         <Card className="w-full max-w-md border-none shadow-xl rounded-2xl">
@@ -51,19 +89,32 @@ export default function Admin() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-5">
               <div className="space-y-2">
+                <Label htmlFor="email">Email Address</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="admin@dishatraders.com"
+                  className="bg-gray-50 border-gray-200 focus:bg-white h-11 focus:border-[#00A896]"
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter admin password"
+                  placeholder="••••••••"
                   className="bg-gray-50 border-gray-200 focus:bg-white h-11 focus:border-[#00A896]"
+                  required
                 />
               </div>
               {error && <p className="text-red-500 text-sm font-medium bg-red-50 p-2 rounded text-center">{error}</p>}
-              <Button type="submit" className="w-full bg-[#002147] hover:bg-[#003366] h-11 text-base">
-                Login to Dashboard
+              <Button type="submit" disabled={loginLoading} className="w-full bg-[#002147] hover:bg-[#003366] h-11 text-base">
+                {loginLoading ? <Loader2 className="animate-spin" /> : "Login to Dashboard"}
               </Button>
             </form>
             <div className="mt-6 text-center text-xs text-gray-400">
