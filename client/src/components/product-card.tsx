@@ -1,5 +1,5 @@
 import { Product } from "@/lib/products";
-import { config } from "@/lib/config";
+import { useConfig } from "@/hooks/use-config";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MessageCircle, ArrowUpRight, ShieldCheck } from "lucide-react";
@@ -10,10 +10,12 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const config = useConfig();
   const [isLoaded, setIsLoaded] = useState(false);
   const whatsappMessage = encodeURIComponent(
     `Hello, I am interested in this product: ${product.name} (Code: ${product.code}). Please provide more details.`
   );
+  // Use the hook's config which might have updated whatsappLink, or construct it here as fallback
   const whatsappLink = `https://wa.me/${config.contact.whatsapp}?text=${whatsappMessage}`;
 
   return (

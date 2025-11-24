@@ -10,7 +10,18 @@ export function useConfig() {
       try {
         const savedSettings = await dbGetSettings();
         if (savedSettings) {
-          setConfig((prev) => ({ ...prev, ...savedSettings }));
+          // Merge saved settings
+          const mergedConfig = { ...defaultConfig, ...savedSettings };
+          
+          // Ensure whatsappLink is synced with contact.whatsapp
+          if (mergedConfig.contact?.whatsapp) {
+             mergedConfig.social = {
+               ...mergedConfig.social,
+               whatsappLink: `https://wa.me/${mergedConfig.contact.whatsapp}`
+             };
+          }
+          
+          setConfig(mergedConfig);
         }
       } catch (error) {
         console.warn("Error loading settings:", error);
