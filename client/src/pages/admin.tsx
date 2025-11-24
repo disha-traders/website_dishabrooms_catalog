@@ -89,16 +89,16 @@ export default function Admin() {
       )}
 
       <Tabs defaultValue="products" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="bg-transparent border-b border-gray-200 w-full justify-start rounded-none h-auto p-0 gap-8">
+        <TabsList className="bg-white p-1 rounded-lg border border-gray-200 w-full sm:w-auto inline-flex h-auto">
           <TabsTrigger 
             value="products" 
-            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#00A896] data-[state=active]:text-[#00A896] text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all hover:text-[#002147]"
+            className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
           >
             Products
           </TabsTrigger>
           <TabsTrigger 
             value="settings"
-            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#00A896] data-[state=active]:text-[#00A896] text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all hover:text-[#002147]"
+            className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
           >
             General Settings
           </TabsTrigger>
