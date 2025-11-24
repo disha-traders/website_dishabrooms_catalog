@@ -64,6 +64,8 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(28); // Slightly smaller to fit
   doc.setFont("helvetica", "bold");
+  // Add slight letter spacing simulation by adding spaces between characters? No, JS PDF doesn't support it easily.
+  // We will just center it perfectly.
   doc.text("Disha Traders", pageWidth / 2, headerCenterY - 6, { align: "center" });
   
   // Tagline
@@ -73,8 +75,8 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   doc.text("All Types of India's Premium Cleaning Brand in one Place", pageWidth / 2, headerCenterY + 4, { align: "center" });
   
   doc.setTextColor(200, 200, 200); // Light Gray
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "italic"); // Made italic for better style
   doc.text("Direct from Manufacturer", pageWidth / 2, headerCenterY + 10, { align: "center" });
 
   

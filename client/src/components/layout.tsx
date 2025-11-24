@@ -62,14 +62,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <button
             className="md:hidden p-2 text-white"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Nav */}
+          {/* Mobile Nav */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-brand-cetacean border-t border-white/10 p-4 absolute w-full shadow-xl">
+          <div className="md:hidden bg-brand-cetacean border-t border-white/10 p-4 absolute w-full shadow-xl z-50 animate-in slide-in-from-top-5 duration-300">
             <nav className="flex flex-col gap-4">
               {navItems.map((item) => (
                 <Link 
@@ -113,16 +114,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <p className="text-gray-300 mb-6 max-w-sm leading-relaxed">
                 {config.tagline}
               </p>
-              <div className="flex gap-4">
-                {/* Social placeholders */}
-                <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-blue transition-colors cursor-pointer">
-                  <span className="sr-only">Facebook</span>
-                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
-                </div>
-                <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-green transition-colors cursor-pointer">
-                  <span className="sr-only">WhatsApp</span>
-                   <Phone size={18} />
-                </div>
+            <div className="flex gap-4">
+                {/* Social Links */}
+                <a 
+                  href="#" 
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-blue transition-all hover:-translate-y-1 cursor-pointer"
+                  aria-label="Visit our Facebook page"
+                >
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
+                </a>
+                <a 
+                  href={config.social.whatsappLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-green transition-all hover:-translate-y-1 cursor-pointer"
+                  aria-label="Contact us on WhatsApp"
+                >
+                   <Phone size={18} className="text-white" />
+                </a>
               </div>
             </div>
 
