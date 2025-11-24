@@ -48,7 +48,7 @@ export function SettingsTab() {
     <Card className="border-none shadow-sm rounded-[16px] overflow-hidden bg-white">
       <CardHeader className="bg-white border-b px-6 py-5">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-xl text-brand-cetacean">General Information</CardTitle>
+          <CardTitle className="text-xl text-[#002147]">General Information</CardTitle>
           {status.message && (
             <div className={`text-sm flex items-center gap-2 px-3 py-1 rounded-full ${
               status.type === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'
@@ -66,7 +66,7 @@ export function SettingsTab() {
             <Input 
               value={localConfig.companyName}
               onChange={(e) => setLocalConfig({...localConfig, companyName: e.target.value})} 
-              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
             />
           </div>
           <div className="space-y-2">
@@ -74,7 +74,7 @@ export function SettingsTab() {
             <Input 
               value={localConfig.brandName} 
               onChange={(e) => setLocalConfig({...localConfig, brandName: e.target.value})}
-              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
             />
           </div>
           <div className="space-y-2">
@@ -82,7 +82,7 @@ export function SettingsTab() {
             <Input 
                value={localConfig.contact.phone}
                onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, phone: e.target.value}})}
-               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
             />
           </div>
           <div className="space-y-2">
@@ -90,7 +90,7 @@ export function SettingsTab() {
             <Input 
                value={localConfig.contact.whatsapp}
                onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, whatsapp: e.target.value}})}
-               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
             />
           </div>
           <div className="space-y-2">
@@ -98,7 +98,7 @@ export function SettingsTab() {
             <Input 
                value={localConfig.contact.email}
                onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, email: e.target.value}})}
-               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+               className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
             />
           </div>
         </div>
@@ -108,7 +108,7 @@ export function SettingsTab() {
           <Textarea 
              value={localConfig.contact.address}
              onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, address: e.target.value}})}
-             className="bg-gray-50 border-gray-200 focus:bg-white transition-colors min-h-[100px]"
+             className="bg-gray-50 border-gray-200 focus:bg-white transition-colors min-h-[100px] focus:border-[#00A896]"
           />
         </div>
 
@@ -119,7 +119,7 @@ export function SettingsTab() {
                 value={localConfig.hero?.title || ""}
                 onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title: e.target.value }})} 
                 placeholder="e.g. Premium Cleaning Solutions"
-                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
               />
             </div>
             <div className="space-y-2">
@@ -128,7 +128,7 @@ export function SettingsTab() {
                 value={localConfig.hero?.subtitle || ""}
                 onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, subtitle: e.target.value }})}
                 placeholder="e.g. Quality brooms and mops for every home"
-                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
               />
             </div>
         </div>
@@ -137,7 +137,7 @@ export function SettingsTab() {
           <Button 
             onClick={handleSaveSettings} 
             disabled={saving} 
-            className="bg-brand-blue hover:bg-blue-700 text-white gap-2 px-6 rounded-full shadow-md hover:shadow-lg transition-all"
+            className="bg-[#002147] hover:bg-[#003366] text-white gap-2 px-6 rounded-full shadow-md hover:shadow-lg transition-all"
           >
             {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />} 
             Save Settings

@@ -40,13 +40,13 @@ export default function Admin() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center p-4">
         <Card className="w-full max-w-md border-none shadow-xl rounded-2xl">
           <CardHeader className="text-center pb-2">
-            <div className="mx-auto w-12 h-12 bg-brand-cetacean/10 rounded-full flex items-center justify-center mb-4 text-brand-cetacean">
+            <div className="mx-auto w-12 h-12 bg-[#002147]/10 rounded-full flex items-center justify-center mb-4 text-[#002147]">
               <Lock size={24} />
             </div>
-            <CardTitle className="text-2xl font-heading font-bold text-brand-cetacean">Admin Access</CardTitle>
+            <CardTitle className="text-2xl font-heading font-bold text-[#002147]">Admin Access</CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-5">
@@ -58,11 +58,11 @@ export default function Admin() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter admin password"
-                  className="bg-gray-50 border-gray-200 focus:bg-white h-11"
+                  className="bg-gray-50 border-gray-200 focus:bg-white h-11 focus:border-[#00A896]"
                 />
               </div>
               {error && <p className="text-red-500 text-sm font-medium bg-red-50 p-2 rounded text-center">{error}</p>}
-              <Button type="submit" className="w-full bg-brand-cetacean hover:bg-brand-cetacean/90 h-11 text-base">
+              <Button type="submit" className="w-full bg-[#002147] hover:bg-[#003366] h-11 text-base">
                 Login to Dashboard
               </Button>
             </form>
@@ -90,13 +90,13 @@ export default function Admin() {
         <TabsList className="bg-transparent border-b border-gray-200 w-full justify-start rounded-none h-auto p-0 gap-8">
           <TabsTrigger 
             value="products" 
-            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-brand-blue data-[state=active]:text-brand-blue text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all"
+            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#00A896] data-[state=active]:text-[#00A896] text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all hover:text-[#002147]"
           >
             Products
           </TabsTrigger>
           <TabsTrigger 
             value="settings"
-            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-brand-blue data-[state=active]:text-brand-blue text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all"
+            className="data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-[#00A896] data-[state=active]:text-[#00A896] text-gray-500 rounded-none pb-3 px-1 font-medium text-base transition-all hover:text-[#002147]"
           >
             General Settings
           </TabsTrigger>

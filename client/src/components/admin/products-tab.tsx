@@ -201,7 +201,7 @@ export function ProductsTab() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <div>
-          <h2 className="text-xl font-bold text-brand-cetacean">Products Management</h2>
+          <h2 className="text-xl font-bold text-[#002147]">Products Management</h2>
           <p className="text-sm text-gray-500">Manage your catalog items</p>
         </div>
         <div className="flex gap-2">
@@ -210,7 +210,7 @@ export function ProductsTab() {
               onClick={handleSeedData} 
               variant="outline"
               disabled={seeding}
-              className="gap-2 border-brand-blue/30 text-brand-blue hover:bg-brand-blue/5"
+              className="gap-2 border-[#00A896]/30 text-[#00A896] hover:bg-[#00A896]/5"
             >
               {seeding ? <Loader2 className="animate-spin" size={16} /> : <Database size={16} />}
               Seed Mock Data
@@ -218,7 +218,7 @@ export function ProductsTab() {
           )}
           <Button 
             onClick={handleAddProduct} 
-            className="bg-brand-green hover:bg-green-600 text-white gap-2 rounded-full px-6 shadow-sm hover:shadow-md transition-all"
+            className="bg-[#00A896] hover:bg-[#008C7D] text-white gap-2 rounded-full px-6 shadow-sm hover:shadow-md transition-all"
           >
             <Plus size={18} /> Add New Product
           </Button>
@@ -234,7 +234,7 @@ export function ProductsTab() {
 
       {loading ? (
         <div className="flex flex-col items-center justify-center py-12 text-gray-500">
-          <Loader2 className="animate-spin mb-2 text-brand-blue" size={32} />
+          <Loader2 className="animate-spin mb-2 text-[#00A896]" size={32} />
           <p>Loading products from database...</p>
         </div>
       ) : (
@@ -252,7 +252,7 @@ export function ProductsTab() {
                       {seeding ? "Seeding..." : "Seed Mock Data"}
                    </Button>
                  )}
-                 <Button onClick={handleAddProduct} className="bg-brand-blue text-white">
+                 <Button onClick={handleAddProduct} className="bg-[#00A896] hover:bg-[#008C7D] text-white">
                    Add Product
                  </Button>
               </div>
@@ -266,7 +266,7 @@ export function ProductsTab() {
                   </div>
                   <div className="flex-1 text-center sm:text-left space-y-1">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                      <h3 className="font-bold text-lg text-brand-cetacean">{product.name}</h3>
+                      <h3 className="font-bold text-lg text-[#002147]">{product.name}</h3>
                       <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">
                         {product.code}
                       </span>
@@ -277,7 +277,7 @@ export function ProductsTab() {
                       )}
                     </div>
                     <div className="flex items-center justify-center sm:justify-start gap-2">
-                      <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal rounded-md text-xs font-medium">
+                      <span className="inline-block px-2 py-1 bg-[#00A896]/10 text-[#00A896] rounded-md text-xs font-medium">
                         {product.category}
                       </span>
                       {product.size && (
@@ -294,7 +294,7 @@ export function ProductsTab() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="gap-2 border-gray-200 text-gray-600 hover:text-brand-blue hover:border-brand-blue/30 hover:bg-brand-blue/5" 
+                      className="gap-2 border-gray-200 text-gray-600 hover:text-[#00A896] hover:border-[#00A896]/30 hover:bg-[#00A896]/5" 
                       onClick={() => handleEditProduct(product)}
                     >
                       <Edit2 size={14} /> Edit
@@ -318,8 +318,8 @@ export function ProductsTab() {
       {/* Product Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent className="sm:max-w-[600px] h-[85vh] sm:h-auto sm:max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
-          <DialogHeader className="px-6 py-4 border-b bg-gray-50/50">
-            <DialogTitle className="text-xl text-brand-cetacean">{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
+          <DialogHeader className="px-6 py-4 border-b bg-[#002147]/5">
+            <DialogTitle className="text-xl text-[#002147]">{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
             <DialogDescription>
               {editingProduct ? "Make changes to the product details here." : "Fill in the details for the new product."}
             </DialogDescription>
@@ -337,7 +337,7 @@ export function ProductsTab() {
                     value={formData.name}
                     onChange={(e) => setFormData({...formData, name: e.target.value})}
                     placeholder="e.g. Premium Grass Broom"
-                    className={`focus:border-brand-blue ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    className={`focus:border-[#00A896] ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                   />
                   {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
                 </div>
@@ -466,9 +466,9 @@ export function ProductsTab() {
             </div>
           </div>
 
-          <DialogFooter className="p-6 border-t bg-gray-50/50">
+          <DialogFooter className="p-6 border-t bg-[#002147]/5">
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-brand-blue text-white w-full sm:w-auto" onClick={handleSaveProduct} disabled={saving}>
+            <Button type="submit" className="bg-[#002147] hover:bg-[#003366] text-white w-full sm:w-auto" onClick={handleSaveProduct} disabled={saving}>
               {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
               {editingProduct ? "Save Changes" : "Add Product"}
             </Button>

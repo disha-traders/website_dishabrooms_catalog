@@ -9,18 +9,18 @@ interface AdminLayoutProps {
 
 export function AdminLayout({ children, onLogout }: AdminLayoutProps) {
   return (
-    <div className="min-h-screen bg-[#F5F5F7] font-sans">
+    <div className="min-h-screen bg-[#F0F4F8] font-sans">
       {/* Top Header Bar */}
-      <header className="bg-brand-cetacean text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50">
+      <header className="bg-[#002147] text-white px-6 py-4 flex justify-between items-center shadow-md sticky top-0 z-50">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center text-brand-gold font-bold border border-white/20">
+          <div className="w-8 h-8 bg-[#00A896]/20 rounded-lg flex items-center justify-center text-[#CD7F32] font-bold border border-[#00A896]/30">
             DT
           </div>
-          <h1 className="text-xl font-bold tracking-tight">Disha Traders Admin</h1>
+          <h1 className="text-xl font-bold tracking-tight text-white">Disha Traders Admin</h1>
         </div>
         <div className="flex items-center gap-4">
           <Link href="/">
-            <a className="text-sm text-gray-300 hover:text-white flex items-center gap-1 transition-colors">
+            <a className="text-sm text-gray-300 hover:text-[#00A896] flex items-center gap-1 transition-colors">
               <ExternalLink size={14} />
               View Site
             </a>
