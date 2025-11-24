@@ -32,7 +32,7 @@ export default function About() {
         <div className="container mx-auto px-4 py-16 md:py-24">
           
           {/* CEO Section */}
-          <div className="max-w-6xl mx-auto mb-24">
+          <div className="max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000 fill-mode-both">
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col lg:flex-row">
               <div className="lg:w-2/5 relative min-h-[400px] bg-[#002147]">
                 <img 
@@ -63,7 +63,7 @@ export default function About() {
           </div>
 
           {/* Company Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto mb-24">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-6xl mx-auto mb-24 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200 fill-mode-both">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow group">
               <div className="w-12 h-12 bg-blue-50 text-[#002147] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#002147] group-hover:text-white transition-colors">
                 <TrendingUp size={24} />
@@ -95,7 +95,7 @@ export default function About() {
           </div>
 
           {/* Narrative Sections */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto items-center animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300 fill-mode-both">
             <div className="space-y-8">
               <div className="space-y-4">
                 <div className="flex items-center gap-3 text-[#00A896] font-bold tracking-wider uppercase text-sm">

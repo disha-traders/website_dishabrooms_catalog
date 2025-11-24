@@ -6,13 +6,16 @@ import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Loader2 } from "lucide-react";
+import { Loader2, Filter, Search, PackageX } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 
 export default function Products() {
   const [location, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
 
   // Fetch products from Firebase
   useEffect(() => {
@@ -22,6 +25,7 @@ export default function Products() {
     }
 
     try {
+      // We fetch all and filter client side for speed in this scale
       const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
       const unsub = onSnapshot(q, (snapshot) => {
         const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
@@ -47,10 +51,6 @@ export default function Products() {
     }
   }, []);
 
-  const filteredProducts = activeCategory === "All" 
-    ? products 
-    : products.filter(p => p.category === activeCategory);
-
   const handleCategoryClick = (cat: string) => {
     setActiveCategory(cat);
     if (cat === "All") {
@@ -58,71 +58,126 @@ export default function Products() {
     }
   };
 
+  // Filter Logic
+  const filteredProducts = products.filter(p => {
+    const matchesCategory = activeCategory === "All" || p.category === activeCategory;
+    const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          p.code.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
+
   return (
     <Layout>
-      <div className="hero-custom py-12">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl md:text-4xl font-heading font-bold mb-4">Our Products</h1>
-          <p className="max-w-2xl opacity-90">
-            Explore our wide range of high-quality cleaning products designed for durability and efficiency.
-          </p>
+      {/* Hero Header */}
+      <div className="bg-[#002147] text-white py-16 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="max-w-3xl">
+            <span className="text-[#00A896] font-bold tracking-widest uppercase text-sm mb-2 block">Premium Catalog</span>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4 leading-tight">
+              Quality Cleaning Tools<br/>For Every Need
+            </h1>
+            <p className="text-blue-100 text-lg max-w-2xl">
+              Explore our extensive range of brooms, mops, and brushes designed for durability, efficiency, and ease of use.
+            </p>
+          </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-12">
-        {/* Filters */}
-        <div className="filter-bar justify-center md:justify-start">
-          <button
-            onClick={() => handleCategoryClick("All")}
-            className={cn(
-              "filter-pill",
-              activeCategory === "All" ? "active" : ""
-            )}
-          >
-            All Products
-          </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCategoryClick(cat)}
-              className={cn(
-                "filter-pill",
-                activeCategory === cat ? "active" : ""
-              )}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
-
-        {/* Loading State */}
-        {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-gray-500">
-            <Loader2 className="animate-spin mb-4 text-brand-blue" size={32} />
-            <p>Loading catalog...</p>
-          </div>
-        ) : (
-          <>
-            {/* Grid */}
-            {filteredProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                {filteredProducts.map((product) => (
-                  <ProductCard key={product.id} product={product} />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
-                <p className="text-gray-500">No products found in this category.</p>
-                <button 
-                  onClick={() => setActiveCategory("All")}
-                  className="mt-4 text-brand-blue hover:underline font-medium"
+      <div className="bg-[#F8FAFC] min-h-screen">
+        <div className="container mx-auto px-4 py-8 md:py-12">
+          
+          {/* Controls Bar */}
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-8 flex flex-col md:flex-row gap-4 items-center justify-between sticky top-20 z-20">
+            
+            {/* Category Filters */}
+            <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
+               <button
+                onClick={() => handleCategoryClick("All")}
+                className={cn(
+                  "px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300",
+                  activeCategory === "All" 
+                    ? "bg-[#002147] text-white shadow-md shadow-blue-900/20" 
+                    : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                )}
+              >
+                All Items
+              </button>
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryClick(cat)}
+                  className={cn(
+                    "px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300",
+                    activeCategory === cat 
+                      ? "bg-[#002147] text-white shadow-md shadow-blue-900/20" 
+                      : "bg-gray-50 text-gray-600 hover:bg-gray-100"
+                  )}
                 >
-                  View all products
+                  {cat}
                 </button>
-              </div>
-            )}
-          </>
-        )}
+              ))}
+            </div>
+
+            {/* Search */}
+            <div className="relative w-full md:w-64 shrink-0">
+               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+               <Input 
+                  placeholder="Search products..." 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-9 h-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] rounded-full transition-all"
+               />
+            </div>
+          </div>
+
+          {/* Content Area */}
+          {loading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="bg-white rounded-2xl p-4 space-y-4">
+                  <Skeleton className="aspect-[4/3] w-full rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-1/3" />
+                    <Skeleton className="h-6 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              {filteredProducts.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                  {filteredProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-24 text-center">
+                  <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-6 text-gray-400">
+                    <PackageX size={48} />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#002147] mb-2">No products found</h3>
+                  <p className="text-gray-500 max-w-md mb-8">
+                    We couldn't find any products matching your criteria. Try adjusting your filters or search query.
+                  </p>
+                  <button 
+                    onClick={() => { setActiveCategory("All"); setSearchQuery(""); }}
+                    className="text-[#00A896] font-bold hover:underline"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+          
+          <div className="mt-16 text-center">
+             <p className="text-gray-400 text-sm">Showing {filteredProducts.length} products</p>
+          </div>
+
+        </div>
       </div>
     </Layout>
   );
