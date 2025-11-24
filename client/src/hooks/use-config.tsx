@@ -1,26 +1,32 @@
 import { useState, useEffect } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { config as defaultConfig } from "@/lib/config";
+import { dbGetSettings } from "@/lib/db-service";
 
 export function useConfig() {
   const [config, setConfig] = useState(defaultConfig);
 
   useEffect(() => {
-    // Guard against missing firebase config to prevent crashes in dev
-    if (!db) return;
-
-    try {
-      const unsub = onSnapshot(doc(db, "settings", "dishaTraders"), (doc) => {
-        if (doc.exists()) {
-          // Merge with default to ensure all fields exist
-          setConfig((prev) => ({ ...prev, ...doc.data() } as any));
+    const loadConfig = async () => {
+      try {
+        const savedSettings = await dbGetSettings();
+        if (savedSettings) {
+          setConfig((prev) => ({ ...prev, ...savedSettings }));
         }
-      });
-      return () => unsub();
-    } catch (error) {
-      console.warn("Error connecting to Firebase settings:", error);
-    }
+      } catch (error) {
+        console.warn("Error loading settings:", error);
+      }
+    };
+
+    loadConfig();
+    
+    // Optional: Listen for local storage changes to sync across tabs/components
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "disha_settings") {
+        loadConfig();
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   return config;

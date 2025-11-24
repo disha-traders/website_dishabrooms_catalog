@@ -1,44 +1,38 @@
 import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
-import { categories, Product } from "@/lib/products";
+import { Product } from "@/lib/products";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
-import { collection, query, orderBy, getDocs } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { Loader2, Filter, Search, PackageX, Download, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { dbGetProducts, dbGetCategories } from "@/lib/db-service";
 
 export default function Products() {
   const [location, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch products from Firebase
+  // Fetch products from Service
   const fetchProducts = async () => {
-    if (!db) {
-      console.error("Firebase db not initialized");
-      setLoading(false);
-      return;
-    }
-
     setLoading(true);
     setError(null);
     try {
       console.log("Fetching products...");
-      // Fetch once instead of snapshot to avoid potential listener issues
-      const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
-      const snapshot = await getDocs(q);
+      const [items, cats] = await Promise.all([
+        dbGetProducts(),
+        dbGetCategories()
+      ]);
       
-      console.log("Products fetched", snapshot.size);
-      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
-      console.log("Parsed products:", items);
+      console.log("Products fetched", items.length);
       setProducts(items);
+      setCategories(cats.map(c => c.name));
     } catch (e: any) {
       console.error("Failed to fetch products", e);
       setError(e.message || "Failed to load products");

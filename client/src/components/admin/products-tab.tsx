@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { categories as defaultCategories, Product, products as mockProducts } from "@/lib/products";
+import { Product, categories as defaultCategories } from "@/lib/products";
 import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Dialog,
@@ -22,8 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
+import { dbGetProducts, dbSaveProduct, dbDeleteProduct, dbGetCategories } from "@/lib/db-service";
 
 export function ProductsTab() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -57,70 +56,38 @@ export function ProductsTab() {
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Fetch products and categories
-  useEffect(() => {
-    if (!db) {
-      setLoading(false);
-      setError("Firebase not initialized");
-      return;
-    }
-    
+  const refreshData = async () => {
+    setLoading(true);
+    setError(null);
     try {
-      // Fetch Products
-      const qProducts = query(collection(db, "products"), orderBy("sortOrder", "asc"));
-      const unsubProducts = onSnapshot(qProducts, (snapshot) => {
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
-        setProducts(items);
-        setLoading(false);
-      }, (err) => {
-        console.error("Failed to fetch products", err);
-        setError("Failed to load products.");
-        setLoading(false);
-      });
-
-      // Fetch Categories
-      const qCategories = query(collection(db, "categories"), orderBy("sortOrder", "asc"));
-      const unsubCategories = onSnapshot(qCategories, (snapshot) => {
-        if (!snapshot.empty) {
-          const cats = snapshot.docs.map(doc => doc.data().name as string);
-          setDynamicCategories(cats);
-        } else {
-          // Fallback to default if no dynamic categories
-          setDynamicCategories([...defaultCategories]);
-        }
-      });
-
-      return () => {
-        unsubProducts();
-        unsubCategories();
-      };
+      const [prods, cats] = await Promise.all([
+        dbGetProducts(),
+        dbGetCategories()
+      ]);
+      setProducts(prods);
+      setDynamicCategories(cats.map(c => c.name));
     } catch (e) {
+      console.error("Failed to load data", e);
+      setError("Failed to load products.");
+    } finally {
       setLoading(false);
-      setError("An unexpected error occurred.");
     }
+  };
+
+  useEffect(() => {
+    refreshData();
   }, []);
 
   const handleSeedData = async () => {
-    if (!db) return;
-    if (!confirm("This will add all default mock products to your database. Continue?")) return;
+    if (!confirm("Reset to default mock data?")) return;
     
     setSeeding(true);
     try {
-      const promises = mockProducts.map((p, index) => {
-        const { id, ...data } = p;
-        return addDoc(collection(db, "products"), {
-          ...data,
-          sortOrder: index,
-          isActive: true,
-          createdAt: new Date(),
-          updatedAt: new Date()
-        });
-      });
-      
-      await Promise.all(promises);
-      alert("Successfully seeded " + mockProducts.length + " products!");
+      localStorage.removeItem("disha_products");
+      await refreshData();
+      alert("Data reset successfully!");
     } catch (e) {
-      console.error("Seeding error", e);
-      alert("Failed to seed data: " + (e as Error).message);
+      alert("Failed to reset data");
     } finally {
       setSeeding(false);
     }
@@ -159,13 +126,9 @@ export function ProductsTab() {
   };
 
   const handleDeleteProduct = async (id: string) => {
-    if (!db) return;
     if (confirm("Are you sure you want to delete this product?")) {
-      try {
-        await deleteDoc(doc(db, "products", id));
-      } catch (e) {
-        alert("Error deleting product");
-      }
+      await dbDeleteProduct(id);
+      await refreshData();
     }
   };
 
@@ -194,30 +157,22 @@ export function ProductsTab() {
   };
 
   const handleSaveProduct = async () => {
-    if (!db) return;
-    
     if (!validateForm()) return;
 
     setSaving(true);
     try {
-      const productData = {
-        ...formData,
-        updatedAt: new Date(),
-        sortOrder: Number(formData.sortOrder),
-      };
-
-      if (editingProduct) {
-        await updateDoc(doc(db, "products", editingProduct.id), productData);
-      } else {
-        await addDoc(collection(db, "products"), {
-          ...productData,
-          createdAt: new Date()
-        });
-      }
+      await dbSaveProduct(
+        {
+          ...formData,
+          sortOrder: Number(formData.sortOrder),
+        },
+        editingProduct?.id
+      );
       setIsDialogOpen(false);
+      await refreshData();
     } catch (e) {
       console.error("Error saving product", e);
-      alert("Failed to save product: " + (e as Error).message);
+      alert("Failed to save product");
     } finally {
       setSaving(false);
     }
@@ -309,11 +264,9 @@ export function ProductsTab() {
               <h3 className="text-lg font-medium text-gray-900">No products yet</h3>
               <p className="text-gray-500 mb-6">Get started by adding your first product.</p>
               <div className="flex justify-center gap-4">
-                 {import.meta.env.MODE === "development" && (
-                   <Button onClick={handleSeedData} variant="outline" disabled={seeding}>
-                      {seeding ? "Seeding..." : "Seed Mock Data"}
-                   </Button>
-                 )}
+                 <Button onClick={handleSeedData} variant="outline" disabled={seeding}>
+                    {seeding ? "Resetting..." : "Initialize Mock Data"}
+                 </Button>
                  <Button onClick={handleAddProduct} className="bg-[#00A896] hover:bg-[#008C7D] text-white">
                    Add Product
                  </Button>

@@ -2,9 +2,9 @@
 export interface Product {
   id: string;
   name: string;
-  category: "Grass Brooms" | "Coco Brooms" | "Yarn Mops" | "Wipers & Brushes";
+  category: string;
   code: string;
-  size: string;
+  size?: string;
   description: string;
   imageUrl: string;
   isFeatured?: boolean;

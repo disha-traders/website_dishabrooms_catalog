@@ -5,10 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useConfig } from "@/hooks/use-config";
-import { db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
 import { Loader2, Save, CheckCircle, AlertCircle, Plus, X, MapPin } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { dbSaveSettings } from "@/lib/db-service";
 
 export function SettingsTab() {
   const liveConfig = useConfig();
@@ -42,26 +40,11 @@ export function SettingsTab() {
   };
 
   const handleSaveSettings = async () => {
-    if (!db) {
-      setStatus({ type: 'error', message: "Firebase not connected" });
-      return;
-    }
-    
     setSaving(true);
     setStatus({ type: null, message: '' });
     
     try {
-      // Create a timeout promise
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error("Request timed out. Check your internet connection.")), 10000)
-      );
-
-      // Race the save operation against the timeout
-      await Promise.race([
-        setDoc(doc(db, "settings", "dishaTraders"), localConfig, { merge: true }),
-        timeoutPromise
-      ]);
-
+      await dbSaveSettings(localConfig);
       setStatus({ type: 'success', message: "Settings saved successfully!" });
       
       // Clear success message after 3 seconds

@@ -4,9 +4,8 @@ import { useConfig } from "@/hooks/use-config";
 import { Link } from "wouter";
 import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle, Download } from "lucide-react";
 import { useEffect, useState } from "react";
-import { collection, query, where, limit, getDocs, orderBy } from "firebase/firestore";
-import { db } from "@/lib/firebase";
 import { Product } from "@/lib/products";
+import { dbGetProducts } from "@/lib/db-service";
 import heroBg from "@assets/stock_images/manufacturing_factor_f5c4b17f.jpg";
 
 import { ProductCard } from "@/components/product-card";
@@ -24,18 +23,15 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchFeatured() {
-      if (!db) return;
       try {
-        // Get first 4 active products sorted by sortOrder
-        const q = query(
-          collection(db, "products"), 
-          where("isActive", "==", true),
-          orderBy("sortOrder", "asc"),
-          limit(4)
-        );
-        const snapshot = await getDocs(q);
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
-        setFeaturedProducts(items);
+        const allProducts = await dbGetProducts();
+        // Filter client-side for active & featured, sort by sortOrder, take 4
+        const featured = allProducts
+          .filter(p => p.isActive !== false && p.isFeatured !== false) // Default true if undefined
+          .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+          .slice(0, 4);
+          
+        setFeaturedProducts(featured);
       } catch (e) {
         console.error("Failed to fetch featured products", e);
       }

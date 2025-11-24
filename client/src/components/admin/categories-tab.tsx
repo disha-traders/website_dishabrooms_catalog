@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Edit2, Loader2, AlertCircle, List, Save } from "lucide-react";
+import { Plus, Trash2, Edit2, Loader2, List, Save } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -13,21 +13,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy } from "firebase/firestore";
-import { categories as defaultCategories } from "@/lib/products";
-
-interface Category {
-  id: string;
-  name: string;
-  description?: string;
-  sortOrder: number;
-}
+import { Category, dbGetCategories, dbSaveCategory, dbDeleteCategory } from "@/lib/db-service";
 
 export function CategoriesTab() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   
   // Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -40,47 +30,26 @@ export function CategoriesTab() {
   });
 
   // Fetch categories
-  useEffect(() => {
-    if (!db) {
-      setLoading(false);
-      return;
-    }
-    
+  const refreshCategories = async () => {
     try {
-      const q = query(collection(db, "categories"), orderBy("sortOrder", "asc"));
-      const unsub = onSnapshot(q, (snapshot) => {
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Category[];
-        setCategories(items);
-        setLoading(false);
-      }, (err) => {
-        console.error("Failed to fetch categories", err);
-        setError("Failed to load categories.");
-        setLoading(false);
-      });
-      return () => unsub();
-    } catch (e) {
+      const items = await dbGetCategories();
+      setCategories(items);
       setLoading(false);
-      setError("An error occurred.");
+    } catch (e) {
+      console.error("Failed to load categories", e);
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    refreshCategories();
   }, []);
 
   const handleSeedCategories = async () => {
-    if (!db) return;
     if (!confirm("Initialize default categories?")) return;
-    
-    try {
-      const promises = defaultCategories.map((catName, index) => {
-        return addDoc(collection(db, "categories"), {
-          name: catName,
-          description: "Standard category",
-          sortOrder: index,
-          createdAt: new Date()
-        });
-      });
-      await Promise.all(promises);
-    } catch (e) {
-      alert("Error seeding categories");
-    }
+    // Re-fetch will trigger seeding logic in service if empty
+    localStorage.removeItem("disha_categories");
+    await refreshCategories();
   };
 
   const handleAddCategory = () => {
@@ -104,39 +73,27 @@ export function CategoriesTab() {
   };
 
   const handleDeleteCategory = async (id: string) => {
-    if (!db) return;
     if (confirm("Are you sure? This might affect products using this category.")) {
-      try {
-        await deleteDoc(doc(db, "categories", id));
-      } catch (e) {
-        alert("Error deleting category");
-      }
+      await dbDeleteCategory(id);
+      await refreshCategories();
     }
   };
 
   const handleSaveCategory = async () => {
-    if (!db) return;
     if (!formData.name.trim()) return;
 
     setSaving(true);
     try {
-      const categoryData = {
-        ...formData,
-        updatedAt: new Date(),
-        sortOrder: Number(formData.sortOrder),
-      };
-
-      if (editingCategory) {
-        await updateDoc(doc(db, "categories", editingCategory.id), categoryData);
-      } else {
-        await addDoc(collection(db, "categories"), {
-          ...categoryData,
-          createdAt: new Date()
-        });
-      }
+      await dbSaveCategory(
+        {
+          ...formData,
+          sortOrder: Number(formData.sortOrder),
+        },
+        editingCategory?.id
+      );
       setIsDialogOpen(false);
+      await refreshCategories();
     } catch (e) {
-      console.error("Error saving category", e);
       alert("Failed to save category");
     } finally {
       setSaving(false);
