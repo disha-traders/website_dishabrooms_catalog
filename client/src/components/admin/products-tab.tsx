@@ -549,7 +549,17 @@ export function ProductsTab() {
                       <Input
                         id="imageUrl"
                         value={formData.imageUrl}
-                        onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          // Google Drive Auto-convert logic
+                          if (val.includes("drive.google.com") && val.includes("/file/d/")) {
+                            const match = val.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                            if (match && match[1]) {
+                              val = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                            }
+                          }
+                          setFormData({...formData, imageUrl: val});
+                        }}
                         placeholder="https://example.com/image.jpg"
                         className={`pl-10 h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all font-mono text-xs text-gray-600 ${errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                       />
@@ -562,8 +572,8 @@ export function ProductsTab() {
                     ) : (
                       <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
                         <p className="text-xs text-blue-700 leading-relaxed">
-                           <strong>Tip:</strong> For local images, upload to <code>/public/products</code> folder.<br/>
-                           Use path format: <code>/products/your-image-name.jpg</code>
+                           <strong>Support:</strong> Google Drive links are automatically converted.<br/>
+                           <strong>Tip:</strong> Use a direct link for best performance.
                         </p>
                       </div>
                     )}
