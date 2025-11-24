@@ -94,11 +94,9 @@ export default function Admin() {
               </form>
             </CardContent>
             <div className="bg-gray-50 p-4 text-center border-t border-gray-100">
-              <Link href="/">
-                <a className="text-sm text-gray-500 hover:text-[#002147] font-medium inline-flex items-center gap-2 transition-colors group">
+              <Link href="/" className="text-sm text-gray-500 hover:text-[#002147] font-medium inline-flex items-center gap-2 transition-colors group">
                   <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
                   Back to Main Website
-                </a>
               </Link>
             </div>
           </Card>
