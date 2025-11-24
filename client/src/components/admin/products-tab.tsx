@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { categories, Product, products as mockProducts } from "@/lib/products";
-import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database } from "lucide-react";
+import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -21,9 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { db, storage } from "@/lib/firebase";
+import { db } from "@/lib/firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, writeBatch } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 export function ProductsTab() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -35,7 +34,6 @@ export function ProductsTab() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     category: "Grass Brooms",
@@ -103,7 +101,6 @@ export function ProductsTab() {
 
   const handleAddProduct = () => {
     setEditingProduct(null);
-    setImageFile(null);
     setFormData({
       name: "",
       category: "Grass Brooms",
@@ -117,7 +114,6 @@ export function ProductsTab() {
 
   const handleEditProduct = (product: Product) => {
     setEditingProduct(product);
-    setImageFile(null);
     setFormData({
       name: product.name,
       category: product.category,
@@ -144,17 +140,8 @@ export function ProductsTab() {
     if (!db) return;
     setSaving(true);
     try {
-      let imageUrl = formData.imageUrl;
-
-      if (imageFile) {
-        const storageRef = ref(storage, `product-images/${Date.now()}-${imageFile.name}`);
-        await uploadBytes(storageRef, imageFile);
-        imageUrl = await getDownloadURL(storageRef);
-      }
-
       const productData = {
         ...formData,
-        imageUrl,
         updatedAt: new Date(),
         sortOrder: (editingProduct as any)?.sortOrder || Date.now(),
         isActive: true
@@ -297,37 +284,42 @@ export function ProductsTab() {
           
           <div className="flex-1 overflow-y-auto p-6">
             <div className="grid gap-6">
-              {/* Image Upload Section */}
-              <div className="flex flex-col items-center justify-center gap-4 bg-gray-50 p-6 rounded-lg border border-dashed border-gray-300">
-                {formData.imageUrl && formData.imageUrl !== "/images/placeholder.jpg" ? (
-                  <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-white shadow-sm">
-                    <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+              {/* Image URL Section */}
+              <div className="flex flex-col gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
+                <div className="flex gap-4 items-start">
+                   {formData.imageUrl ? (
+                    <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-white shadow-sm shrink-0 bg-gray-200">
+                      <img 
+                        src={formData.imageUrl} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover" 
+                        onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 shrink-0">
+                      <ImageIcon size={32} />
+                    </div>
+                  )}
+                  
+                  <div className="flex-1 space-y-2">
+                    <Label htmlFor="imageUrl" className="text-sm font-medium text-gray-700">Image URL</Label>
+                    <div className="flex gap-2">
+                       <div className="relative flex-1">
+                          <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                          <Input
+                            id="imageUrl"
+                            value={formData.imageUrl}
+                            onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+                            placeholder="https://example.com/image.jpg"
+                            className="pl-9 bg-white"
+                          />
+                       </div>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Enter a direct link to an image (e.g. from Google Drive, Imgur, or another hosting service).
+                    </p>
                   </div>
-                ) : (
-                  <div className="w-32 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400">
-                    <ImageIcon size={40} />
-                  </div>
-                )}
-                
-                <div className="w-full max-w-xs text-center">
-                  <Label htmlFor="image" className="cursor-pointer inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors shadow-sm">
-                    <Upload size={16} /> {editingProduct ? "Change Image" : "Upload Image"}
-                  </Label>
-                  <Input
-                    id="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      if (e.target.files?.[0]) {
-                        setImageFile(e.target.files[0]);
-                        // Create a local preview URL
-                        const previewUrl = URL.createObjectURL(e.target.files[0]);
-                        setFormData({...formData, imageUrl: previewUrl});
-                      }
-                    }}
-                    className="hidden"
-                  />
-                  {imageFile && <p className="mt-2 text-xs text-green-600 font-medium">Selected: {imageFile.name}</p>}
                 </div>
               </div>
 
@@ -406,5 +398,3 @@ export function ProductsTab() {
     </div>
   );
 }
-
-import { Upload } from "lucide-react";
