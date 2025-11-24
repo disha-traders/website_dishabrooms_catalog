@@ -154,7 +154,7 @@ export default function Home() {
         </div>
       </section>
       {/* Categories Section */}
-      <section className="py-20 relative overflow-hidden bg-[#F0F4F8]">
+      <section className="py-24 relative overflow-hidden bg-[#F0F4F8]">
         {/* Slideshow Background */}
         <div className="absolute inset-0 w-full h-full z-0">
           {slides.map((slide, index) => (
@@ -165,10 +165,10 @@ export default function Home() {
                <img 
                  src={slide} 
                  alt={`Background Slide ${index + 1}`} 
-                 className="w-full h-full object-cover"
+                 className="w-full h-full object-cover scale-105 animate-pulse-slow"
                />
-               {/* Overlay for readability */}
-               <div className="absolute inset-0 bg-white/90 backdrop-blur-[1px]"></div>
+               {/* Overlay for readability - Reduced opacity from 90 to 80 for visibility */}
+               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px]"></div>
              </div>
           ))}
         </div>
@@ -176,7 +176,7 @@ export default function Home() {
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-heading font-bold text-[#002147] mb-4">Our Product Range</h2>
-            <div className="w-24 h-1 bg-[#00A896] mx-auto rounded-full"></div>
+            <div className="w-24 h-1 bg-[#00A896] mx-auto rounded-full shadow-sm"></div>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -184,16 +184,22 @@ export default function Home() {
               <Link 
                 key={idx} 
                 href={`/products?category=${encodeURIComponent(cat.name)}`}
-                className="group card-custom p-8 text-center block h-full hover:-translate-y-2 transition-all duration-300 hover:shadow-lg"
+                className="group relative p-8 text-center block h-full transition-all duration-500 hover:-translate-y-2
+                           bg-white/80 backdrop-blur-md border border-white/50 rounded-2xl shadow-lg hover:shadow-xl overflow-hidden"
               >
-                <div className="w-16 h-16 bg-[#00A896]/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#00A896] transition-colors duration-300">
-                  <cat.icon size={32} className="text-[#00A896] group-hover:text-white transition-colors duration-300" />
+                {/* Card Hover Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative z-10">
+                  <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner group-hover:scale-110 transition-transform duration-500 ring-4 ring-[#00A896]/10 group-hover:ring-[#00A896]/30">
+                    <cat.icon size={36} className="text-[#00A896] transition-colors duration-300" />
+                  </div>
+                  <h3 className="text-xl font-bold text-[#002147] mb-3">{cat.name}</h3>
+                  <p className="text-gray-600 text-sm mb-6 leading-relaxed font-medium">{cat.desc}</p>
+                  <span className="inline-flex items-center justify-center gap-2 text-[#00A896] font-bold text-sm bg-[#00A896]/10 px-4 py-2 rounded-full group-hover:bg-[#00A896] group-hover:text-white transition-all duration-300">
+                    View Products <ArrowRight size={14} />
+                  </span>
                 </div>
-                <h3 className="text-xl font-bold text-[#002147] mb-2">{cat.name}</h3>
-                <p className="text-gray-500 text-sm mb-6">{cat.desc}</p>
-                <span className="text-[#00A896] font-semibold text-sm group-hover:underline flex items-center justify-center gap-1">
-                  View Products <ArrowRight size={14} />
-                </span>
               </Link>
             ))}
           </div>
