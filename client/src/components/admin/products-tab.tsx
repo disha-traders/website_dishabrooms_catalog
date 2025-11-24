@@ -505,10 +505,25 @@ export function ProductsTab() {
                         onChange={(e) => {
                           let val = e.target.value;
                           // Google Drive Auto-convert logic
-                          if (val.includes("drive.google.com") && val.includes("/file/d/")) {
-                            const match = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                            if (match && match[1]) {
-                              val = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+                          if (val.includes("drive.google.com") || val.includes("docs.google.com")) {
+                            let fileId = null;
+                            
+                            // Case 1: /file/d/FILE_ID
+                            const matchFile = val.match(/\/d\/([a-zA-Z0-9_-]+)/);
+                            if (matchFile && matchFile[1]) {
+                              fileId = matchFile[1];
+                            }
+                            
+                            // Case 2: id=FILE_ID
+                            if (!fileId) {
+                              const matchId = val.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                              if (matchId && matchId[1]) {
+                                fileId = matchId[1];
+                              }
+                            }
+
+                            if (fileId) {
+                              val = `https://drive.google.com/uc?export=view&id=${fileId}`;
                             }
                           }
                           setFormData({...formData, imageUrl: val});
