@@ -168,7 +168,7 @@ export default function Home() {
                  className="w-full h-full object-cover scale-105 animate-pulse-slow"
                />
                {/* Overlay for readability - Reduced opacity from 90 to 80 for visibility */}
-               <div className="absolute inset-0 bg-white/80 backdrop-blur-[2px]"></div>
+               <div className="absolute inset-0 bg-white/20 backdrop-blur-[1px]"></div>
              </div>
           ))}
         </div>
