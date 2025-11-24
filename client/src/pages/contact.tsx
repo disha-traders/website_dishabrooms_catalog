@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Phone, Mail, MapPin, MessageSquare, Send, Loader2, CheckCircle2, MessageCircle } from "lucide-react";
+import { Phone, Mail, MapPin, Loader2, CheckCircle2, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import {
   Select,
@@ -28,8 +28,37 @@ export default function Contact() {
     message: ""
   });
 
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string) => {
+    const phoneRegex = /^[\d\s\-\+()]+$/;
+    return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validation
+    if (!formData.name.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+    if (!formData.email.trim() || !validateEmail(formData.email)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+    if (!formData.phone.trim() || !validatePhone(formData.phone)) {
+      alert("Please enter a valid phone number (at least 10 digits)");
+      return;
+    }
+    if (!formData.message.trim() || formData.message.trim().length < 10) {
+      alert("Please enter a message of at least 10 characters");
+      return;
+    }
+
     setLoading(true);
     
     // Simulate network delay for better UX
@@ -129,9 +158,11 @@ export default function Contact() {
                 </div>
                 <a 
                   href={config.social.whatsappLink}
+                  data-testid="link-whatsapp-quick"
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="btn-whatsapp-custom whitespace-nowrap shadow-none"
+                  aria-label="Chat with us on WhatsApp"
                 >
                   Chat Now
                 </a>
@@ -181,23 +212,27 @@ export default function Contact() {
                         <Label htmlFor="name" className="text-gray-700 font-medium">Your Name</Label>
                         <Input 
                           id="name" 
+                          data-testid="input-name"
                           placeholder="John Doe" 
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({...formData, name: e.target.value})}
                           className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                          aria-label="Your name"
                         />
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="phone" className="text-gray-700 font-medium">Phone Number</Label>
                         <Input 
                           id="phone" 
+                          data-testid="input-phone"
                           placeholder="+91 98765 43210" 
                           required
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => setFormData({...formData, phone: e.target.value})}
                           className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                          aria-label="Phone number"
                         />
                       </div>
                     </div>
@@ -206,12 +241,14 @@ export default function Contact() {
                       <Label htmlFor="email" className="text-gray-700 font-medium">Email Address</Label>
                       <Input 
                         id="email" 
+                        data-testid="input-email"
                         placeholder="john@company.com" 
                         required
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12"
+                        aria-label="Email address"
                       />
                     </div>
 
@@ -221,7 +258,7 @@ export default function Contact() {
                         value={formData.subject} 
                         onValueChange={(val) => setFormData({...formData, subject: val})}
                       >
-                        <SelectTrigger className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12">
+                        <SelectTrigger data-testid="select-subject" className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] h-12" aria-label="Inquiry subject">
                           <SelectValue placeholder="Select a subject" />
                         </SelectTrigger>
                         <SelectContent>
@@ -238,12 +275,15 @@ export default function Contact() {
                       <Label htmlFor="message" className="text-gray-700 font-medium">Message</Label>
                       <Textarea 
                         id="message" 
+                        data-testid="input-message"
                         placeholder="Please share details about your requirements..." 
                         required
                         value={formData.message}
                         onChange={(e) => setFormData({...formData, message: e.target.value})}
                         className="bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] min-h-[150px] resize-none"
+                        aria-label="Message"
                       />
+                      <p className="text-xs text-gray-400">Minimum 10 characters required</p>
                     </div>
 
                     <div className="pt-4">
@@ -252,9 +292,11 @@ export default function Contact() {
                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                           <button
                             type="submit" 
+                            data-testid="button-submit-whatsapp"
                             onClick={() => setSubmissionType('whatsapp')}
                             disabled={loading}
                             className="btn-whatsapp-custom w-full h-12 text-base whitespace-nowrap"
+                            aria-label="Send message via WhatsApp"
                           >
                             {loading && submissionType === 'whatsapp' ? (
                               <>
@@ -269,9 +311,11 @@ export default function Contact() {
 
                           <button
                             type="submit" 
+                            data-testid="button-submit-email"
                             onClick={() => setSubmissionType('email')}
                             disabled={loading}
                             className="btn-whatsapp-custom w-full h-12 text-base whitespace-nowrap"
+                            aria-label="Send message via email"
                           >
                             {loading && submissionType === 'email' ? (
                               <>

@@ -28,17 +28,14 @@ export default function Products() {
     setLoading(true);
     setError(null);
     try {
-      console.log("Fetching products...");
       const [items, cats] = await Promise.all([
         dbGetProducts(),
         dbGetCategories()
       ]);
       
-      console.log("Products fetched", items.length);
       setProducts(items);
       setCategories(cats.map(c => c.name));
     } catch (e: any) {
-      console.error("Failed to fetch products", e);
       setError(e.message || "Failed to load products");
     } finally {
       setLoading(false);
@@ -93,7 +90,6 @@ export default function Products() {
     }
   };
 
-  console.log("Render products:", { loading, productsCount: products.length, filteredCount: filteredProducts.length });
 
   return (
     <Layout>
@@ -113,7 +109,9 @@ export default function Products() {
                <Button 
                 onClick={handleDownloadCatalog}
                 disabled={generatingPdf}
+                data-testid="button-download-catalog"
                 className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-lg transition-all hover:scale-105 backdrop-blur-md border border-white/20"
+                aria-label="Download catalog as PDF"
                >
                   {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                   {generatingPdf ? "Generating Catalog..." : "Download Catalog PDF"}
@@ -133,12 +131,14 @@ export default function Products() {
             <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar">
                <button
                 onClick={() => handleCategoryClick("All")}
+                data-testid="filter-all-items"
                 className={cn(
                   "px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300",
                   activeCategory === "All" 
                     ? "bg-[#002147] text-white shadow-md shadow-blue-900/20" 
                     : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                 )}
+                aria-pressed={activeCategory === "All"}
               >
                 All Items
               </button>
@@ -146,12 +146,14 @@ export default function Products() {
                 <button
                   key={cat}
                   onClick={() => handleCategoryClick(cat)}
+                  data-testid={`filter-category-${cat.toLowerCase().replace(/\s+/g, '-')}`}
                   className={cn(
                     "px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap transition-all duration-300",
                     activeCategory === cat 
                       ? "bg-[#002147] text-white shadow-md shadow-blue-900/20" 
                       : "bg-gray-50 text-gray-600 hover:bg-gray-100"
                   )}
+                  aria-pressed={activeCategory === cat}
                 >
                   {cat}
                 </button>
@@ -162,10 +164,12 @@ export default function Products() {
             <div className="relative w-full md:w-64 shrink-0">
                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                <Input 
+                  data-testid="input-search-products"
                   placeholder="Search products..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-9 h-10 bg-gray-50 border-gray-200 focus:bg-white focus:border-[#00A896] rounded-full transition-all"
+                  aria-label="Search products by name or code"
                />
             </div>
           </div>
