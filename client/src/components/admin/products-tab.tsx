@@ -96,12 +96,40 @@ export function ProductsTab() {
   };
 
   const handleDownloadTemplate = () => {
-    const csvContent = "name,category,code,size,description,imageUrl,sortOrder\nExample Product,Grass Brooms,EX-001,48 inches,This is an example description,https://example.com/image.jpg,1";
+    // If we have products, export them. Otherwise, provide a template.
+    let csvData = [];
+    
+    if (products.length > 0) {
+      csvData = products.map(p => ({
+        name: p.name,
+        category: p.category,
+        code: p.code,
+        size: p.size || "",
+        description: p.description || "",
+        imageUrl: p.imageUrl || "",
+        sortOrder: p.sortOrder || 0,
+        isActive: p.isActive !== false // Default to true if undefined
+      }));
+    } else {
+      // Template data
+      csvData = [{
+        name: "Example Product",
+        category: "Grass Brooms",
+        code: "EX-001",
+        size: "48 inches",
+        description: "This is an example description",
+        imageUrl: "https://example.com/image.jpg",
+        sortOrder: 1,
+        isActive: true
+      }];
+    }
+
+    const csvContent = Papa.unparse(csvData);
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", "disha_products_template.csv");
+    link.setAttribute("download", products.length > 0 ? "disha_products_export.csv" : "disha_products_template.csv");
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -119,6 +147,7 @@ export function ProductsTab() {
         try {
           const parsedProducts = results.data as any[];
           let successCount = 0;
+          let updateCount = 0;
           
           for (const row of parsedProducts) {
             if (!row.name || !row.code) continue;
@@ -149,6 +178,16 @@ export function ProductsTab() {
               }
             }
 
+            // Check if product exists to update instead of create
+            const existingProduct = products.find(p => p.code === row.code);
+            
+            // Handle boolean isActive flag from CSV string
+            let isActive = true;
+            if (row.isActive !== undefined && row.isActive !== "") {
+              const val = String(row.isActive).toLowerCase();
+              isActive = val === "true" || val === "1" || val === "yes";
+            }
+
             await dbSaveProduct({
               name: row.name,
               category: row.category || "Uncategorized",
@@ -156,13 +195,19 @@ export function ProductsTab() {
               size: row.size || "",
               description: row.description || "",
               imageUrl: imageUrl,
-              isActive: true,
+              isActive: isActive,
               sortOrder: Number(row.sortOrder) || 0
-            });
+            }, existingProduct?.id); // Pass ID if updating
+
+            if (existingProduct) updateCount++;
             successCount++;
           }
           
-          alert(`Successfully imported ${successCount} products!`);
+          const msg = updateCount > 0 
+            ? `Processed ${successCount} products (${updateCount} updated, ${successCount - updateCount} new)!`
+            : `Successfully imported ${successCount} new products!`;
+            
+          alert(msg);
           await refreshData();
         } catch (e) {
           console.error("Bulk upload failed", e);
