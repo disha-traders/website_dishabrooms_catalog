@@ -524,7 +524,8 @@ export function ProductsTab() {
                             }
 
                             if (fileId) {
-                              val = `https://drive.google.com/uc?export=view&id=${fileId}`;
+                              // Use lh3.googleusercontent.com for better embedding reliability
+                              val = `https://lh3.googleusercontent.com/d/${fileId}`;
                             }
                           }
                           setFormData({...formData, imageUrl: val});
