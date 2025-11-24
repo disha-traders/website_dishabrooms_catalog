@@ -51,14 +51,25 @@ export function SettingsTab() {
     setStatus({ type: null, message: '' });
     
     try {
-      await setDoc(doc(db, "settings", "dishaTraders"), localConfig, { merge: true });
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error("Request timed out. Check your internet connection.")), 10000)
+      );
+
+      // Race the save operation against the timeout
+      await Promise.race([
+        setDoc(doc(db, "settings", "dishaTraders"), localConfig, { merge: true }),
+        timeoutPromise
+      ]);
+
       setStatus({ type: 'success', message: "Settings saved successfully!" });
       
       // Clear success message after 3 seconds
       setTimeout(() => setStatus({ type: null, message: '' }), 3000);
     } catch (e) {
       console.error("Error saving settings", e);
-      setStatus({ type: 'error', message: "Failed to save settings. Check console for details." });
+      const msg = (e as Error).message || "Failed to save settings.";
+      setStatus({ type: 'error', message: msg });
     } finally {
       setSaving(false);
     }
