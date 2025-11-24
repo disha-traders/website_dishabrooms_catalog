@@ -58,10 +58,8 @@ export default function Home() {
                 {config.hero.subtitle || config.tagline || "Manufacturing premium cleaning products with pride in Tamil Nadu."}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 pt-6">
-                <Link href="/products">
-                  <a className="btn-primary-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl hover:bg-[#008c7d]">
-                    View Product Catalog
-                  </a>
+                <Link href="/products" className="btn-primary-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl hover:bg-[#008c7d]">
+                  View Product Catalog
                 </Link>
                 <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-whatsapp-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl gap-2">
                   <MessageCircle className="w-6 h-6" />
@@ -96,17 +94,19 @@ export default function Home() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat, idx) => (
-              <Link key={idx} href={`/products?category=${encodeURIComponent(cat.name)}`}>
-                <a className="group card-custom p-8 text-center block h-full hover:-translate-y-2 transition-all duration-300 hover:shadow-lg">
-                  <div className="w-16 h-16 bg-[#00A896]/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#00A896] transition-colors duration-300">
-                    <cat.icon size={32} className="text-[#00A896] group-hover:text-white transition-colors duration-300" />
-                  </div>
-                  <h3 className="text-xl font-bold text-[#002147] mb-2">{cat.name}</h3>
-                  <p className="text-gray-500 text-sm mb-6">{cat.desc}</p>
-                  <span className="text-[#00A896] font-semibold text-sm group-hover:underline flex items-center justify-center gap-1">
-                    View Products <ArrowRight size={14} />
-                  </span>
-                </a>
+              <Link 
+                key={idx} 
+                href={`/products?category=${encodeURIComponent(cat.name)}`}
+                className="group card-custom p-8 text-center block h-full hover:-translate-y-2 transition-all duration-300 hover:shadow-lg"
+              >
+                <div className="w-16 h-16 bg-[#00A896]/10 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-[#00A896] transition-colors duration-300">
+                  <cat.icon size={32} className="text-[#00A896] group-hover:text-white transition-colors duration-300" />
+                </div>
+                <h3 className="text-xl font-bold text-[#002147] mb-2">{cat.name}</h3>
+                <p className="text-gray-500 text-sm mb-6">{cat.desc}</p>
+                <span className="text-[#00A896] font-semibold text-sm group-hover:underline flex items-center justify-center gap-1">
+                  View Products <ArrowRight size={14} />
+                </span>
               </Link>
             ))}
           </div>

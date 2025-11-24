@@ -23,29 +23,27 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <header className="header-custom w-full shadow-md">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">
           {/* Brand */}
-          <Link href="/">
-            <a className="flex flex-col">
-              <span className="text-2xl font-heading font-bold tracking-wide text-white uppercase">
-                {config.brandName}
-              </span>
-              <span className="text-[10px] text-brand-teal uppercase tracking-widest opacity-90">
-                {config.companyName}
-              </span>
-            </a>
+          <Link href="/" className="flex flex-col">
+            <span className="text-2xl font-heading font-bold tracking-wide text-white uppercase">
+              {config.brandName}
+            </span>
+            <span className="text-[10px] text-brand-teal uppercase tracking-widest opacity-90">
+              {config.companyName}
+            </span>
           </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
-              <Link key={item.path} href={item.path}>
-                <a
-                  className={cn(
-                    "text-sm font-medium transition-colors hover:text-brand-chartreuse uppercase tracking-wider",
-                    location === item.path ? "text-brand-chartreuse font-bold" : "text-gray-300"
-                  )}
-                >
-                  {item.label}
-                </a>
+              <Link 
+                key={item.path} 
+                href={item.path}
+                className={cn(
+                  "text-sm font-medium transition-colors hover:text-brand-chartreuse uppercase tracking-wider",
+                  location === item.path ? "text-brand-chartreuse font-bold" : "text-gray-300"
+                )}
+              >
+                {item.label}
               </Link>
             ))}
             <Button 
@@ -74,16 +72,16 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <div className="md:hidden bg-brand-cetacean border-t border-white/10 p-4 absolute w-full shadow-xl">
             <nav className="flex flex-col gap-4">
               {navItems.map((item) => (
-                <Link key={item.path} href={item.path}>
-                  <a
-                    className={cn(
-                      "text-base font-medium py-2 border-b border-white/5",
-                      location === item.path ? "text-brand-chartreuse" : "text-gray-300"
-                    )}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.label}
-                  </a>
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  className={cn(
+                    "text-base font-medium py-2 border-b border-white/5",
+                    location === item.path ? "text-brand-chartreuse" : "text-gray-300"
+                  )}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {item.label}
                 </Link>
               ))}
               <a 
@@ -134,19 +132,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <ul className="space-y-3">
                 {navItems.map((item) => (
                   <li key={item.path}>
-                    <Link href={item.path}>
-                      <a className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-brand-gold rounded-full"></span>
-                        {item.label}
-                      </a>
+                    <Link href={item.path} className="flex items-center gap-2">
+                      <span className="w-1.5 h-1.5 bg-brand-gold rounded-full"></span>
+                      {item.label}
                     </Link>
                   </li>
                 ))}
                 <li>
-                  <Link href="/admin">
-                    <a className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white">
-                       Admin Login
-                    </a>
+                  <Link href="/admin" className="flex items-center gap-2 mt-4 text-gray-400 hover:text-white">
+                     Admin Login
                   </Link>
                 </li>
               </ul>
