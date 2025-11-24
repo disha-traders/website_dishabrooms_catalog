@@ -49,38 +49,51 @@ export const generateCatalog = async (products: Product[], config: Config, cover
   
   // --- PAGE 1: COVER PAGE ---
   
-  // Background color for cover
+  // Background color for cover (fallback)
   doc.setFillColor(0, 33, 71); // #002147
   doc.rect(0, 0, pageWidth, pageHeight, "F");
   
-  // Load Cover Image
+  // Load Cover Image - FILL PAGE
   const coverImgBase64 = await loadImage(coverImageUrl);
   if (coverImgBase64) {
     try {
-      // Centered large image
-      const imgWidth = 150;
-      const imgHeight = 150;
-      const x = (pageWidth - imgWidth) / 2;
-      const y = 60;
-      doc.addImage(coverImgBase64, "JPEG", x, y, imgWidth, imgHeight);
+      // Fill the entire page
+      doc.addImage(coverImgBase64, "JPEG", 0, 0, pageWidth, pageHeight);
+      
+      // Add a subtle overlay gradient effect (simulated with transparency if possible, or just a dark block at bottom)
+      // jsPDF doesn't support easy gradients/transparency in standard mode easily without plugins, 
+      // so we'll stick to a clean design overlay.
     } catch (e) {
       console.warn("Error adding cover image", e);
     }
   }
 
-  // Title Text
+  // Title Overlay - Top Centered with simple shadow effect
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(40);
   doc.setFont("helvetica", "bold");
+  // Drop shadow simulation
+  doc.setTextColor(0, 0, 0);
+  doc.text(config.brandName.toUpperCase(), (pageWidth / 2) + 1, 41, { align: "center" });
+  doc.setTextColor(255, 255, 255);
   doc.text(config.brandName.toUpperCase(), pageWidth / 2, 40, { align: "center" });
   
   doc.setFontSize(18);
   doc.setFont("helvetica", "normal");
-  doc.text("PREMIUM PRODUCT CATALOG", pageWidth / 2, 50, { align: "center" });
+  doc.text("PREMIUM PRODUCT CATALOG", pageWidth / 2, 55, { align: "center" });
   
-  doc.setFontSize(14);
-  doc.text(config.companyName, pageWidth / 2, pageHeight - 30, { align: "center" });
-  doc.text(`Contact: ${config.contact.phone}`, pageWidth / 2, pageHeight - 20, { align: "center" });
+  // Footer Strip on Cover Page (Blue Background)
+  doc.setFillColor(0, 33, 71); // #002147
+  doc.rect(0, pageHeight - 35, pageWidth, 35, "F");
+  
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(config.companyName, pageWidth / 2, pageHeight - 22, { align: "center" });
+  
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Contact: ${config.contact.phone} | ${config.contact.email}`, pageWidth / 2, pageHeight - 12, { align: "center" });
   
   // --- PRODUCT PAGES ---
   
@@ -119,10 +132,10 @@ export const generateCatalog = async (products: Product[], config: Config, cover
       doc.text(category.toUpperCase(), 15, 17);
       
       // Footer
-      doc.setFillColor(240, 244, 248); // Light gray
+      doc.setFillColor(0, 33, 71); // #002147 (Dark Blue Background as requested)
       doc.rect(0, pageHeight - 20, pageWidth, 20, "F");
       
-      doc.setTextColor(0, 33, 71);
+      doc.setTextColor(255, 255, 255); // White Text
       doc.setFontSize(10);
       doc.setFont("helvetica", "normal");
       const footerText = `${config.companyName} | ${config.contact.phone} | ${config.contact.email}`;
