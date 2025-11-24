@@ -4,8 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { categories, Product, products as mockProducts } from "@/lib/products";
-import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon } from "lucide-react";
+import { categories as defaultCategories, Product, products as mockProducts } from "@/lib/products";
+import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon, Filter, ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, writeBatch } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, getDocs } from "firebase/firestore";
 
 export function ProductsTab() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,13 +31,22 @@ export function ProductsTab() {
   const [error, setError] = useState<string | null>(null);
   const [seeding, setSeeding] = useState(false);
   
+  // Filter & Pagination State
+  const [searchQuery, setSearchQuery] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Dynamic Categories State
+  const [dynamicCategories, setDynamicCategories] = useState<string[]>([]);
+
   // Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
     name: "",
-    category: "Grass Brooms",
+    category: "",
     code: "",
     size: "",
     description: "",
@@ -47,7 +56,7 @@ export function ProductsTab() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Fetch products
+  // Fetch products and categories
   useEffect(() => {
     if (!db) {
       setLoading(false);
@@ -56,17 +65,34 @@ export function ProductsTab() {
     }
     
     try {
-      const q = query(collection(db, "products"), orderBy("sortOrder", "asc"));
-      const unsub = onSnapshot(q, (snapshot) => {
+      // Fetch Products
+      const qProducts = query(collection(db, "products"), orderBy("sortOrder", "asc"));
+      const unsubProducts = onSnapshot(qProducts, (snapshot) => {
         const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
         setProducts(items);
         setLoading(false);
       }, (err) => {
         console.error("Failed to fetch products", err);
-        setError("Failed to load products. Please check your connection.");
+        setError("Failed to load products.");
         setLoading(false);
       });
-      return () => unsub();
+
+      // Fetch Categories
+      const qCategories = query(collection(db, "categories"), orderBy("sortOrder", "asc"));
+      const unsubCategories = onSnapshot(qCategories, (snapshot) => {
+        if (!snapshot.empty) {
+          const cats = snapshot.docs.map(doc => doc.data().name as string);
+          setDynamicCategories(cats);
+        } else {
+          // Fallback to default if no dynamic categories
+          setDynamicCategories([...defaultCategories]);
+        }
+      });
+
+      return () => {
+        unsubProducts();
+        unsubCategories();
+      };
     } catch (e) {
       setLoading(false);
       setError("An unexpected error occurred.");
@@ -104,7 +130,7 @@ export function ProductsTab() {
     setEditingProduct(null);
     setFormData({
       name: "",
-      category: "Grass Brooms",
+      category: dynamicCategories[0] || "Grass Brooms",
       code: "",
       size: "",
       description: "",
@@ -197,30 +223,66 @@ export function ProductsTab() {
     }
   };
 
+  // Filter Logic
+  const filteredProducts = products.filter(p => {
+    const matchesSearch = (p.name?.toLowerCase() || "").includes(searchQuery.toLowerCase()) || 
+                          (p.code?.toLowerCase() || "").includes(searchQuery.toLowerCase());
+    const matchesCategory = categoryFilter === "All" || p.category === categoryFilter;
+    return matchesSearch && matchesCategory;
+  });
+
+  // Pagination Logic
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginatedProducts = filteredProducts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Reset page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, categoryFilter]);
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
         <div>
           <h2 className="text-xl font-bold text-[#002147]">Products Management</h2>
-          <p className="text-sm text-gray-500">Manage your catalog items</p>
+          <p className="text-sm text-gray-500">Manage your catalog items ({products.length} total)</p>
         </div>
-        <div className="flex gap-2">
-          {import.meta.env.MODE === "development" && products.length === 0 && (
-            <Button 
-              onClick={handleSeedData} 
-              variant="outline"
-              disabled={seeding}
-              className="gap-2 border-[#00A896]/30 text-[#00A896] hover:bg-[#00A896]/5"
-            >
-              {seeding ? <Loader2 className="animate-spin" size={16} /> : <Database size={16} />}
-              Seed Mock Data
-            </Button>
-          )}
-          <Button 
+        
+        <div className="flex flex-col sm:flex-row gap-3 w-full xl:w-auto">
+           {/* Search */}
+           <div className="relative w-full sm:w-64">
+             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+             <Input 
+               placeholder="Search name or code..." 
+               value={searchQuery}
+               onChange={(e) => setSearchQuery(e.target.value)}
+               className="pl-9 h-10 bg-gray-50 border-gray-200 focus:bg-white"
+             />
+           </div>
+
+           {/* Category Filter */}
+           <div className="w-full sm:w-48">
+             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+               <SelectTrigger className="h-10 bg-gray-50 border-gray-200">
+                 <SelectValue placeholder="Filter Category" />
+               </SelectTrigger>
+               <SelectContent>
+                 <SelectItem value="All">All Categories</SelectItem>
+                 {dynamicCategories.map(cat => (
+                   <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                 ))}
+               </SelectContent>
+             </Select>
+           </div>
+
+           <Button 
             onClick={handleAddProduct} 
-            className="bg-[#00A896] hover:bg-[#008C7D] text-white gap-2 rounded-full px-6 shadow-sm hover:shadow-md transition-all"
+            className="bg-[#00A896] hover:bg-[#008C7D] text-white gap-2 rounded-md px-4 h-10 shadow-sm whitespace-nowrap"
           >
-            <Plus size={18} /> Add New Product
+            <Plus size={18} /> Add Product
           </Button>
         </div>
       </div>
@@ -257,65 +319,101 @@ export function ProductsTab() {
                  </Button>
               </div>
             </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-4">
-              {products.map((product) => (
-                <Card key={product.id} className="flex flex-col sm:flex-row items-center p-4 gap-6 overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow duration-200">
-                  <div className="w-full sm:w-24 h-24 bg-gray-100 rounded-lg shrink-0 overflow-hidden relative border border-gray-100">
-                    <img 
-                      src={product.imageUrl} 
-                      alt={product.name} 
-                      className="w-full h-full object-cover"
-                      onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
-                    />
-                  </div>
-                  <div className="flex-1 text-center sm:text-left space-y-1">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                      <h3 className="font-bold text-lg text-[#002147]">{product.name}</h3>
-                      <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">
-                        {product.code}
-                      </span>
-                      {product.isActive === false && (
-                        <span className="inline-block px-2 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-bold uppercase tracking-wider">
-                          Inactive
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-center sm:justify-start gap-2">
-                      <span className="inline-block px-2 py-1 bg-[#00A896]/10 text-[#00A896] rounded-md text-xs font-medium">
-                        {product.category}
-                      </span>
-                      {product.size && (
-                        <span className="text-xs text-gray-400 border-l pl-2 ml-1">
-                          {product.size}
-                        </span>
-                      )}
-                      <span className="text-xs text-gray-400 border-l pl-2 ml-1">
-                        Sort: {product.sortOrder}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2 mt-4 sm:mt-0 w-full sm:w-auto justify-center">
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="gap-2 border-gray-200 text-gray-600 hover:text-[#00A896] hover:border-[#00A896]/30 hover:bg-[#00A896]/5" 
-                      onClick={() => handleEditProduct(product)}
-                    >
-                      <Edit2 size={14} /> Edit
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors" 
-                      onClick={() => handleDeleteProduct(product.id)}
-                    >
-                      <Trash2 size={14} />
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+          ) : filteredProducts.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-xl border border-gray-100">
+              <p className="text-gray-500">No products match your search filters.</p>
+              <Button variant="link" onClick={() => {setSearchQuery(""); setCategoryFilter("All")}} className="text-[#00A896]">
+                Clear Filters
+              </Button>
             </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 gap-4">
+                {paginatedProducts.map((product) => (
+                  <Card key={product.id} className="flex flex-col sm:flex-row items-center p-4 gap-6 overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow duration-200">
+                    <div className="w-full sm:w-24 h-24 bg-gray-100 rounded-lg shrink-0 overflow-hidden relative border border-gray-100">
+                      <img 
+                        src={product.imageUrl} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover"
+                        onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+                      />
+                    </div>
+                    <div className="flex-1 text-center sm:text-left space-y-1">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                        <h3 className="font-bold text-lg text-[#002147]">{product.name}</h3>
+                        <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">
+                          {product.code}
+                        </span>
+                        {product.isActive === false && (
+                          <span className="inline-block px-2 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-bold uppercase tracking-wider">
+                            Inactive
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center justify-center sm:justify-start gap-2">
+                        <span className="inline-block px-2 py-1 bg-[#00A896]/10 text-[#00A896] rounded-md text-xs font-medium">
+                          {product.category}
+                        </span>
+                        {product.size && (
+                          <span className="text-xs text-gray-400 border-l pl-2 ml-1">
+                            {product.size}
+                          </span>
+                        )}
+                        <span className="text-xs text-gray-400 border-l pl-2 ml-1">
+                          Sort: {product.sortOrder}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-2 mt-4 sm:mt-0 w-full sm:w-auto justify-center">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="gap-2 border-gray-200 text-gray-600 hover:text-[#00A896] hover:border-[#00A896]/30 hover:bg-[#00A896]/5" 
+                        onClick={() => handleEditProduct(product)}
+                      >
+                        <Edit2 size={14} /> Edit
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="text-gray-400 hover:bg-red-50 hover:text-red-600 transition-colors" 
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
+                        <Trash2 size={14} />
+                      </Button>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="flex items-center justify-between bg-white p-4 rounded-xl border border-gray-100">
+                  <span className="text-sm text-gray-500">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft size={16} /> Previous
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next <ChevronRight size={16} />
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -384,7 +482,7 @@ export function ProductsTab() {
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((cat) => (
+                        {dynamicCategories.map((cat) => (
                           <SelectItem key={cat} value={cat} className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50">{cat}</SelectItem>
                         ))}
                       </SelectContent>
@@ -521,13 +619,11 @@ export function ProductsTab() {
               Cancel
             </Button>
             <Button 
-              type="submit" 
-              className="h-11 px-8 bg-[#002147] hover:bg-[#003366] text-white font-medium shadow-lg shadow-[#002147]/10 hover:shadow-[#002147]/20 transition-all" 
-              onClick={handleSaveProduct} 
+              onClick={handleSaveProduct}
               disabled={saving}
+              className="h-11 px-8 bg-[#00A896] hover:bg-[#008C7D] text-white font-bold shadow-lg shadow-[#00A896]/20"
             >
-              {saving ? <Loader2 className="animate-spin mr-2" size={18} /> : (editingProduct ? <Edit2 size={18} className="mr-2" /> : <Plus size={18} className="mr-2" />)}
-              {editingProduct ? "Save Changes" : "Create Product"}
+              {saving ? <Loader2 className="animate-spin" /> : "Save Product"}
             </Button>
           </DialogFooter>
         </DialogContent>

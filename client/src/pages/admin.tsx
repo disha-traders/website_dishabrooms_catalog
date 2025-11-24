@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { AdminLayout } from "@/components/admin/admin-layout";
 import { ProductsTab } from "@/components/admin/products-tab";
+import { CategoriesTab } from "@/components/admin/categories-tab";
 import { SettingsTab } from "@/components/admin/settings-tab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -130,6 +131,12 @@ export default function Admin() {
             Products
           </TabsTrigger>
           <TabsTrigger 
+            value="categories" 
+            className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
+          >
+            Categories
+          </TabsTrigger>
+          <TabsTrigger 
             value="settings"
             className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
           >
@@ -139,6 +146,10 @@ export default function Admin() {
 
         <TabsContent value="products" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
           <ProductsTab />
+        </TabsContent>
+
+        <TabsContent value="categories" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
+          <CategoriesTab />
         </TabsContent>
 
         <TabsContent value="settings" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
