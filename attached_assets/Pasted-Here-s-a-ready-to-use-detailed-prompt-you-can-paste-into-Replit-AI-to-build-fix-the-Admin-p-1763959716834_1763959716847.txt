@@ -1,0 +1,285 @@
+Here’s a **ready-to-use, detailed prompt** you can paste into **Replit AI** to build/fix the Admin page exactly how we want it 👇
+
+---
+
+````txt
+You are a senior full-stack React developer and senior UI/UX designer.  
+You’re working on an admin dashboard for a product catalog website for a manufacturer (Disha Traders – Alagu Mayil).
+
+Tech context:
+- React + Vite project (SPA style).
+- Firebase **Firestore only** (Spark free tier, NO billing).
+- We are **NOT** using Firebase Storage at all (no buckets, no file uploads).
+- All images will be referenced via a simple `imageUrl` string field.
+- Admin route: `/admin`.
+
+Your job:  
+Design and implement a clean, robust, user-friendly **Admin page** with two main sections:
+1) **Products Management**
+2) **General Settings**
+
+The Admin page should be the single control panel for managing the website text and products.
+
+=====================================================
+HIGH-LEVEL REQUIREMENTS
+=====================================================
+
+1. The `/admin` page must:
+   - Have a simple password gate (client-side only is okay for now).
+   - Show a **top header bar**, tabs for navigation, and a clean dashboard layout.
+   - Work entirely with **Firestore** (no Firebase Storage usage at all).
+   - Use the existing Firebase client (which initializes Firestore using VITE_FIREBASE_* env vars).
+
+2. Absolutely DO NOT:
+   - Import or use `getStorage`, `ref`, `uploadBytes`, `getDownloadURL`, or any other Firebase Storage APIs.
+   - Depend on any `storageBucket` env var.
+   - Require paid Firebase plans. This must work 100% on free Spark tier.
+
+=====================================================
+ADMIN LAYOUT & THEME
+=====================================================
+
+Create a component for `/admin` that:
+
+- Shows a **top header bar** with:
+  - Left: title “Disha Traders Admin”.
+  - Right: a “View Site” link (opens `/` in a new tab) and a “Logout” button (clears admin session locally).
+
+- Uses **tabbed navigation** just under the header:
+  - Tabs: [Products] [General Settings]
+  - The currently active tab is styled with a bottom border and bold text.
+  - In mobile view, tabs can stack or scroll but still be clearly clickable.
+
+- Overall theme:
+  - Background: very light gray (`#F5F5F7`).
+  - Cards: white, rounded corners (~16px), soft shadow.
+  - Accent colors can be:
+    - Primary dark: `#080A59` (header background).
+    - Primary accent: `#0261D3` for main buttons or highlights.
+    - Success: `#06B029` for success badges and “saved” status.
+  - Typography: system font / Inter style; headings semi-bold, 18–22px.
+
+- Admin access gate:
+  - Simple password prompt when visiting `/admin`:
+    - Single password input and “Login” button.
+    - Password can come from a Vite env variable (e.g. `import.meta.env.VITE_ADMIN_PASSWORD`) or a temporary hardcoded value.
+  - On success, store an “isAdmin” flag in `localStorage` or context so page doesn’t re-prompt every time.
+  - On logout, clear this flag and show the login screen again.
+
+=====================================================
+FIRESTORE DATA MODEL (IMPORTANT)
+=====================================================
+
+We will use Firestore with this minimal schema:
+
+1) Collection: `products`
+   Each document fields:
+   - `name`        (string, required)
+   - `code`        (string, required, SKU-like)
+   - `category`    (string; one of: "Grass Brooms", "Coco Brooms", "Yarn Mops", "Wipers & Brushes")
+   - `size`        (string; e.g. “Premium Long Handle” or dimensions)
+   - `description` (string; short description)
+   - `imageUrl`    (string; URL or path like `/products/am-gb-501.jpg`)
+   - `isActive`    (boolean; default true)
+   - `sortOrder`   (number; default 0)
+   - `createdAt`   (timestamp)
+   - `updatedAt`   (timestamp)
+
+2) Collection: `settings`, document id: `dishaTraders`
+   Fields:
+   - `companyName`   (string)
+   - `brandName`     (string)
+   - `phone`         (string)
+   - `whatsapp`      (string)
+   - `email`         (string)
+   - `address`       (string, multiline)
+   - `heroTitle`     (string)
+   - `heroSubtitle`  (string)
+
+The public site (Home, Contact, Footer, Products page) will read data from these Firestore docs.
+
+=====================================================
+ADMIN – PRODUCTS TAB (CRUD)
+=====================================================
+
+### Layout
+
+In the **Products** tab:
+
+- At the top of the card:
+  - Title: “Products”
+  - Right side: a primary button `+ Add Product` that opens the Add Product dialog.
+
+- Below the header:
+  - If data is loading: show a friendly “Loading products…” state.
+  - If there are zero products: show an empty state:
+    - Message: “No products added yet.”
+    - A visible button “Add your first product” (same as + Add Product).
+  - If there are products: show a table/list.
+
+### Product list
+
+For each product, show:
+
+- Small thumbnail (from `imageUrl`) on the left.
+- Text details:
+  - Product name
+  - Code
+  - Category
+  - Optional: a small pill showing “Active” / “Inactive”
+- On the right:
+  - “Edit” button
+  - “Delete” button (with a confirmation prompt)
+
+Make sure the list updates immediately when a product is added/edited/deleted.
+
+### Add / Edit Product dialog
+
+The same form can be reused for Add and Edit.
+
+Form fields:
+
+- Text input: **Name** (required)
+- Text input: **Code** (required)
+- Select: **Category** with options:
+  - Grass Brooms
+  - Coco Brooms
+  - Yarn Mops
+  - Wipers & Brushes
+- Text input: **Size / Variant** (optional but useful)
+- Textarea: **Description** (optional)
+- Text input: **Image URL**
+  - Placeholder: `/products/am-gb-501.jpg` or full URL
+  - Below this field, show a live image preview (`<img src={imageUrl} />`) if the value is non-empty and a valid URL/path.
+- Checkbox: **Active** (isActive)
+- Numeric input: **Sort order** (for ordering in the public catalog)
+
+Buttons:
+- Primary: “Add Product” (for new) or “Save Changes” (for editing)
+- Secondary: “Cancel”
+
+Behavior:
+
+- On Add:
+  - Validate required fields (name, code, category).
+  - Call `addDoc` on `products` collection with all fields.
+  - Set `createdAt` and `updatedAt` timestamps.
+  - Update local state so the new product appears immediately in the list.
+  - Close the modal.
+
+- On Edit:
+  - Pre-fill the form with the existing product data.
+  - On Save:
+    - Call `updateDoc` on that product document.
+    - Update `updatedAt`.
+    - Update local state.
+    - Close modal.
+
+- On Delete:
+  - Confirm via `window.confirm` or a simple modal.
+  - Call `deleteDoc` on that Firestore document.
+  - Remove it from local state.
+
+Error handling:
+- Wrap Firestore calls in try/catch.
+- On failure, show a simple inline error message and `console.error` the stack.
+
+Note again: there must be **no Storage usage** here; `imageUrl` is just a string.
+
+=====================================================
+ADMIN – GENERAL SETTINGS TAB
+=====================================================
+
+This tab manages `settings/dishaTraders`.
+
+Layout:
+
+- Single card labeled “General Settings”.
+- Inside, a form with:
+
+Fields:
+- **Company Name**      (text)
+- **Brand Name**        (text)
+- **Phone**             (text)
+- **WhatsApp Number**   (text)
+- **Email**             (text)
+- **Address**           (textarea, 3–4 lines)
+- **Hero Title**        (text)
+- **Hero Subtitle**     (text)
+
+Behavior:
+
+- On initial load:
+  - Fetch `doc(db, "settings", "dishaTraders")`.
+  - If exists, populate the form with stored values.
+  - If not, use sensible defaults and treat the first Save as creating this doc.
+
+- On “Save Settings” button click:
+  - Call `setDoc(doc(db, "settings", "dishaTraders"), { ...fields }, { merge: true })`.
+  - Show a small success message: e.g. “Settings saved” under the button.
+  - Log success to console.
+  - On error, show a small error message and log error to console.
+
+The rest of the app (Home page, Contact page, Footer) will use a hook (e.g. `useConfig()` or similar) to read from `settings/dishaTraders` and display these values.
+
+=====================================================
+FIREBASE CLIENT & ENV USAGE
+=====================================================
+
+Ensure there is a proper Firebase client file, e.g. `client/src/lib/firebase.ts`, that:
+
+- Uses Vite env variables:
+
+  - `import.meta.env.VITE_FIREBASE_API_KEY`
+  - `import.meta.env.VITE_FIREBASE_AUTH_DOMAIN`
+  - `import.meta.env.VITE_FIREBASE_PROJECT_ID`
+  - `import.meta.env.VITE_FIREBASE_APP_ID`
+  - (No need for storage bucket anymore.)
+
+- Initializes Firebase app exactly once (singleton).
+- Exports the Firestore instance, e.g.:
+
+  ```ts
+  import { initializeApp, getApps } from "firebase/app";
+  import { getFirestore } from "firebase/firestore";
+
+  const firebaseConfig = { /* use Vite env vars here */ };
+
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+
+  export const db = getFirestore(app);
+````
+
+The admin components should import `db` and use Firestore client methods.
+
+=====================================================
+QUALITY & CLEANUP
+=================
+
+* Keep the admin components modular:
+
+  * `/admin` page shell.
+  * `<AdminHeader />`
+  * `<AdminTabs />`
+  * `<AdminProducts />`
+  * `<AdminSettings />`
+* Add basic loading/error states for both tabs (no infinite “Loading…” if Firestore fails).
+* Remove any dead code related to Firebase Storage.
+* Ensure the admin UI looks clean and consistent with the rest of the site.
+
+At the end, please:
+
+* Show me the key React components for:
+
+  * Admin shell and layout
+  * Products admin
+  * General Settings admin
+* Confirm there are no Storage-related references and the admin works with a free Firestore-only Firebase project.
+
+```
+
+---
+
+You can paste this whole block into Replit AI and let it refactor/build the Admin page exactly to our needs.
+::contentReference[oaicite:0]{index=0}
+```

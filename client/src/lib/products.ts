@@ -12,6 +12,10 @@ export interface Product {
   description: string;
   imageUrl: string;
   isFeatured?: boolean;
+  isActive?: boolean;
+  sortOrder?: number;
+  createdAt?: any;
+  updatedAt?: any;
 }
 
 export const categories = [

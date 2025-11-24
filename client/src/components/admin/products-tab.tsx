@@ -21,6 +21,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy, writeBatch } from "firebase/firestore";
 
@@ -40,7 +41,9 @@ export function ProductsTab() {
     code: "",
     size: "",
     description: "",
-    imageUrl: "/images/placeholder.jpg"
+    imageUrl: "/images/placeholder.jpg",
+    isActive: true,
+    sortOrder: 0
   });
 
   // Fetch products
@@ -75,10 +78,7 @@ export function ProductsTab() {
     
     setSeeding(true);
     try {
-      // We use a batch or just simple loop since batch is limited to 500 operations (we have few)
-      // Let's use simple Promise.all for clarity
       const promises = mockProducts.map((p, index) => {
-        // Create a clean object without the ID (Firestore generates it)
         const { id, ...data } = p;
         return addDoc(collection(db, "products"), {
           ...data,
@@ -107,7 +107,9 @@ export function ProductsTab() {
       code: "",
       size: "",
       description: "",
-      imageUrl: "/images/placeholder.jpg"
+      imageUrl: "/images/placeholder.jpg",
+      isActive: true,
+      sortOrder: products.length
     });
     setIsDialogOpen(true);
   };
@@ -120,7 +122,9 @@ export function ProductsTab() {
       code: product.code,
       size: product.size,
       description: product.description,
-      imageUrl: product.imageUrl
+      imageUrl: product.imageUrl,
+      isActive: product.isActive ?? true,
+      sortOrder: product.sortOrder ?? 0
     });
     setIsDialogOpen(true);
   };
@@ -143,8 +147,7 @@ export function ProductsTab() {
       const productData = {
         ...formData,
         updatedAt: new Date(),
-        sortOrder: (editingProduct as any)?.sortOrder || Date.now(),
-        isActive: true
+        sortOrder: Number(formData.sortOrder),
       };
 
       if (editingProduct) {
@@ -235,6 +238,11 @@ export function ProductsTab() {
                       <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-bold uppercase tracking-wider">
                         {product.code}
                       </span>
+                      {product.isActive === false && (
+                        <span className="inline-block px-2 py-0.5 bg-red-100 text-red-600 rounded text-[10px] font-bold uppercase tracking-wider">
+                          Inactive
+                        </span>
+                      )}
                     </div>
                     <div className="flex items-center justify-center sm:justify-start gap-2">
                       <span className="inline-block px-2 py-1 bg-brand-teal/10 text-brand-teal rounded-md text-xs font-medium">
@@ -245,6 +253,9 @@ export function ProductsTab() {
                           {product.size}
                         </span>
                       )}
+                      <span className="text-xs text-gray-400 border-l pl-2 ml-1">
+                        Sort: {product.sortOrder}
+                      </span>
                     </div>
                   </div>
                   <div className="flex gap-2 mt-4 sm:mt-0 w-full sm:w-auto justify-center">
@@ -360,6 +371,28 @@ export function ProductsTab() {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-2">
+                   <Label htmlFor="sortOrder">Sort Order</Label>
+                   <Input
+                     id="sortOrder"
+                     type="number"
+                     value={formData.sortOrder}
+                     onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})}
+                     placeholder="0"
+                   />
+                </div>
+
+                <div className="space-y-2 flex items-end pb-2">
+                   <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id="isActive" 
+                        checked={formData.isActive}
+                        onCheckedChange={(checked) => setFormData({...formData, isActive: !!checked})}
+                      />
+                      <Label htmlFor="isActive" className="cursor-pointer">Active Product</Label>
+                   </div>
                 </div>
 
                 <div className="space-y-2 col-span-2">

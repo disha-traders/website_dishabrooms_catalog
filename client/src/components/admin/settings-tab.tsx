@@ -112,6 +112,27 @@ export function SettingsTab() {
           />
         </div>
 
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium">Hero Title</Label>
+              <Input 
+                value={localConfig.hero?.title || ""}
+                onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title: e.target.value }})} 
+                placeholder="e.g. Premium Cleaning Solutions"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium">Hero Subtitle</Label>
+              <Input 
+                value={localConfig.hero?.subtitle || ""}
+                onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, subtitle: e.target.value }})}
+                placeholder="e.g. Quality brooms and mops for every home"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+              />
+            </div>
+        </div>
+
         <div className="pt-4 border-t flex justify-end">
           <Button 
             onClick={handleSaveSettings} 
