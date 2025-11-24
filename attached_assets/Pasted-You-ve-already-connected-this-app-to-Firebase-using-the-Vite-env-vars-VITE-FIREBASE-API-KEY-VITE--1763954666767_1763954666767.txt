@@ -1,0 +1,93 @@
+You’ve already connected this app to Firebase using the Vite env vars:
+
+VITE_FIREBASE_API_KEY
+
+VITE_FIREBASE_AUTH_DOMAIN
+
+VITE_FIREBASE_PROJECT_ID
+
+VITE_FIREBASE_STORAGE_BUCKET
+
+VITE_FIREBASE_MESSAGING_SENDER_ID
+
+VITE_FIREBASE_APP_ID
+
+/admin now loads, but there are two issues:
+
+On /admin → Products:
+
+The UI stays on “Loading products…” forever.
+
+The “+ Add New Product” button doesn’t appear.
+
+On /admin → General Settings:
+
+The form shows default values (Disha Traders, phone, etc.).
+
+When I change a field and click Save Settings, nothing seems to happen; reloading /admin shows the old values again.
+
+Please do all of the following:
+
+A. Fix Products Admin tab
+
+Inspect the products admin component(s) and the Firebase client.
+
+Make sure products are loaded from the Firestore collection products using the configured db instance.
+
+Handle the “no products yet” case:
+
+If the products collection is empty, stop the loading spinner and show an empty state message plus the “+ Add Product” button.
+
+Ensure the “+ Add Product” button is always visible once Firebase initialization is successful, even if there are zero products.
+
+Make sure Add / Edit / Delete product operations:
+
+Use addDoc, updateDoc, deleteDoc on the products collection.
+
+Update local state after each operation so the list refreshes immediately without manual reload.
+
+If any Firestore call fails (permissions, wrong path, etc.), log the error to the console and show a simple error message in the UI instead of being stuck on “Loading products…”.
+
+B. Fix General Settings Save
+
+Confirm that the General Settings form reads from the Firestore document settings/dishaTraders (collection settings, doc id dishaTraders).
+
+Wire the Save Settings button to:
+
+Call setDoc(doc(db, "settings", "dishaTraders"), { ...fields }, { merge: true }).
+
+Await the promise and then either:
+
+Update local state with the saved values, or
+
+Re-fetch the settings document to confirm.
+
+Add basic feedback:
+
+On success, log to console and optionally show a small “Settings saved” message.
+
+On error, log the error and show a message like “Failed to save settings – check Firebase config or rules.”
+
+Make sure the public pages (Home, Contact, Footer) still use the same useConfig hook and that it reads from settings/dishaTraders when available, falling back to static defaults only if Firestore is unavailable.
+
+C. Verify Firebase usage
+
+Confirm that the Firebase client uses the Vite env variables (import.meta.env.VITE_FIREBASE_*) and that no old process.env references remain.
+
+Make sure the app doesn’t crash if Firestore is empty:
+
+If settings/dishaTraders doesn’t exist yet, create it on first save.
+
+If products is empty, treat it as an empty list, not a loading error.
+
+After changes, please:
+
+Show me the updated code for:
+
+The Firebase client file
+
+The admin Products component
+
+The admin General Settings component
+
+Briefly explain what was wrong and how you fixed it.
