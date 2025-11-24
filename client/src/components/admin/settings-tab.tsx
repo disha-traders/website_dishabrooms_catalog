@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useConfig } from "@/hooks/use-config";
-import { Loader2, Save, CheckCircle, AlertCircle, Plus, X, MapPin } from "lucide-react";
+import { Loader2, Save, CheckCircle, AlertCircle, Plus, X, MapPin, Database } from "lucide-react";
 import { dbSaveSettings } from "@/lib/db-service";
 
 export function SettingsTab() {
@@ -196,6 +196,38 @@ export function SettingsTab() {
             {saving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />} 
             Save Settings
           </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export function FirebaseSetupGuide() {
+  return (
+    <Card className="border-none shadow-sm rounded-[16px] overflow-hidden bg-blue-50/50 mt-8 border border-blue-100">
+      <CardHeader className="px-6 py-4 border-b border-blue-100">
+        <CardTitle className="text-lg text-[#002147] flex items-center gap-2">
+          <Database size={18} className="text-[#00A896]" />
+          Firebase Setup Guide (Free Tier)
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-6 space-y-4 text-sm text-gray-700">
+        <div className="space-y-2">
+          <p className="font-semibold text-[#002147]">Step 1: Create Database</p>
+          <p>Go to <a href="https://console.firebase.google.com" target="_blank" className="text-blue-600 hover:underline">Firebase Console</a> &gt; Build &gt; <strong>Firestore Database</strong>.</p>
+          <div className="bg-yellow-50 text-yellow-800 p-2 rounded border border-yellow-100 text-xs">
+            <strong>Important:</strong> Do NOT click on "Storage". We only use "Firestore Database".
+          </div>
+        </div>
+        <div className="space-y-2">
+          <p className="font-semibold text-[#002147]">Step 2: Select Free Plan</p>
+          <p>Click "Create Database". Select <strong>Start in Test Mode</strong> (easiest) or Production Mode.</p>
+          <p>Choose a location (e.g., <code>nam5 (us-central)</code>). This is free.</p>
+        </div>
+        <div className="space-y-2">
+          <p className="font-semibold text-[#002147]">Step 3: Get Config</p>
+          <p>Go to Project Settings &gt; General &gt; "Your apps" &gt; SDK Setup and Configuration.</p>
+          <p>Copy the <code>firebaseConfig</code> object and paste it into your code.</p>
         </div>
       </CardContent>
     </Card>
