@@ -15,9 +15,14 @@ export function useConfig() {
           
           // Ensure whatsappLink is synced with contact.whatsapp
           if (mergedConfig.contact?.whatsapp) {
+             // Remove any non-numeric characters except the country code which is usually implied
+             // If they enter +91 98765 43210 -> 919876543210
+             // If they enter 9876543210 (without country code), we assume 91 or use as is (better to use as is or prepend if needed, but let's just strip)
+             const cleanNumber = mergedConfig.contact.whatsapp.replace(/[^0-9]/g, "");
+             
              mergedConfig.social = {
                ...mergedConfig.social,
-               whatsappLink: `https://wa.me/${mergedConfig.contact.whatsapp}`
+               whatsappLink: `https://wa.me/${cleanNumber}`
              };
           }
           
