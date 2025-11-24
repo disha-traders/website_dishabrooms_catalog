@@ -25,7 +25,7 @@ export default function Admin() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
     
     if (password === adminPassword) {
       setIsAuthenticated(true);
