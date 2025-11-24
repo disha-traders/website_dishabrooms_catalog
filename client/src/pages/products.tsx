@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/product-card";
 import { categories, Product } from "@/lib/products";
 import { useState, useEffect } from "react";
@@ -6,7 +7,7 @@ import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import { Loader2, Filter, Search, PackageX } from "lucide-react";
+import { Loader2, Filter, Search, PackageX, Download } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 
@@ -80,6 +81,14 @@ export default function Products() {
             <p className="text-blue-100 text-lg max-w-2xl">
               Explore our extensive range of brooms, mops, and brushes designed for durability, efficiency, and ease of use.
             </p>
+            <div className="mt-8">
+               <a href="/catalog.pdf" download="Alagu_Mayil_Catalog.pdf" title="Download Catalog">
+                <Button className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-lg transition-all hover:scale-105 backdrop-blur-md border border-white/20">
+                  <Download className="w-4 h-4" />
+                  Download Catalog PDF
+                </Button>
+               </a>
+            </div>
           </div>
         </div>
       </div>
