@@ -105,7 +105,9 @@ export function SettingsTab() {
                value={localConfig.contact.whatsapp}
                onChange={(e) => setLocalConfig({...localConfig, contact: {...localConfig.contact, whatsapp: e.target.value}})}
                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+               placeholder="919876543210"
             />
+            <p className="text-xs text-gray-400">Enter full number with country code (e.g. 919876543210). No spaces or + symbol.</p>
           </div>
           <div className="space-y-2">
             <Label className="text-gray-600 font-medium">Email Address</Label>

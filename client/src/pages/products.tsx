@@ -196,12 +196,13 @@ export default function Products() {
                   <p className="text-gray-500 max-w-md mb-8">
                     We couldn't find any products matching your criteria. Try adjusting your filters or search query.
                   </p>
-                  <button 
+                  <Button 
                     onClick={() => { setActiveCategory("All"); setSearchQuery(""); }}
+                    variant="link"
                     className="text-[#00A896] font-bold hover:underline"
                   >
                     Clear all filters
-                  </button>
+                  </Button>
                 </div>
               )}
             </>
