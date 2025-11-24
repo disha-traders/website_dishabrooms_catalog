@@ -18,7 +18,7 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#002147]/50 to-[#002147]"></div>
         
         <div className="relative z-10 text-center p-6 max-w-4xl">
-          <span className="text-[#00A896] font-medium tracking-widest uppercase text-sm mb-4 block">Established 2010</span>
+          <span className="text-[#00A896] font-medium tracking-widest uppercase text-sm mb-4 block">Established 1996</span>
           <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             We Don't Just Make Brooms,<br/>We Craft Cleanliness.
           </h1>
@@ -68,7 +68,7 @@ export default function About() {
               <div className="w-12 h-12 bg-blue-50 text-[#002147] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:bg-[#002147] group-hover:text-white transition-colors">
                 <TrendingUp size={24} />
               </div>
-              <h3 className="text-3xl font-bold text-[#002147] mb-1">15+</h3>
+              <h3 className="text-3xl font-bold text-[#002147] mb-1">25+</h3>
               <p className="text-gray-500 text-sm">Years of Excellence</p>
             </div>
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow group">
