@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Product, categories as defaultCategories } from "@/lib/products";
-import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon, Filter, ChevronLeft, ChevronRight } from "lucide-react";
+import { Plus, Trash2, Edit2, Loader2, Image as ImageIcon, Search, AlertCircle, Database, Link as LinkIcon, Filter, ChevronLeft, ChevronRight, Upload, Download } from "lucide-react";
+import Papa from "papaparse";
 import {
   Dialog,
   DialogContent,
@@ -42,6 +43,7 @@ export function ProductsTab() {
   // Form State
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -91,6 +93,66 @@ export function ProductsTab() {
     } finally {
       setSeeding(false);
     }
+  };
+
+  const handleDownloadTemplate = () => {
+    const csvContent = "name,category,code,size,description,imageUrl,sortOrder\nExample Product,Grass Brooms,EX-001,48 inches,This is an example description,https://example.com/image.jpg,1";
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "disha_products_template.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleBulkUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        try {
+          const parsedProducts = results.data as any[];
+          let successCount = 0;
+          
+          for (const row of parsedProducts) {
+            if (!row.name || !row.code) continue;
+            
+            await dbSaveProduct({
+              name: row.name,
+              category: row.category || "Uncategorized",
+              code: row.code,
+              size: row.size || "",
+              description: row.description || "",
+              imageUrl: row.imageUrl || "/images/placeholder.jpg",
+              isActive: true,
+              sortOrder: Number(row.sortOrder) || 0
+            });
+            successCount++;
+          }
+          
+          alert(`Successfully imported ${successCount} products!`);
+          await refreshData();
+        } catch (e) {
+          console.error("Bulk upload failed", e);
+          alert("Failed to process CSV file");
+        } finally {
+          setUploading(false);
+          // Reset input
+          event.target.value = "";
+        }
+      },
+      error: (error) => {
+        console.error("CSV Parse Error", error);
+        alert("Failed to parse CSV file");
+        setUploading(false);
+      }
+    });
   };
 
   const handleAddProduct = () => {
@@ -233,12 +295,41 @@ export function ProductsTab() {
              </Select>
            </div>
 
-           <Button 
-            onClick={handleAddProduct} 
-            className="bg-[#00A896] hover:bg-[#008C7D] text-white gap-2 rounded-md px-4 h-10 shadow-sm whitespace-nowrap"
-          >
-            <Plus size={18} /> Add Product
-          </Button>
+           <div className="flex gap-2">
+             <Button 
+               variant="outline" 
+               onClick={handleDownloadTemplate}
+               className="h-10 px-3 border-gray-200 text-gray-600 hover:text-[#002147] hover:border-[#002147]"
+               title="Download CSV Template"
+             >
+               <Download size={18} />
+             </Button>
+             
+             <div className="relative">
+               <input
+                 type="file"
+                 accept=".csv"
+                 onChange={handleBulkUpload}
+                 className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                 disabled={uploading}
+               />
+               <Button 
+                 variant="outline" 
+                 className="h-10 px-3 border-gray-200 text-gray-600 hover:text-[#002147] hover:border-[#002147]"
+                 title="Upload CSV"
+                 disabled={uploading}
+               >
+                 {uploading ? <Loader2 className="animate-spin" size={18} /> : <Upload size={18} />}
+               </Button>
+             </div>
+
+             <Button 
+              onClick={handleAddProduct} 
+              className="bg-[#00A896] hover:bg-[#008C7D] text-white gap-2 rounded-md px-4 h-10 shadow-sm whitespace-nowrap"
+            >
+              <Plus size={18} /> Add Product
+            </Button>
+           </div>
         </div>
       </div>
 
