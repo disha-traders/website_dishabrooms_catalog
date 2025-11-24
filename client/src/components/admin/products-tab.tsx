@@ -317,160 +317,212 @@ export function ProductsTab() {
 
       {/* Product Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[600px] h-[85vh] sm:h-auto sm:max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
-          <DialogHeader className="px-6 py-4 border-b bg-[#002147]/5">
-            <DialogTitle className="text-xl text-[#002147]">{editingProduct ? "Edit Product" : "Add New Product"}</DialogTitle>
-            <DialogDescription>
-              {editingProduct ? "Make changes to the product details here." : "Fill in the details for the new product."}
-            </DialogDescription>
+        <DialogContent className="sm:max-w-[700px] h-[90vh] sm:h-auto sm:max-h-[90vh] flex flex-col p-0 gap-0 overflow-hidden bg-white rounded-xl shadow-2xl border-0">
+          <DialogHeader className="px-8 py-6 border-b border-gray-100 bg-white sticky top-0 z-10">
+            <div className="flex items-center gap-3 mb-1">
+              <div className="w-10 h-10 rounded-full bg-[#E6F6F4] flex items-center justify-center text-[#00A896]">
+                {editingProduct ? <Edit2 size={18} /> : <Plus size={20} />}
+              </div>
+              <div>
+                <DialogTitle className="text-xl font-bold text-[#002147] tracking-tight">
+                  {editingProduct ? "Edit Product Details" : "Add New Product"}
+                </DialogTitle>
+                <DialogDescription className="text-gray-500 text-sm mt-0.5">
+                  {editingProduct ? "Update the catalog information below." : "Create a new item for your catalog."}
+                </DialogDescription>
+              </div>
+            </div>
           </DialogHeader>
           
-          <div className="flex-1 overflow-y-auto p-6">
-            <div className="grid gap-6">
+          <div className="flex-1 overflow-y-auto p-8 bg-gray-50/30">
+            <div className="space-y-8">
               
-              {/* 1. Product Details Section */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="name">Product Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="e.g. Premium Grass Broom"
-                    className={`focus:border-[#00A896] ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                  />
-                  {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+              {/* Section: Basic Info */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#002147] uppercase tracking-wider border-b border-gray-100 pb-2">
+                  <span className="bg-[#002147] w-1 h-4 rounded-full"></span>
+                  Basic Information
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="code">Product Code <span className="text-red-500">*</span></Label>
-                  <Input
-                    id="code"
-                    value={formData.code}
-                    onChange={(e) => setFormData({...formData, code: e.target.value})}
-                    placeholder="e.g. GB-001"
-                    className={errors.code ? "border-red-500 focus-visible:ring-red-500" : ""}
-                  />
-                  {errors.code && <p className="text-xs text-red-500">{errors.code}</p>}
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="col-span-12 sm:col-span-8 space-y-2">
+                    <Label htmlFor="name" className="text-gray-700 font-medium">Product Name <span className="text-red-500">*</span></Label>
+                    <Input
+                      id="name"
+                      value={formData.name}
+                      onChange={(e) => setFormData({...formData, name: e.target.value})}
+                      placeholder="e.g. Premium Grass Broom"
+                      className={`h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    />
+                    {errors.name && <p className="text-xs text-red-500 font-medium">{errors.name}</p>}
+                  </div>
+                  
+                  <div className="col-span-12 sm:col-span-4 space-y-2">
+                    <Label htmlFor="code" className="text-gray-700 font-medium">Product Code <span className="text-red-500">*</span></Label>
+                    <Input
+                      id="code"
+                      value={formData.code}
+                      onChange={(e) => setFormData({...formData, code: e.target.value})}
+                      placeholder="e.g. GB-001"
+                      className={`h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all font-mono text-sm ${errors.code ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                    />
+                    {errors.code && <p className="text-xs text-red-500 font-medium">{errors.code}</p>}
+                  </div>
+
+                  <div className="col-span-12 sm:col-span-6 space-y-2">
+                    <Label htmlFor="category" className="text-gray-700 font-medium">Category <span className="text-red-500">*</span></Label>
+                    <Select 
+                      value={formData.category} 
+                      onValueChange={(val) => setFormData({...formData, category: val})}
+                    >
+                      <SelectTrigger className={`h-11 bg-white border-gray-200 focus:ring-[#00A896]/20 ${errors.category ? "border-red-500 focus:ring-red-500" : ""}`}>
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat} value={cat} className="cursor-pointer hover:bg-gray-50 focus:bg-gray-50">{cat}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.category && <p className="text-xs text-red-500 font-medium">{errors.category}</p>}
+                  </div>
+
+                  <div className="col-span-12 sm:col-span-6 space-y-2">
+                    <Label htmlFor="size" className="text-gray-700 font-medium">Size / Dimensions</Label>
+                    <Input
+                      id="size"
+                      value={formData.size}
+                      onChange={(e) => setFormData({...formData, size: e.target.value})}
+                      placeholder="e.g. 48 inches"
+                      className="h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all"
+                    />
+                  </div>
+
+                  <div className="col-span-12 space-y-2">
+                    <Label htmlFor="description" className="text-gray-700 font-medium">Description</Label>
+                    <Textarea
+                      id="description"
+                      value={formData.description}
+                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                      placeholder="Detailed product specifications, material details, and usage instructions..."
+                      className="min-h-[100px] bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all resize-none"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              {/* Section: Media */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#002147] uppercase tracking-wider border-b border-gray-100 pb-2">
+                  <span className="bg-[#002147] w-1 h-4 rounded-full"></span>
+                  Product Visuals
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(val) => setFormData({...formData, category: val})}
-                  >
-                    <SelectTrigger className={errors.category ? "border-red-500 focus:ring-red-500" : ""}>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {errors.category && <p className="text-xs text-red-500">{errors.category}</p>}
-                </div>
-
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="size">Size / Dimensions</Label>
-                  <Input
-                    id="size"
-                    value={formData.size}
-                    onChange={(e) => setFormData({...formData, size: e.target.value})}
-                    placeholder="e.g. 48 inches"
-                  />
-                </div>
-
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder="Product details and specifications..."
-                    className="min-h-[100px]"
-                  />
-                </div>
-              </div>
-
-              {/* 2. Image Section */}
-              <div className="flex flex-col gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div className="flex gap-4 items-start">
-                   {formData.imageUrl ? (
-                    <div className="relative w-24 h-24 rounded-lg overflow-hidden border-2 border-white shadow-sm shrink-0 bg-gray-200">
-                      <img 
-                        src={formData.imageUrl} 
-                        alt="Preview" 
-                        className="w-full h-full object-cover" 
-                        onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+                <div className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm flex flex-col sm:flex-row gap-6">
+                  <div className="shrink-0">
+                     <Label className="block mb-3 text-gray-700 font-medium">Preview</Label>
+                     {formData.imageUrl ? (
+                      <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-gray-50 group">
+                        <img 
+                          src={formData.imageUrl} 
+                          alt="Preview" 
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
+                          onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+                        />
+                        <div className="absolute inset-0 ring-1 ring-black/5 rounded-lg"></div>
+                      </div>
+                    ) : (
+                      <div className="w-32 h-32 bg-gray-100 rounded-lg flex flex-col items-center justify-center text-gray-400 border border-dashed border-gray-300">
+                        <ImageIcon size={24} className="mb-2 opacity-50" />
+                        <span className="text-[10px] font-medium">No Image</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex-1 space-y-3">
+                    <Label htmlFor="imageUrl" className="text-gray-700 font-medium">Image Source</Label>
+                    <div className="relative">
+                      <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
+                      <Input
+                        id="imageUrl"
+                        value={formData.imageUrl}
+                        onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
+                        placeholder="https://example.com/image.jpg"
+                        className={`pl-10 h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all font-mono text-xs text-gray-600 ${errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                       />
                     </div>
-                  ) : (
-                    <div className="w-24 h-24 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 shrink-0">
-                      <ImageIcon size={32} />
-                    </div>
-                  )}
-                  
-                  <div className="flex-1 space-y-2">
-                    <Label htmlFor="imageUrl" className="text-sm font-medium text-gray-700">Image URL</Label>
-                    <div className="flex gap-2">
-                       <div className="relative flex-1">
-                          <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                          <Input
-                            id="imageUrl"
-                            value={formData.imageUrl}
-                            onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
-                            placeholder="https://example.com/image.jpg"
-                            className={`pl-9 bg-white ${errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}`}
-                          />
-                       </div>
-                    </div>
+                    
                     {errors.imageUrl ? (
-                      <p className="text-xs text-red-500 font-medium">{errors.imageUrl}</p>
-                    ) : (
-                      <p className="text-xs text-gray-500">
-                         For local images, upload them to <code>/public/products</code> and use a path like: <code>/products/AM-GB-501.jpg</code>
+                      <p className="text-xs text-red-500 font-medium flex items-center gap-1">
+                        <AlertCircle size={12} /> {errors.imageUrl}
                       </p>
+                    ) : (
+                      <div className="bg-blue-50 p-3 rounded-lg border border-blue-100">
+                        <p className="text-xs text-blue-700 leading-relaxed">
+                           <strong>Tip:</strong> For local images, upload to <code>/public/products</code> folder.<br/>
+                           Use path format: <code>/products/your-image-name.jpg</code>
+                        </p>
+                      </div>
                     )}
                   </div>
                 </div>
-              </div>
+              </section>
 
-              {/* 3. Catalog Options */}
-              <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg bg-gray-50/50">
-                 <div className="space-y-2">
-                   <Label htmlFor="sortOrder">Sort Order</Label>
-                   <Input
-                     id="sortOrder"
-                     type="number"
-                     value={formData.sortOrder}
-                     onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})}
-                     placeholder="0"
-                     className="bg-white"
-                   />
+              {/* Section: Settings */}
+              <section className="space-y-4">
+                <div className="flex items-center gap-2 text-sm font-semibold text-[#002147] uppercase tracking-wider border-b border-gray-100 pb-2">
+                  <span className="bg-[#002147] w-1 h-4 rounded-full"></span>
+                  Settings
                 </div>
 
-                <div className="space-y-2 flex items-end pb-2">
-                   <div className="flex items-center space-x-2">
-                      <Checkbox 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                   <div className="space-y-2">
+                     <Label htmlFor="sortOrder" className="text-gray-700 font-medium">Sort Order</Label>
+                     <Input
+                       id="sortOrder"
+                       type="number"
+                       value={formData.sortOrder}
+                       onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})}
+                       placeholder="0"
+                       className="h-11 bg-white border-gray-200 focus:border-[#00A896] focus:ring-[#00A896]/20 transition-all"
+                     />
+                     <p className="text-[10px] text-gray-400">Lower numbers appear first.</p>
+                  </div>
+
+                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 flex items-center justify-between">
+                     <div className="space-y-0.5">
+                        <Label htmlFor="isActive" className="text-base font-medium text-gray-900 cursor-pointer">Active Status</Label>
+                        <p className="text-xs text-gray-500">Visible in public catalog</p>
+                     </div>
+                     <Checkbox 
                         id="isActive" 
                         checked={formData.isActive}
                         onCheckedChange={(checked) => setFormData({...formData, isActive: !!checked})}
+                        className="data-[state=checked]:bg-[#00A896] data-[state=checked]:border-[#00A896] w-6 h-6"
                       />
-                      <Label htmlFor="isActive" className="cursor-pointer">Active Product</Label>
-                   </div>
+                  </div>
                 </div>
-              </div>
+              </section>
 
             </div>
           </div>
 
-          <DialogFooter className="p-6 border-t bg-[#002147]/5">
-            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
-            <Button type="submit" className="bg-[#002147] hover:bg-[#003366] text-white w-full sm:w-auto" onClick={handleSaveProduct} disabled={saving}>
-              {saving ? <Loader2 className="animate-spin mr-2" size={16} /> : null}
-              {editingProduct ? "Save Changes" : "Add Product"}
+          <DialogFooter className="p-6 border-t border-gray-100 bg-white sticky bottom-0 z-10 gap-3">
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDialogOpen(false)}
+              className="h-11 px-6 border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-gray-900 font-medium"
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit" 
+              className="h-11 px-8 bg-[#002147] hover:bg-[#003366] text-white font-medium shadow-lg shadow-[#002147]/10 hover:shadow-[#002147]/20 transition-all" 
+              onClick={handleSaveProduct} 
+              disabled={saving}
+            >
+              {saving ? <Loader2 className="animate-spin mr-2" size={18} /> : (editingProduct ? <Edit2 size={18} className="mr-2" /> : <Plus size={18} className="mr-2" />)}
+              {editingProduct ? "Save Changes" : "Create Product"}
             </Button>
           </DialogFooter>
         </DialogContent>
