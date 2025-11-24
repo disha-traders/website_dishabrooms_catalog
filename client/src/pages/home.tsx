@@ -76,12 +76,6 @@ export default function Home() {
                     View Catalog
                   </Button>
                 </Link>
-                <a href="#" className="pointer-events-none opacity-50 cursor-not-allowed" title="Catalog coming soon">
-                  <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
-                    <Download className="w-5 h-5" />
-                    Download Catalog
-                  </Button>
-                </a>
                 <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
                   <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
                     <MessageCircle className="w-5 h-5" />
@@ -116,6 +110,15 @@ export default function Home() {
                    
                    {/* Floating Badge */}
                    <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-[#002147] px-4 py-2 rounded-lg shadow-lg text-xs font-bold border border-white/50">Trusted by 10,000+ Shops & Distributors</div>
+                 </div>
+                 
+                 <div className="mt-6 flex justify-center">
+                   <a href="#" className="pointer-events-none opacity-50 cursor-not-allowed" title="Catalog coming soon">
+                    <Button variant="outline" className="h-12 px-6 rounded-full border-white/30 bg-white/10 text-white hover:bg-white/20 font-bold text-base gap-2 backdrop-blur-md shadow-lg transition-all hover:scale-105 hover:shadow-xl">
+                      <Download className="w-4 h-4" />
+                      Download Catalog PDF
+                    </Button>
+                   </a>
                  </div>
                </div>
                
