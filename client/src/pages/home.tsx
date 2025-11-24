@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/hooks/use-config";
 import { Link } from "wouter";
-import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { collection, query, where, limit, getDocs, orderBy } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -63,7 +63,8 @@ export default function Home() {
                     View Product Catalog
                   </a>
                 </Link>
-                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-whatsapp-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl">
+                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="btn-whatsapp-custom text-lg px-8 py-4 shadow-lg hover:shadow-xl gap-2">
+                  <MessageCircle className="w-6 h-6" />
                   Enquire on WhatsApp
                 </a>
               </div>
@@ -192,7 +193,8 @@ export default function Home() {
             Partner with us for consistent quality and competitive pricing. We are ready to fulfill your bulk requirements.
           </p>
           <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
-            <Button size="lg" className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-full px-8 h-14 shadow-xl shadow-green-500/20 text-lg">
+            <Button size="lg" className="bg-[#25D366] hover:bg-[#128C7E] text-white font-bold rounded-full px-8 h-14 shadow-xl shadow-green-500/20 text-lg gap-2">
+              <MessageCircle className="w-6 h-6" />
               Share Your Requirement on WhatsApp
             </Button>
           </a>

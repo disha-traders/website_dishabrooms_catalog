@@ -2,7 +2,7 @@ import { Link, useLocation } from "wouter";
 import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Phone, Mail, MapPin } from "lucide-react";
+import { Menu, X, Phone, Mail, MapPin, MessageCircle } from "lucide-react";
 import { useState } from "react";
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -50,9 +50,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             ))}
             <Button 
               asChild 
-              className="btn-whatsapp-custom rounded-full px-6"
+              className="btn-whatsapp-custom rounded-full px-6 gap-2"
             >
               <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
+                <MessageCircle className="w-4 h-4" />
                 Enquire Now
               </a>
             </Button>
