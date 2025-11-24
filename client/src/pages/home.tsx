@@ -2,10 +2,11 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { useConfig } from "@/hooks/use-config";
 import { Link } from "wouter";
-import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle, Download } from "lucide-react";
+import { ArrowRight, CheckCircle2, Star, Box, Truck, ShieldCheck, Sparkles, Brush, Eraser, MessageCircle, Download, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Product } from "@/lib/products";
 import { dbGetProducts } from "@/lib/db-service";
+import { generateCatalog } from "@/lib/pdf-generator";
 import heroBg from "@assets/stock_images/manufacturing_factor_f5c4b17f.jpg";
 
 import { ProductCard } from "@/components/product-card";
@@ -13,6 +14,7 @@ import { ProductCard } from "@/components/product-card";
 export default function Home() {
   const config = useConfig();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   
   const categories = [
     { name: "Grass Brooms", icon: Sparkles, desc: "Premium soft grass brooms" },
@@ -38,6 +40,21 @@ export default function Home() {
     }
     fetchFeatured();
   }, []);
+
+  const handleDownloadCatalog = async () => {
+    setGeneratingPdf(true);
+    try {
+      const products = await dbGetProducts();
+      // Filter active products only
+      const activeProducts = products.filter(p => p.isActive !== false);
+      await generateCatalog(activeProducts, config, "/images/hero-poster.png");
+    } catch (e) {
+      console.error("PDF Generation failed", e);
+      alert("Failed to generate catalog");
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
 
   return (
     <Layout>
@@ -116,12 +133,14 @@ export default function Home() {
                  </div>
                  
                  <div className="mt-4 flex justify-center">
-                   <a href="/catalog.pdf" download="Alagu_Mayil_Catalog.pdf" title="Download Catalog">
-                    <Button className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-[0_0_15px_rgba(0,168,150,0.4)] transition-all hover:scale-105 hover:shadow-xl backdrop-blur-md border border-white/20">
-                      <Download className="w-4 h-4" />
-                      Download Catalog PDF
-                    </Button>
-                   </a>
+                   <Button 
+                    onClick={handleDownloadCatalog}
+                    disabled={generatingPdf}
+                    className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-[0_0_15px_rgba(0,168,150,0.4)] transition-all hover:scale-105 hover:shadow-xl backdrop-blur-md border border-white/20"
+                   >
+                      {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                      {generatingPdf ? "Generating Catalog..." : "Download Catalog PDF"}
+                   </Button>
                  </div>
                </div>
                

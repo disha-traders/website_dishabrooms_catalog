@@ -4,13 +4,16 @@ import { ProductCard } from "@/components/product-card";
 import { Product } from "@/lib/products";
 import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
+import { useConfig } from "@/hooks/use-config";
 import { cn } from "@/lib/utils";
 import { Loader2, Filter, Search, PackageX, Download, RefreshCw } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
 import { dbGetProducts, dbGetCategories } from "@/lib/db-service";
+import { generateCatalog } from "@/lib/pdf-generator";
 
 export default function Products() {
+  const config = useConfig();
   const [location, setLocation] = useLocation();
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [products, setProducts] = useState<Product[]>([]);
@@ -18,6 +21,7 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
 
   // Fetch products from Service
   const fetchProducts = async () => {
@@ -75,6 +79,20 @@ export default function Products() {
     return matchesCategory && matchesSearch && isActive;
   });
 
+  const handleDownloadCatalog = async () => {
+    setGeneratingPdf(true);
+    try {
+      // Filter active products only
+      const activeProducts = products.filter(p => p.isActive !== false);
+      await generateCatalog(activeProducts, config, "/images/hero-poster.png");
+    } catch (e) {
+      console.error("PDF Generation failed", e);
+      alert("Failed to generate catalog");
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   console.log("Render products:", { loading, productsCount: products.length, filteredCount: filteredProducts.length });
 
   return (
@@ -92,12 +110,14 @@ export default function Products() {
               Explore our extensive range of brooms, mops, and brushes designed for durability, efficiency, and ease of use.
             </p>
             <div className="mt-8">
-               <a href="/catalog.pdf" download="Alagu_Mayil_Catalog.pdf" title="Download Catalog">
-                <Button className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-lg transition-all hover:scale-105 backdrop-blur-md border border-white/20">
-                  <Download className="w-4 h-4" />
-                  Download Catalog PDF
-                </Button>
-               </a>
+               <Button 
+                onClick={handleDownloadCatalog}
+                disabled={generatingPdf}
+                className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-lg transition-all hover:scale-105 backdrop-blur-md border border-white/20"
+               >
+                  {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                  {generatingPdf ? "Generating Catalog..." : "Download Catalog PDF"}
+               </Button>
             </div>
           </div>
         </div>
