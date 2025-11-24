@@ -262,7 +262,12 @@ export function ProductsTab() {
               {products.map((product) => (
                 <Card key={product.id} className="flex flex-col sm:flex-row items-center p-4 gap-6 overflow-hidden border-none shadow-sm hover:shadow-md transition-shadow duration-200">
                   <div className="w-full sm:w-24 h-24 bg-gray-100 rounded-lg shrink-0 overflow-hidden relative border border-gray-100">
-                    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" />
+                    <img 
+                      src={product.imageUrl} 
+                      alt={product.name} 
+                      className="w-full h-full object-cover"
+                      onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
+                    />
                   </div>
                   <div className="flex-1 text-center sm:text-left space-y-1">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-2">

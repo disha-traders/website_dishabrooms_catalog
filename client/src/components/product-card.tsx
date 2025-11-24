@@ -30,6 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
           alt={product.name}
           loading="lazy"
           onLoad={() => setIsLoaded(true)}
+          onError={(e) => (e.currentTarget.src = "/images/placeholder.jpg")}
           className={`w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
         />
         
