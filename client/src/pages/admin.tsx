@@ -7,99 +7,53 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Lock, Loader2 } from "lucide-react";
-import { db, auth } from "@/lib/firebase";
-import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { Lock } from "lucide-react";
+import { db } from "@/lib/firebase";
 
 export default function Admin() {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [email, setEmail] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("products");
-  const [loginLoading, setLoginLoading] = useState(false);
 
   useEffect(() => {
-    if (!auth) {
-      setLoading(false);
-      return;
+    const auth = localStorage.getItem("admin_auth");
+    if (auth === "true") {
+      setIsAuthenticated(true);
     }
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-    });
-    return () => unsubscribe();
   }, []);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!auth) {
-      setError("Firebase Auth not initialized");
-      return;
-    }
+    const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD;
     
-    setLoginLoading(true);
-    setError("");
-    
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      // onAuthStateChanged will handle the redirect/state update
-    } catch (err: any) {
-      console.error("Login error:", err);
-      let msg = "Failed to login.";
-      if (err.code === "auth/invalid-credential" || err.code === "auth/user-not-found" || err.code === "auth/wrong-password") {
-        msg = "Invalid email or password.";
-      } else if (err.code === "auth/too-many-requests") {
-        msg = "Too many failed attempts. Try again later.";
-      }
-      setError(msg);
-    } finally {
-      setLoginLoading(false);
+    if (password === adminPassword) {
+      setIsAuthenticated(true);
+      localStorage.setItem("admin_auth", "true");
+      setError("");
+    } else {
+      setError("Incorrect password");
     }
   };
 
-  const handleLogout = async () => {
-    if (!auth) return;
-    try {
-      await signOut(auth);
-    } catch (e) {
-      console.error("Logout error", e);
-    }
+  const handleLogout = () => {
+    localStorage.removeItem("admin_auth");
+    setIsAuthenticated(false);
+    setPassword(""); // Clear password on logout
   };
 
-  if (loading) {
+  if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center">
-        <Loader2 className="animate-spin text-[#00A896]" size={32} />
-      </div>
-    );
-  }
-
-  if (!user) {
-    return (
-      <div className="min-h-screen bg-[#F0F4F8] flex items-center justify-center p-4">
-        <Card className="w-full max-w-md border-none shadow-xl rounded-2xl">
-          <CardHeader className="text-center pb-2">
+      <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center p-4">
+        <Card className="w-full max-w-md border-none shadow-lg rounded-xl bg-white">
+          <CardHeader className="text-center pb-2 pt-6">
             <div className="mx-auto w-12 h-12 bg-[#002147]/10 rounded-full flex items-center justify-center mb-4 text-[#002147]">
               <Lock size={24} />
             </div>
-            <CardTitle className="text-2xl font-heading font-bold text-[#002147]">Admin Access</CardTitle>
+            <CardTitle className="text-2xl font-bold text-[#002147]">Admin Login</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-6 px-6">
             <form onSubmit={handleLogin} className="space-y-5">
-              <div className="space-y-2">
-                <Label htmlFor="email">Email Address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@dishatraders.com"
-                  className="bg-gray-50 border-gray-200 focus:bg-white h-11 focus:border-[#00A896]"
-                  required
-                />
-              </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <Input
@@ -107,19 +61,16 @@ export default function Admin() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter admin password"
                   className="bg-gray-50 border-gray-200 focus:bg-white h-11 focus:border-[#00A896]"
-                  required
+                  autoFocus
                 />
               </div>
               {error && <p className="text-red-500 text-sm font-medium bg-red-50 p-2 rounded text-center">{error}</p>}
-              <Button type="submit" disabled={loginLoading} className="w-full bg-[#002147] hover:bg-[#003366] h-11 text-base">
-                {loginLoading ? <Loader2 className="animate-spin" /> : "Login to Dashboard"}
+              <Button type="submit" className="w-full bg-[#002147] hover:bg-[#003366] h-11 text-base font-medium shadow-md hover:shadow-lg transition-all">
+                Login
               </Button>
             </form>
-            <div className="mt-6 text-center text-xs text-gray-400">
-              Protected Area • Disha Traders
-            </div>
           </CardContent>
         </Card>
       </div>

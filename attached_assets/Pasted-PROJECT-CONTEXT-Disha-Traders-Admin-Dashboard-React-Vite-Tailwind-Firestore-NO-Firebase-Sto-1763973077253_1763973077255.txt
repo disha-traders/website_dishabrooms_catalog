@@ -1,0 +1,116 @@
+PROJECT CONTEXT: Disha Traders Admin Dashboard
+(React + Vite + Tailwind + Firestore, NO Firebase Storage)
+
+We are removing Firebase Authentication completely.
+We want to restore a simple, secure-enough password gate for /admin using an environment variable:
+
+VITE_ADMIN_PASSWORD=yourpassword
+
+
+Please update the app with the following requirements:
+
+🔐 1. ADMIN LOGIN SCREEN (Client-Side Auth)
+
+Create a clean, simple login screen that appears ONLY when the user visits /admin and is not authenticated.
+
+UI Requirements:
+
+Centered card with:
+
+Title: Admin Login
+
+Password field (type=password)
+
+“Login” button
+
+Tailwind styling:
+
+white card, rounded-xl, shadow-lg, padding-6
+
+background: light gray (#F5F5F7)
+
+Show error text if password incorrect.
+
+🔐 2. AUTH LOGIC USING ENV PASSWORD
+
+Authentication rules:
+
+ENV:
+
+Use:
+
+import.meta.env.VITE_ADMIN_PASSWORD
+
+Logic:
+
+On form submit:
+
+Compare entered password with VITE_ADMIN_PASSWORD
+
+If correct:
+
+Set localStorage.setItem("admin_auth", "true")
+
+Immediately show the Admin Dashboard (AdminLayout)
+
+If wrong:
+
+Show small red error: "Incorrect password"
+
+On page load:
+
+If localStorage.admin_auth === "true" → automatically show admin dashboard
+
+Otherwise → show login screen
+
+On logout:
+
+In AdminLayout, “Logout” button should:
+
+localStorage.removeItem("admin_auth")
+
+Force redirect to login screen
+
+📌 3. FILES TO UPDATE
+
+Please modify or create:
+
+client/src/pages/Admin.jsx (or whichever page handles /admin)
+
+client/src/components/admin/AdminLayout.jsx
+
+Add a new component if needed:
+
+client/src/components/admin/AdminLogin.jsx
+
+Ensure clean separation:
+
+AdminLogin.jsx → handles password screen
+
+AdminLayout.jsx → shows real admin tabs after login
+
+🚫 4. IMPORTANT RULES
+
+Do NOT use Firebase Auth anymore.
+
+Do NOT suggest server-side auth (we want simple front-end only).
+
+Do NOT leak the env var directly; only compare inside JS code.
+
+Do NOT change Firestore code (it already works fine).
+
+🔧 5. WHAT TO RETURN
+
+Please output:
+
+Updated Admin.jsx (or equivalent page)
+
+Complete AdminLogin.jsx component
+
+Updated AdminLayout.jsx showing logout logic
+
+A short explanation of how the auth flow now works
+
+🎯 GOAL
+
+Make /admin protected again with a simple password gate using VITE_ADMIN_PASSWORD, with clean UX and zero Firebase Auth dependency.
