@@ -109,9 +109,7 @@ export default function Home() {
                    />
                    
                    {/* Floating Badge */}
-                   <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-[#002147] px-4 py-2 rounded-lg shadow-lg text-xs font-bold border border-white/50">
-                     Trusted by 10,000+ Homes
-                   </div>
+                   <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur text-[#002147] px-4 py-2 rounded-lg shadow-lg text-xs font-bold border border-white/50">Trusted by 10,000+ Shops & Distributors</div>
                  </div>
                </div>
                
@@ -125,7 +123,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Categories Section */}
       <section className="py-20 bg-[#F0F4F8]">
         <div className="container mx-auto px-4">
@@ -154,7 +151,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Why Choose Us */}
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
@@ -212,7 +208,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Ideal For Strip */}
       <section className="py-12 bg-[#785748]/5 border-y border-[#785748]/10">
         <div className="container mx-auto px-4">
@@ -224,7 +219,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
       {/* Bottom CTA */}
       <section className="py-24 bg-white text-center">
         <div className="container mx-auto px-4 max-w-3xl">
