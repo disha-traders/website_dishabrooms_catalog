@@ -18,6 +18,7 @@ export default function Contact() {
   const config = useConfig();
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submissionType, setSubmissionType] = useState<'email' | 'whatsapp'>('email');
   
   const [formData, setFormData] = useState({
     name: "",
@@ -36,11 +37,20 @@ export default function Contact() {
       setLoading(false);
       setSubmitted(true);
       
-      // Construct email body
-      const body = `Name: ${formData.name}%0D%0APhone: ${formData.phone}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-      
-      // Open mail client
-      window.location.href = `mailto:${config.contact.email}?subject=${encodeURIComponent(formData.subject)} - ${formData.name}&body=${body}`;
+      if (submissionType === 'email') {
+        // Construct email body
+        const body = `Name: ${formData.name}%0D%0APhone: ${formData.phone}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
+        
+        // Open mail client
+        window.location.href = `mailto:${config.contact.email}?subject=${encodeURIComponent(formData.subject)} - ${formData.name}&body=${body}`;
+      } else {
+        // Construct WhatsApp message
+        const text = `*New Enquiry from Website*%0a%0a*Name:* ${formData.name}%0a*Subject:* ${formData.subject}%0a*Phone:* ${formData.phone}%0a*Email:* ${formData.email}%0a%0a*Message:*%0a${formData.message}`;
+        
+        // Use the phone number from config, stripping non-digits
+        const phone = config.contact.phone.replace(/\D/g, '');
+        window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+      }
     }, 1500);
   };
 
@@ -236,21 +246,41 @@ export default function Contact() {
                       />
                     </div>
 
-                    <Button 
-                      type="submit" 
-                      disabled={loading}
-                      className="w-full btn-primary-custom h-14 text-lg shadow-lg shadow-teal-900/20"
-                    >
-                      {loading ? (
-                        <>
-                          <Loader2 className="animate-spin mr-2" /> Sending...
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 w-5 h-5" /> Send Message
-                        </>
-                      )}
-                    </Button>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+                      <Button 
+                        type="submit" 
+                        onClick={() => setSubmissionType('whatsapp')}
+                        disabled={loading}
+                        className="w-full bg-[#25D366] hover:bg-[#128C7E] h-14 text-lg shadow-lg text-white"
+                      >
+                        {loading && submissionType === 'whatsapp' ? (
+                          <>
+                            <Loader2 className="animate-spin mr-2" /> Opening...
+                          </>
+                        ) : (
+                          <>
+                            <MessageCircle className="mr-2 w-5 h-5" /> Send by WhatsApp
+                          </>
+                        )}
+                      </Button>
+
+                      <Button 
+                        type="submit" 
+                        onClick={() => setSubmissionType('email')}
+                        disabled={loading}
+                        className="w-full btn-primary-custom h-14 text-lg shadow-lg shadow-teal-900/20"
+                      >
+                        {loading && submissionType === 'email' ? (
+                          <>
+                            <Loader2 className="animate-spin mr-2" /> Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Mail className="mr-2 w-5 h-5" /> Send by Email
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </form>
                 </>
               )}
