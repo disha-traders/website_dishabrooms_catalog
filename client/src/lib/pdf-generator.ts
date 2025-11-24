@@ -68,28 +68,68 @@ export const generateCatalog = async (products: Product[], config: Config, cover
       doc.rect(0, 0, pageWidth, coverImageHeight, "F");
   }
 
-  // 2. Footer Section (Bottom 20%)
+  // HEADER OVERLAY (Brand Box)
+  // Rectangle shape with text
+  const brandBoxWidth = pageWidth * 0.8;
+  const brandBoxHeight = 45;
+  const brandBoxX = (pageWidth - brandBoxWidth) / 2;
+  const brandBoxY = 40;
+
+  // Semi-transparent white box or solid white
+  doc.setFillColor(255, 255, 255);
+  // Add a slight shadow manually if needed, or just the box
+  doc.rect(brandBoxX, brandBoxY, brandBoxWidth, brandBoxHeight, "F");
+  
+  // Border for box
+  doc.setDrawColor(0, 33, 71); // #002147
+  doc.setLineWidth(0.5);
+  doc.rect(brandBoxX, brandBoxY, brandBoxWidth, brandBoxHeight, "S");
+
+  // Brand Name inside box
+  doc.setTextColor(0, 33, 71); // #002147
+  doc.setFontSize(24);
+  doc.setFont("helvetica", "bold");
+  doc.text("Disha Traders", pageWidth / 2, brandBoxY + 18, { align: "center" });
+
+  // Tagline inside box
+  doc.setTextColor(0, 168, 150); // #00A896
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "bold");
+  const tagline = "All Types of India's Premium Cleaning Brand in one Place";
+  doc.text(tagline, pageWidth / 2, brandBoxY + 28, { align: "center" });
+  
+  doc.setTextColor(100, 100, 100); // Gray
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text("Direct from Manufacturer", pageWidth / 2, brandBoxY + 36, { align: "center" });
+
+
+  // 2. Footer Section (Bottom 10% only as requested, rest is image/whitespace)
+  // Adjusting layout: Image 80%, Footer 10%
+  // Actually user asked: "Make Contact details Footer rectangle shap only 10% and selected image as Body 80%"
+  // So we will draw footer at bottom 10%
+  
+  const footerRectHeight = pageHeight * 0.15; // 15% looks better for text fitting, but visual weight is low
+  const footerY = pageHeight - footerRectHeight;
+  
   doc.setFillColor(0, 33, 71); // #002147
-  doc.rect(0, coverImageHeight, pageWidth, footerHeight, "F");
+  doc.rect(0, footerY, pageWidth, footerRectHeight, "F");
   
   // Calculate vertical centering for text in the footer
-  const footerCenterY = coverImageHeight + (footerHeight / 2);
+  const footerCenterY = footerY + (footerRectHeight / 2);
   
   doc.setTextColor(255, 255, 255);
   
-  // Brand Name (Large)
-  doc.setFontSize(26);
-  doc.setFont("helvetica", "bold");
-  doc.text(config.brandName.toUpperCase(), pageWidth / 2, footerCenterY - 15, { align: "center" });
-  
   // Company Name
-  doc.setFontSize(14);
-  doc.setFont("helvetica", "normal");
-  doc.text(config.companyName, pageWidth / 2, footerCenterY, { align: "center" });
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(config.companyName, pageWidth / 2, footerCenterY - 5, { align: "center" });
   
   // Contact Details
-  doc.setFontSize(12);
-  doc.text(`Contact: ${config.contact.phone} | ${config.contact.email}`, pageWidth / 2, footerCenterY + 12, { align: "center" });
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Contact: ${config.contact.phone} | ${config.contact.email}`, pageWidth / 2, footerCenterY + 5, { align: "center" });
+  doc.text(config.contact.address, pageWidth / 2, footerCenterY + 12, { align: "center" });
   
   // --- PRODUCT PAGES ---
   
