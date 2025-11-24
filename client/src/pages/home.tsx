@@ -9,6 +9,8 @@ import { db } from "@/lib/firebase";
 import { Product } from "@/lib/products";
 import heroBg from "@assets/stock_images/manufacturing_factor_f5c4b17f.jpg";
 
+import { ProductCard } from "@/components/product-card";
+
 export default function Home() {
   const config = useConfig();
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -194,6 +196,56 @@ export default function Home() {
                 </span>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products Section */}
+      {featuredProducts.length > 0 && (
+        <section className="py-20 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+              <div>
+                <span className="text-[#00A896] font-bold tracking-widest uppercase text-sm mb-2 block">Bestsellers</span>
+                <h2 className="text-3xl lg:text-4xl font-heading font-bold text-[#002147]">Featured Products</h2>
+              </div>
+              <Link href="/products">
+                <Button variant="outline" className="rounded-full border-[#002147]/20 hover:bg-[#002147] hover:text-white transition-all">
+                  View All Products
+                </Button>
+              </Link>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Stats Strip */}
+      <section className="py-16 bg-[#002147] text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/10">
+            <div className="p-4">
+              <div className="text-4xl md:text-5xl font-bold text-[#00A896] mb-2">25+</div>
+              <div className="text-gray-300 font-medium">Years of Excellence</div>
+            </div>
+            <div className="p-4">
+              <div className="text-4xl md:text-5xl font-bold text-[#CD7F32] mb-2">50+</div>
+              <div className="text-gray-300 font-medium">Premium Products</div>
+            </div>
+            <div className="p-4">
+              <div className="text-4xl md:text-5xl font-bold text-[#00A896] mb-2">10k+</div>
+              <div className="text-gray-300 font-medium">Happy Clients</div>
+            </div>
+            <div className="p-4">
+              <div className="text-4xl md:text-5xl font-bold text-[#CD7F32] mb-2">100%</div>
+              <div className="text-gray-300 font-medium">Quality Guarantee</div>
+            </div>
           </div>
         </div>
       </section>
