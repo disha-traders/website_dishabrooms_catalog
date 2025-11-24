@@ -45,6 +45,7 @@ export function ProductsTab() {
     isActive: true,
     sortOrder: 0
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Fetch products
   useEffect(() => {
@@ -111,6 +112,7 @@ export function ProductsTab() {
       isActive: true,
       sortOrder: products.length
     });
+    setErrors({});
     setIsDialogOpen(true);
   };
 
@@ -126,6 +128,7 @@ export function ProductsTab() {
       isActive: product.isActive ?? true,
       sortOrder: product.sortOrder ?? 0
     });
+    setErrors({});
     setIsDialogOpen(true);
   };
 
@@ -140,8 +143,35 @@ export function ProductsTab() {
     }
   };
 
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+    
+    if (!formData.name.trim()) newErrors.name = "Product name is required";
+    if (!formData.code.trim()) newErrors.code = "Product code is required";
+    if (!formData.category) newErrors.category = "Category is required";
+    
+    // Image URL Validation
+    const url = formData.imageUrl.trim();
+    if (url) {
+      const isLocalFile = url.startsWith("/fs/") || url.includes("/replit/");
+      const isValidPath = url.startsWith("/") || url.startsWith("http://") || url.startsWith("https://");
+      
+      if (isLocalFile) {
+        newErrors.imageUrl = "This is a local file path. Use a public path like /products/AM-GB-501.jpg or a full https URL.";
+      } else if (!isValidPath) {
+         newErrors.imageUrl = "Must start with '/' (public path) or 'http(s)://'";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSaveProduct = async () => {
     if (!db) return;
+    
+    if (!validateForm()) return;
+
     setSaving(true);
     try {
       const productData = {
@@ -175,7 +205,7 @@ export function ProductsTab() {
           <p className="text-sm text-gray-500">Manage your catalog items</p>
         </div>
         <div className="flex gap-2">
-          {products.length === 0 && (
+          {import.meta.env.MODE === "development" && products.length === 0 && (
             <Button 
               onClick={handleSeedData} 
               variant="outline"
@@ -215,11 +245,13 @@ export function ProductsTab() {
                 <ImageIcon size={32} />
               </div>
               <h3 className="text-lg font-medium text-gray-900">No products yet</h3>
-              <p className="text-gray-500 mb-6">Get started by adding your first product or seed with mock data.</p>
+              <p className="text-gray-500 mb-6">Get started by adding your first product.</p>
               <div className="flex justify-center gap-4">
-                 <Button onClick={handleSeedData} variant="outline" disabled={seeding}>
-                    {seeding ? "Seeding..." : "Seed Mock Data"}
-                 </Button>
+                 {import.meta.env.MODE === "development" && (
+                   <Button onClick={handleSeedData} variant="outline" disabled={seeding}>
+                      {seeding ? "Seeding..." : "Seed Mock Data"}
+                   </Button>
+                 )}
                  <Button onClick={handleAddProduct} className="bg-brand-blue text-white">
                    Add Product
                  </Button>
@@ -295,7 +327,74 @@ export function ProductsTab() {
           
           <div className="flex-1 overflow-y-auto p-6">
             <div className="grid gap-6">
-              {/* Image URL Section */}
+              
+              {/* 1. Product Details Section */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="name">Product Name <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                    placeholder="e.g. Premium Grass Broom"
+                    className={`focus:border-brand-blue ${errors.name ? "border-red-500 focus-visible:ring-red-500" : ""}`}
+                  />
+                  {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="code">Product Code <span className="text-red-500">*</span></Label>
+                  <Input
+                    id="code"
+                    value={formData.code}
+                    onChange={(e) => setFormData({...formData, code: e.target.value})}
+                    placeholder="e.g. GB-001"
+                    className={errors.code ? "border-red-500 focus-visible:ring-red-500" : ""}
+                  />
+                  {errors.code && <p className="text-xs text-red-500">{errors.code}</p>}
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="category">Category <span className="text-red-500">*</span></Label>
+                  <Select 
+                    value={formData.category} 
+                    onValueChange={(val) => setFormData({...formData, category: val})}
+                  >
+                    <SelectTrigger className={errors.category ? "border-red-500 focus:ring-red-500" : ""}>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {categories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  {errors.category && <p className="text-xs text-red-500">{errors.category}</p>}
+                </div>
+
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="size">Size / Dimensions</Label>
+                  <Input
+                    id="size"
+                    value={formData.size}
+                    onChange={(e) => setFormData({...formData, size: e.target.value})}
+                    placeholder="e.g. 48 inches"
+                  />
+                </div>
+
+                <div className="space-y-2 col-span-2">
+                  <Label htmlFor="description">Description</Label>
+                  <Textarea
+                    id="description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({...formData, description: e.target.value})}
+                    placeholder="Product details and specifications..."
+                    className="min-h-[100px]"
+                  />
+                </div>
+              </div>
+
+              {/* 2. Image Section */}
               <div className="flex flex-col gap-4 bg-gray-50 p-6 rounded-lg border border-gray-200">
                 <div className="flex gap-4 items-start">
                    {formData.imageUrl ? (
@@ -323,57 +422,24 @@ export function ProductsTab() {
                             value={formData.imageUrl}
                             onChange={(e) => setFormData({...formData, imageUrl: e.target.value})}
                             placeholder="https://example.com/image.jpg"
-                            className="pl-9 bg-white"
+                            className={`pl-9 bg-white ${errors.imageUrl ? "border-red-500 focus-visible:ring-red-500" : ""}`}
                           />
                        </div>
                     </div>
-                    <p className="text-xs text-gray-500">
-                      Enter a direct link to an image (e.g. from Google Drive, Imgur, or another hosting service).
-                    </p>
+                    {errors.imageUrl ? (
+                      <p className="text-xs text-red-500 font-medium">{errors.imageUrl}</p>
+                    ) : (
+                      <p className="text-xs text-gray-500">
+                         For local images, upload them to <code>/public/products</code> and use a path like: <code>/products/AM-GB-501.jpg</code>
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="name">Product Name <span className="text-red-500">*</span></Label>
-                  <Input
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    placeholder="e.g. Premium Grass Broom"
-                    className="focus:border-brand-blue"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="code">Product Code</Label>
-                  <Input
-                    id="code"
-                    value={formData.code}
-                    onChange={(e) => setFormData({...formData, code: e.target.value})}
-                    placeholder="e.g. GB-001"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(val) => setFormData({...formData, category: val})}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((cat) => (
-                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
+              {/* 3. Catalog Options */}
+              <div className="grid grid-cols-2 gap-4 p-4 border rounded-lg bg-gray-50/50">
+                 <div className="space-y-2">
                    <Label htmlFor="sortOrder">Sort Order</Label>
                    <Input
                      id="sortOrder"
@@ -381,6 +447,7 @@ export function ProductsTab() {
                      value={formData.sortOrder}
                      onChange={(e) => setFormData({...formData, sortOrder: Number(e.target.value)})}
                      placeholder="0"
+                     className="bg-white"
                    />
                 </div>
 
@@ -394,28 +461,8 @@ export function ProductsTab() {
                       <Label htmlFor="isActive" className="cursor-pointer">Active Product</Label>
                    </div>
                 </div>
-
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="size">Size / Dimensions</Label>
-                  <Input
-                    id="size"
-                    value={formData.size}
-                    onChange={(e) => setFormData({...formData, size: e.target.value})}
-                    placeholder="e.g. 48 inches"
-                  />
-                </div>
-
-                <div className="space-y-2 col-span-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({...formData, description: e.target.value})}
-                    placeholder="Product details and specifications..."
-                    className="min-h-[100px]"
-                  />
-                </div>
               </div>
+
             </div>
           </div>
 

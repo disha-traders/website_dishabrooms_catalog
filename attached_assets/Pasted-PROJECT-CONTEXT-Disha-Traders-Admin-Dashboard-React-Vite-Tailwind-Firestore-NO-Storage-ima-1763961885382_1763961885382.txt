@@ -1,0 +1,38 @@
+PROJECT CONTEXT: Disha Traders Admin Dashboard (React + Vite + Tailwind + Firestore, NO Storage, imageUrl only).
+
+I want you to refine the Admin "Products" experience based on these UX requirements:
+
+1) IMAGE URL VALIDATION
+- In the Add/Edit Product dialog, enforce that imageUrl must be either:
+  a) A relative public path starting with "/" (e.g. "/products/am-gb-501.jpg"), OR
+  b) A full URL starting with "http://" or "https://".
+- If the value starts with "/fs/" or looks like an internal Replit path, show a clear validation error under the field:
+  "This is a local file path. Use a public path like /products/AM-GB-501.jpg or a full https URL."
+- Show this error state using Tailwind (red border + small red helper text) and prevent form submission until it is fixed.
+
+2) IMAGE SECTION LAYOUT
+- In the Add/Edit dialog, keep the image preview but integrate it as a dedicated "Image" section in the same scrollable form.
+- The order of sections in the dialog should be:
+  - "Product Details" (name, code, category, size, description)
+  - "Image" (imageUrl + preview + helper text)
+  - "Catalog Options" (isActive toggle, sortOrder)
+- The preview should be a small card: fixed height, object-cover, rounded corners.
+- If imageUrl is empty, show a neutral placeholder (gray background with an icon).
+
+3) REQUIRED FIELD UX
+- Make name, code, and category required.
+- Show a small red asterisk next to their labels.
+- If the user clicks "Add Product" or "Save Changes" with missing required fields, show inline errors instead of just failing silently.
+
+4) SEED MOCK DATA VISIBILITY
+- In ProductsTab, keep the Seed Mock Data functionality but only show the button when:
+    import.meta.env.MODE === "development"
+  OR when a boolean flag like `SHOW_SEED_BUTTON` is true at the top of the file.
+- In production builds (default), the Seed Mock Data button should be hidden completely from the client.
+
+5) URL HINT FOR LOCAL IMAGES
+- Under the imageUrl input, add helper text:
+  "For local images, upload them to /public/products in the project and use a path like: /products/AM-GB-501.jpg"
+- This is purely UI text; no extra backend logic needed.
+
+Please update the existing ProductsTab and Add/Edit Product dialog components in client/src/components/admin/ to follow these rules. Show me the updated React components (including any small Tailwind class changes) and explain briefly where you added validation logic.
