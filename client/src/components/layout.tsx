@@ -173,7 +173,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   aria-label="Chat with us on Aratai"
                   data-testid="link-aratai"
                 >
-                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                  <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#003366" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="12" height="10" rx="1.5" ry="1.5"></rect><path d="M7 9h5"></path><line x1="18" y1="3" x2="18" y2="13"></line><path d="M3 13l-2 3v-1l0 3h5"></path></svg>
                 </a>
               </div>
             </div>
