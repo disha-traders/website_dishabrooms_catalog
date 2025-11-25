@@ -11,6 +11,8 @@ export const config = {
   },
   social: {
     whatsappLink: "https://wa.me/919876543210",
+    facebookLink: "https://www.facebook.com/dishatraders",
+    instagramLink: "https://www.instagram.com/dishatraders",
   },
   hero: {
     title: "Premium Brooms & Cleaning Products",
