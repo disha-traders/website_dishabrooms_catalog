@@ -1,0 +1,84 @@
+You actually **deployed your backend server file, not the Vite frontend**, that’s why Vercel is showing that long `server/index-prod.ts` / `dist/index.js` code instead of your catalog UI.
+
+From the log:
+
+```txt
+> rest-express@1.0.0 build
+> vite build && esbuild server/index-prod.ts ...
+...
+../dist/public/index.html
+```
+
+So:
+
+* Vite is building your **frontend** into `dist/public/…`
+* `esbuild` is building an **Express server** into `dist/index.js`
+* On Vercel, that server build is what’s being served at `/`, so you just see code.
+
+For this simple catalog website you don’t need the Node/Express server on Vercel at all. Just deploy the **static Vite build**.
+
+---
+
+## ✅ Fix: Make Vercel deploy only the Vite frontend
+
+### 1. Simplify `package.json` build script (in your GitHub repo)
+
+Open `package.json` and change the scripts to something like:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+```
+
+* **Remove** the `&& esbuild server/index-prod.ts ...` part from the `build` script.
+* Keep all your React/Vite dependencies as they are.
+
+Commit & push this change to GitHub.
+
+---
+
+### 2. Set correct build settings in Vercel
+
+In your Vercel project:
+
+1. Go to **Settings → Build & Development Settings**.
+2. Set **Framework Preset**: `Vite` (or “Other” if Vite not detected, but Vite is best).
+3. Set:
+
+   * **Install Command**: `npm install`
+   * **Build Command**: `npm run build`
+   * **Output Directory**: `dist/public`
+     (your log clearly shows `../dist/public/index.html`, so `dist/public` is your final folder)
+
+Save changes.
+
+---
+
+### 3. Redeploy
+
+* In Vercel → Deployments → click **“Redeploy”** (or push any new commit to GitHub).
+* After deploy finishes, open:
+
+`https://website-dishabrooms-catalog.vercel.app`
+
+Now Vercel will serve the **built index.html from `dist/public`**, and you should see your Disha Brooms catalog UI instead of raw server code.
+
+---
+
+### If you *do* need a backend later
+
+You can:
+
+* Host backend (Express / REST API) separately on **Render / Railway / Replit**, and
+* Keep Vercel **only for the frontend**.
+
+But for this catalog site, static Vite on Vercel is perfect and free.
+
+---
+
+If you want, send me your current `package.json` content and folder structure (`src/`, `server/`, etc.), and I’ll tell you the exact edits line-by-line.
