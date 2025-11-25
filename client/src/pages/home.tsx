@@ -77,8 +77,7 @@ export default function Home() {
               </div>
               
               <h1 className="text-4xl lg:text-6xl xl:text-7xl font-heading font-bold leading-tight text-white">
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">India's Premium</span>
-                <span className="block text-[#00A896]">Cleaning Brand</span>
+                {config.hero.title || "India's Premium Cleaning Brand"}
               </h1>
               
               <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-300 font-light border-l-4 border-[#CD7F32] pl-6">
