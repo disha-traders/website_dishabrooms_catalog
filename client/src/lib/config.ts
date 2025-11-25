@@ -17,7 +17,10 @@ export const config = {
     arataiLink: "https://www.aratai.app/dishatraders",
   },
   hero: {
-    title: "Premium Brooms & Cleaning Products",
+    mainTitle: "Premium Brooms & Cleaning Products",
+    title2: "All Housekeeping Products in one Place",
+    title3: "India's Premium ",
+    title4: "Cleaning Brand",
     subtitle: "Direct from the Manufacturer",
   },
   branches: ["Delhi", "Mumbai", "Tiruchi", "Coimbatore", "Krishnagiri"]

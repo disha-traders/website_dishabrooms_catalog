@@ -168,25 +168,91 @@ export function SettingsTab() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t">
+        {/* Hero Section - Professional Layout */}
+        <div className="space-y-6 pt-4 border-t">
+          <div className="bg-gradient-to-br from-blue-50 to-blue-50/50 border border-blue-100 rounded-lg p-4">
+            <h3 className="text-lg font-bold text-[#002147] mb-1">Hero Section (Homepage Banner)</h3>
+            <p className="text-sm text-gray-600">Customize the main banner text that appears above the product image</p>
+          </div>
+
+          {/* Hero Main Title - Above Image */}
+          <div className="space-y-2">
+            <Label className="text-gray-700 font-semibold text-sm">🎯 Hero Main Title</Label>
+            <p className="text-xs text-gray-500 mb-2">Appears above the image - Main headline of your homepage</p>
+            <Input 
+              value={localConfig.hero?.mainTitle || ""}
+              onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, mainTitle: e.target.value }})} 
+              placeholder="e.g. Premium Brooms & Cleaning Products"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              data-testid="input-hero-main-title"
+            />
+          </div>
+
+          {/* Hero Title 2 - Below Main Title */}
+          <div className="space-y-2">
+            <Label className="text-gray-700 font-semibold text-sm">📝 Hero Title 2</Label>
+            <p className="text-xs text-gray-500 mb-2">Appears below main title - Descriptive tagline</p>
+            <Input 
+              value={localConfig.hero?.title2 || ""}
+              onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title2: e.target.value }})} 
+              placeholder="e.g. All Housekeeping Products in one Place"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              data-testid="input-hero-title-2"
+            />
+          </div>
+
+          {/* Hero Title 3 - Left Side Part 1 */}
+          <div className="space-y-2">
+            <Label className="text-gray-700 font-semibold text-sm">✨ Hero Title 3 (Part 1)</Label>
+            <p className="text-xs text-gray-500 mb-2">Large heading left side - First line (in white gradient)</p>
+            <Input 
+              value={localConfig.hero?.title3 || ""}
+              onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title3: e.target.value }})} 
+              placeholder="e.g. India's Premium "
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              data-testid="input-hero-title-3"
+            />
+          </div>
+
+          {/* Hero Title 4 - Left Side Part 2 */}
+          <div className="space-y-2">
+            <Label className="text-gray-700 font-semibold text-sm">🎨 Hero Title 4 (Part 2)</Label>
+            <p className="text-xs text-gray-500 mb-2">Large heading left side - Second line (in teal color #00A896)</p>
+            <Input 
+              value={localConfig.hero?.title4 || ""}
+              onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title4: e.target.value }})} 
+              placeholder="e.g. Cleaning Brand"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              data-testid="input-hero-title-4"
+            />
+          </div>
+
+          {/* Hero Subtitle */}
+          <div className="space-y-2">
+            <Label className="text-gray-700 font-semibold text-sm">💬 Hero Subtitle</Label>
+            <p className="text-xs text-gray-500 mb-2">Appears below the main heading - Supporting description</p>
+            <Input 
+              value={localConfig.hero?.subtitle || ""}
+              onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, subtitle: e.target.value }})}
+              placeholder="e.g. Direct from the Manufacturer"
+              className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+              data-testid="input-hero-subtitle"
+            />
+          </div>
+
+          {/* Preview Box */}
+          <div className="bg-gradient-to-br from-[#002147] to-[#003366] rounded-lg p-6 text-white mt-4 border border-white/10">
+            <p className="text-xs font-semibold text-white/60 mb-3">LIVE PREVIEW</p>
             <div className="space-y-2">
-              <Label className="text-gray-600 font-medium">Hero Title</Label>
-              <Input 
-                value={localConfig.hero?.title || ""}
-                onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, title: e.target.value }})} 
-                placeholder="e.g. Premium Cleaning Solutions"
-                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
-              />
+              <p className="text-sm text-gray-400">{localConfig.hero?.mainTitle || "Premium Brooms & Cleaning Products"}</p>
+              <p className="text-sm text-gray-400">{localConfig.hero?.title2 || "All Housekeeping Products in one Place"}</p>
+              <h1 className="text-2xl font-bold leading-tight">
+                <span className="text-gray-300">{localConfig.hero?.title3 || "India's Premium "}</span>
+                <span className="text-[#00A896]">{localConfig.hero?.title4 || "Cleaning Brand"}</span>
+              </h1>
+              <p className="text-sm text-gray-400 pt-2">{localConfig.hero?.subtitle || "Direct from the Manufacturer"}</p>
             </div>
-            <div className="space-y-2">
-              <Label className="text-gray-600 font-medium">Hero Subtitle</Label>
-              <Input 
-                value={localConfig.hero?.subtitle || ""}
-                onChange={(e) => setLocalConfig({...localConfig, hero: { ...localConfig.hero, subtitle: e.target.value }})}
-                placeholder="e.g. Quality brooms and mops for every home"
-                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
-              />
-            </div>
+          </div>
         </div>
 
         {/* Social Media Links */}

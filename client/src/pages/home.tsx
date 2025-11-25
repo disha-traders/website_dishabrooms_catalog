@@ -70,14 +70,28 @@ export default function Home() {
         <div className="container mx-auto px-4 py-12 lg:py-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Text Content */}
-            <div className="lg:col-span-7 space-y-8 animate-in slide-in-from-left duration-700">
+            <div className="lg:col-span-7 space-y-6 animate-in slide-in-from-left duration-700">
               <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
                 <span className="w-2 h-2 rounded-full bg-[#00A896] animate-pulse"></span>
                 <span className="text-[#00A896] font-bold uppercase tracking-widest text-xs">Since 1996</span>
               </div>
               
-              <h1 className="text-4xl lg:text-6xl xl:text-7xl font-heading font-bold leading-tight text-white">
-                {config.hero.title || "India's Premium Cleaning Brand"}
+              <div className="space-y-3">
+                <h2 className="text-xl lg:text-2xl font-semibold text-white/80 tracking-wide">
+                  {config.hero.mainTitle || "Premium Brooms & Cleaning Products"}
+                </h2>
+                <p className="text-lg lg:text-xl text-gray-300 font-light">
+                  {config.hero.title2 || "All Housekeeping Products in one Place"}
+                </p>
+              </div>
+              
+              <h1 className="text-5xl lg:text-7xl xl:text-8xl font-heading font-bold leading-tight text-white">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                  {config.hero.title3 || "India's Premium "}
+                </span>
+                <span className="block text-[#00A896]">
+                  {config.hero.title4 || "Cleaning Brand"}
+                </span>
               </h1>
               
               <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-300 font-light border-l-4 border-[#CD7F32] pl-6">
