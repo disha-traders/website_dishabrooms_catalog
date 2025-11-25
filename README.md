@@ -1,11 +1,13 @@
-# Disha Traders B2B Catalog Website
+# 🧹 Disha Traders B2B Catalog Website
 
-**Premium Cleaning Products Manufacturing & Distribution Platform**
+**Premium Brooms & Cleaning Products | Direct from Tamil Nadu Manufacturer**
 
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-blue)
-![React](https://img.shields.io/badge/React-18.x-blue)
+![React](https://img.shields.io/badge/React-19.x-blue)
 ![Vite](https://img.shields.io/badge/Vite-7.x-purple)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue)
+![Tailwind](https://img.shields.io/badge/Tailwind-4.1-06B6D4)
 
 ---
 
