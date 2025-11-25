@@ -149,7 +149,7 @@ export default function Contact() {
                           data-testid="contact-whatsapp"
                           aria-label="Chat with us on WhatsApp"
                         >
-                          {config.contact.phone}
+                          +91 {config.contact.whatsapp?.slice(-10).replace(/(\d{5})(\d{5})/, '$1 $2') || config.contact.phone}
                           <span className="text-xs bg-[#25D366]/20 text-[#25D366] px-2 py-0.5 rounded font-semibold">Click to Chat</span>
                         </a>
                         <p className="text-gray-500 text-sm mt-1">Mon - Sat, 9am - 6pm IST</p>

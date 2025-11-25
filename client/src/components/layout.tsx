@@ -208,7 +208,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <li className="flex items-center gap-3 text-gray-300">
                   <MessageCircle className="w-5 h-5 text-brand-green shrink-0" />
                   <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-green transition-colors" data-testid="footer-whatsapp">
-                    {config.contact.phone}
+                    +91 {config.contact.whatsapp?.slice(-10).replace(/(\d{5})(\d{5})/, '$1 $2') || config.contact.phone}
                   </a>
                 </li>
                 <li className="flex items-center gap-3 text-gray-300">
