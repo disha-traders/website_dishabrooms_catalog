@@ -138,9 +138,29 @@ export default function Contact() {
                       </div>
                       <div>
                         <h3 className="font-bold text-[#002147] mb-1 text-lg">Email Us</h3>
-                        <a href={`mailto:${config.contact.email}`} className="text-gray-500 hover:text-[#002147] transition-colors">
+                        <a href={`mailto:${config.contact.email}`} className="text-gray-500 hover:text-[#002147] transition-colors" data-testid="link-email">
                           {config.contact.email}
                         </a>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-5 group">
+                      <div className="w-12 h-12 bg-[#25D366]/10 rounded-xl flex items-center justify-center shrink-0 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300">
+                        <MessageCircle size={24} />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-[#002147] mb-1 text-lg">WhatsApp Us</h3>
+                        <a 
+                          href={config.social.whatsappLink}
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-gray-500 font-mono text-lg hover:text-[#25D366] transition-colors" 
+                          data-testid="link-whatsapp-number"
+                          aria-label="Chat with us on WhatsApp"
+                        >
+                          {config.contact.phone}
+                        </a>
+                        <p className="text-gray-400 text-sm mt-1">Mon - Sat, 9am - 6pm IST</p>
                       </div>
                     </div>
                   </div>
