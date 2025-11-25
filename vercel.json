@@ -1,0 +1,11 @@
+{
+  "buildCommand": "npm run build",
+  "installCommand": "npm install",
+  "outputDirectory": "dist/public",
+  "public": true,
+  "functions": {
+    "dist/index.js": {
+      "runtime": "nodejs18.x"
+    }
+  }
+}
