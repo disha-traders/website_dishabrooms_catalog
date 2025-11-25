@@ -1,26 +1,11 @@
 {
-  "buildCommand": "npm run build",
+  "buildCommand": "cd client && vite build --outDir ../dist/public",
   "installCommand": "npm install",
   "outputDirectory": "dist/public",
   "routes": [
     {
-      "src": "^/(?!assets).*",
+      "src": "/(.*)",
       "dest": "/index.html"
-    },
-    {
-      "src": "/assets/.*",
-      "dest": "/assets/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/assets/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
     }
   ]
 }
