@@ -257,6 +257,22 @@ export function SettingsTab() {
                 data-testid="input-linkedin-link"
               />
             </div>
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium text-sm flex items-center gap-2">
+                <div className="w-5 h-5 rounded text-white text-xs flex items-center justify-center font-bold" style={{background: 'linear-gradient(135deg, #FFD700 0%, #FFC700 100%)'}}>A</div>
+                Aratai Messenger Link
+              </Label>
+              <Input 
+                value={localConfig.social?.arataiLink || ""}
+                onChange={(e) => setLocalConfig({
+                  ...localConfig, 
+                  social: {...localConfig.social, arataiLink: e.target.value}
+                })}
+                placeholder="https://www.aratai.app/dishatraders"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+                data-testid="input-aratai-link"
+              />
+            </div>
           </div>
         </div>
 

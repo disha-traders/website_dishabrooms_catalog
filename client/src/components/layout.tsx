@@ -146,7 +146,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   aria-label="Contact us on WhatsApp"
                   data-testid="link-whatsapp"
                 >
-                  <svg className="w-7 h-7 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 6.4c-1.5-1.5-3.5-2.3-5.6-2.3-4.4 0-8 3.6-8 8 0 1.4.4 2.8 1.1 4l-1.2 4.4 4.5-1.2c1.2.7 2.5 1 3.9 1 4.4 0 8-3.6 8-8 0-2.1-.8-4.1-2.3-5.6zm-5.6 13.5c-1.2 0-2.4-.3-3.4-.9l-.2-.1-2.5.6.6-2.4-.2-.2c-.7-1.1-1-2.3-1-3.6 0-3.7 3-6.7 6.7-6.7 1.8 0 3.5.7 4.8 2s2 3 2 4.8c0 3.7-3 6.7-6.7 6.7z"/><path d="M12.5 9.5c-.3 0-.6.2-.7.5-.1.3.1.6.4.7.8.3 1.4.9 1.7 1.7.1.3.4.5.7.4.3-.1.5-.4.4-.7-.4-1.1-1.2-2-2.2-2.4-.1-.1-.2-.1-.3-.1z" /></svg>
+                  <svg className="w-8 h-8 text-[#25D366]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3.01 1 4.33L2 22l6.67-1c1.32.64 2.79 1 4.33 1 5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.4 0-2.75-.35-3.92-.99l-.28-.15-2.9.55.56-2.87-.18-.29C3.38 14.77 3 13.43 3 12c0-4.96 4.04-9 9-9s9 4.04 9 9-4.04 9-9 9zm4.85-7.42c-.26-.13-1.56-.77-1.8-.86-.24-.09-.41-.13-.59.13-.18.26-.69.87-.85 1.05-.16.17-.33.2-.59.07-.26-.13-1.1-.41-2.1-1.3-.78-.7-1.3-1.56-1.45-1.82-.15-.26-.02-.4.11-.53.11-.11.26-.29.39-.43.13-.15.17-.25.26-.42.08-.17.04-.32-.02-.45-.06-.13-.59-1.42-.81-1.95-.21-.51-.43-.44-.59-.44-.15 0-.32-.02-.49-.02s-.44.06-.67.3c-.24.24-.9.88-.9 2.13s.92 2.47 1.05 2.64c.13.17 1.82 2.79 4.4 3.91.62.27 1.1.43 1.48.55.62.2 1.19.17 1.64.1.5-.07 1.56-.64 1.78-1.25.22-.6.22-1.12.15-1.25-.06-.13-.23-.2-.48-.33z" /></svg>
                 </a>
                 {/* LinkedIn Link */}
                 <a 
@@ -158,6 +158,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   data-testid="link-linkedin"
                 >
                   <svg className="w-7 h-7 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" /></svg>
+                </a>
+                {/* Aratai Messenger Link */}
+                <a 
+                  href={config.social.arataiLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-14 h-14 rounded-lg flex items-center justify-center hover:scale-110 transition-all hover:-translate-y-1 cursor-pointer"
+                  style={{background: 'linear-gradient(135deg, #FFD700 0%, #FFC700 100%)'}}
+                  aria-label="Chat with us on Aratai"
+                  data-testid="link-aratai"
+                >
+                  <svg className="w-7 h-7 text-[#003366]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm2 4v8h2V8H8zm3 0v8h2V8h-2zm3 0v8h2V8h-2z" /></svg>
                 </a>
               </div>
             </div>
