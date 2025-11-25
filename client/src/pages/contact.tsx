@@ -76,9 +76,9 @@ export default function Contact() {
         // Construct WhatsApp message
         const text = `*New Enquiry from Website*%0a%0a*Name:* ${formData.name}%0a*Subject:* ${formData.subject}%0a*Phone:* ${formData.phone}%0a*Email:* ${formData.email}%0a%0a*Message:*%0a${formData.message}`;
         
-        // Use the phone number from config, stripping non-digits
-        const phone = config.contact.phone.replace(/\D/g, '');
-        window.open(`https://wa.me/${phone}?text=${text}`, '_blank');
+        // Use the WhatsApp number from config, stripping non-digits
+        const whatsappPhone = config.contact.whatsapp.replace(/\D/g, '');
+        window.open(`https://wa.me/${whatsappPhone}?text=${text}`, '_blank');
       }
     }, 1500);
   };
