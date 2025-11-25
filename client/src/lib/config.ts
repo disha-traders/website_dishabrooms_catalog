@@ -13,6 +13,7 @@ export const config = {
     whatsappLink: "https://wa.me/919876543210",
     facebookLink: "https://www.facebook.com/dishatraders",
     instagramLink: "https://www.instagram.com/dishatraders",
+    linkedinLink: "https://www.linkedin.com/company/dishatraders",
   },
   hero: {
     title: "Premium Brooms & Cleaning Products",

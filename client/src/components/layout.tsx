@@ -135,18 +135,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   aria-label="Follow us on Instagram"
                   data-testid="link-instagram"
                 >
-                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm3.5 12a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0zm1.5-5h1a1 1 0 110 2h-1a1 1 0 110-2z" /></svg>
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.8 2h8.4C19.4 2 22 4.6 22 7.8v8.4c0 3.2-2.6 5.8-5.8 5.8H7.8C4.6 22 2 19.4 2 16.2V7.8C2 4.6 4.6 2 7.8 2zm0 2C5.7 4 4 5.7 4 7.8v8.4c0 2.1 1.7 3.8 3.8 3.8h8.4c2.1 0 3.8-1.7 3.8-3.8V7.8c0-2.1-1.7-3.8-3.8-3.8H7.8zm8.5 3c.8 0 1.5-.7 1.5-1.5s-.7-1.5-1.5-1.5-1.5.7-1.5 1.5.7 1.5 1.5 1.5zm-4.3 2c2.9 0 5.3 2.4 5.3 5.3s-2.4 5.3-5.3 5.3-5.3-2.4-5.3-5.3 2.4-5.3 5.3-5.3zm0 2c-1.8 0-3.3 1.5-3.3 3.3s1.5 3.3 3.3 3.3 3.3-1.5 3.3-3.3-1.5-3.3-3.3-3.3z" /></svg>
                 </a>
                 {/* WhatsApp Link */}
                 <a 
                   href={config.social.whatsappLink} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand-green transition-all hover:-translate-y-1 cursor-pointer"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#25D366] transition-all hover:-translate-y-1 cursor-pointer"
                   aria-label="Contact us on WhatsApp"
                   data-testid="link-whatsapp"
                 >
-                   <Phone size={18} className="text-white" />
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.6 6.4c-1.5-1.5-3.5-2.3-5.6-2.3-4.4 0-8 3.6-8 8 0 1.4.4 2.8 1.1 4l-1.2 4.4 4.5-1.2c1.2.7 2.5 1 3.9 1 4.4 0 8-3.6 8-8 0-2.1-.8-4.1-2.3-5.6zm-5.6 13.5c-1.2 0-2.4-.3-3.4-.9l-.2-.1-2.5.6.6-2.4-.2-.2c-.7-1.1-1-2.3-1-3.6 0-3.7 3-6.7 6.7-6.7 1.8 0 3.5.7 4.8 2s2 3 2 4.8c0 3.7-3 6.7-6.7 6.7z"/><path d="M12.5 9.5c-.3 0-.6.2-.7.5-.1.3.1.6.4.7.8.3 1.4.9 1.7 1.7.1.3.4.5.7.4.3-.1.5-.4.4-.7-.4-1.1-1.2-2-2.2-2.4-.1-.1-.2-.1-.3-.1z" /></svg>
+                </a>
+                {/* LinkedIn Link */}
+                <a 
+                  href={config.social.linkedinLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-[#0A66C2] transition-all hover:-translate-y-1 cursor-pointer"
+                  aria-label="Visit our LinkedIn page"
+                  data-testid="link-linkedin"
+                >
+                  <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z" /></svg>
                 </a>
               </div>
             </div>
