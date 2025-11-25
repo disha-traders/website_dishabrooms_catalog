@@ -71,40 +71,40 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Text Content */}
             <div className="lg:col-span-7 space-y-6 animate-in slide-in-from-left duration-700">
-              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 backdrop-blur-md px-4 py-1.5 rounded-full shadow-sm" data-testid="badge-since-1996">
                 <span className="w-2 h-2 rounded-full bg-[#00A896] animate-pulse"></span>
                 <span className="text-[#00A896] font-bold uppercase tracking-widest text-xs">Since 1996</span>
               </div>
               
               <div className="space-y-3">
-                <h2 className="text-xl lg:text-2xl font-semibold text-white/80 tracking-wide">
+                <h2 className="text-xl lg:text-2xl font-semibold text-white/80 tracking-wide" data-testid="text-hero-main-title">
                   {config.hero.mainTitle || "Premium Brooms & Cleaning Products"}
                 </h2>
-                <p className="text-lg lg:text-xl text-gray-300 font-light">
+                <p className="text-lg lg:text-xl text-gray-300 font-light" data-testid="text-hero-title-2">
                   {config.hero.title2 || "All Housekeeping Products in one Place"}
                 </p>
               </div>
               
               <h1 className="text-5xl lg:text-7xl xl:text-8xl font-heading font-bold leading-tight text-white">
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300">
+                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-300" data-testid="text-hero-title-3">
                   {config.hero.title3 || "India's Premium "}
                 </span>
-                <span className="block text-[#00A896]">
+                <span className="block text-[#00A896]" data-testid="text-hero-title-4">
                   {config.hero.title4 || "Cleaning Brand"}
                 </span>
               </h1>
               
-              <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-300 font-light border-l-4 border-[#CD7F32] pl-6">
+              <p className="text-lg lg:text-xl max-w-xl leading-relaxed text-gray-300 font-light border-l-4 border-[#CD7F32] pl-6" data-testid="text-hero-subtitle">
                 {config.hero.subtitle || "Experience the superior quality of Alagu Mayil. Handcrafted brooms and mops designed for the modern Indian home."}
               </p>
 
               <div className="flex flex-col sm:flex-row gap-5 pt-4">
                 <Link href="/products">
-                  <Button className="h-14 px-8 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-lg shadow-[0_0_20px_rgba(0,168,150,0.3)] transition-all hover:scale-105">
+                  <Button className="h-14 px-8 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-lg shadow-[0_0_20px_rgba(0,168,150,0.3)] transition-all hover:scale-105" data-testid="button-view-catalog">
                     View Catalog
                   </Button>
                 </Link>
-                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
+                <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" data-testid="link-whatsapp-inquiry">
                   <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
                     <MessageCircle className="w-5 h-5" />
                     WhatsApp Enquiry
@@ -150,6 +150,7 @@ export default function Home() {
                     onClick={handleDownloadCatalog}
                     disabled={generatingPdf}
                     className="h-12 px-6 rounded-full bg-[#00A896] hover:bg-[#008C7D] text-white font-bold text-base gap-2 shadow-[0_0_15px_rgba(0,168,150,0.4)] transition-all hover:scale-105 hover:shadow-xl backdrop-blur-md border border-white/20"
+                    data-testid="button-download-catalog"
                    >
                       {generatingPdf ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                       {generatingPdf ? "Generating Catalog..." : "Download Catalog PDF"}

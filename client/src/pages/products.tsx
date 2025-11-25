@@ -98,11 +98,11 @@ export default function Products() {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl">
-            <span className="text-[#00A896] font-bold tracking-widest uppercase text-sm mb-2 block">Premium Catalog</span>
-            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4 leading-tight">
+            <span className="text-[#00A896] font-bold tracking-widest uppercase text-sm mb-2 block" data-testid="badge-premium-catalog">Premium Catalog</span>
+            <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4 leading-tight" data-testid="heading-products-hero">
               Quality Cleaning Tools<br/>For Every Need
             </h1>
-            <p className="text-blue-100 text-lg max-w-2xl">
+            <p className="text-blue-100 text-lg max-w-2xl" data-testid="text-products-description">
               Explore our extensive range of brooms, mops, and brushes designed for durability, efficiency, and ease of use.
             </p>
             <div className="mt-8">

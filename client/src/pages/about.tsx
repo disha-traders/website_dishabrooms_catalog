@@ -18,11 +18,11 @@ export default function About() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#002147]/50 to-[#002147]"></div>
         
         <div className="relative z-10 text-center p-6 max-w-4xl">
-          <span className="text-[#00A896] font-medium tracking-widest uppercase text-sm mb-4 block">Established 1996</span>
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight">
+          <span className="text-[#00A896] font-medium tracking-widest uppercase text-sm mb-4 block" data-testid="text-established">Established 1996</span>
+          <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight" data-testid="heading-about-hero">
             We Don't Just Make Brooms,<br/>We Craft Cleanliness.
           </h1>
-          <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto font-light">
+          <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto font-light" data-testid="text-about-description">
             The story of {config.companyName} and our relentless pursuit of manufacturing excellence in Tamil Nadu.
           </p>
         </div>

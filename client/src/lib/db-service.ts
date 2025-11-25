@@ -1,5 +1,5 @@
 import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, where } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, where, setDoc } from "firebase/firestore";
 import { Product, products as mockProducts, categories as defaultCategories } from "@/lib/products";
 
 // Local Storage Keys
@@ -183,8 +183,8 @@ export const dbSaveSettings = async (settings: any): Promise<void> => {
   
   if (isFirebaseAvailable()) {
     try {
-      // Assuming 'dishaTraders' is the singleton doc ID
-      await updateDoc(doc(db, "settings", "dishaTraders"), settings);
+      // Use setDoc with merge to create or update the document
+      await setDoc(doc(db, "settings", "dishaTraders"), settings, { merge: true });
     } catch (e) { 
       // Silent fail on firebase is okay for prototype 
       console.warn("Firebase settings save failed", e);
