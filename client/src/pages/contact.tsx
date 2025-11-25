@@ -108,59 +108,64 @@ export default function Contact() {
                     Contact Information
                   </h2>
                   
-                  <div className="space-y-8">
-                    <div className="flex items-start gap-5 group">
-                      <div className="w-12 h-12 bg-[#CD7F32]/10 rounded-xl flex items-center justify-center shrink-0 text-[#CD7F32] group-hover:bg-[#CD7F32] group-hover:text-white transition-all duration-300">
-                        <MapPin size={24} />
+                  <div className="space-y-6">
+                    {/* Address */}
+                    <div className="flex gap-5 group">
+                      <div className="w-14 h-14 bg-[#CD7F32]/10 rounded-xl flex items-center justify-center shrink-0 text-[#CD7F32] group-hover:bg-[#CD7F32] group-hover:text-white transition-all duration-300 shadow-sm">
+                        <MapPin size={26} />
                       </div>
-                      <div>
-                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Visit Factory</h3>
-                        <p className="text-gray-500 leading-relaxed">{config.contact.address}</p>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-[#002147] mb-2 text-lg">Visit Factory</h3>
+                        <p className="text-gray-600 leading-relaxed text-base">{config.contact.address}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-5 group">
-                      <div className="w-12 h-12 bg-[#00A896]/10 rounded-xl flex items-center justify-center shrink-0 text-[#00A896] group-hover:bg-[#00A896] group-hover:text-white transition-all duration-300">
-                        <Phone size={24} />
+                    {/* Phone */}
+                    <div className="flex gap-5 group">
+                      <div className="w-14 h-14 bg-[#00A896]/10 rounded-xl flex items-center justify-center shrink-0 text-[#00A896] group-hover:bg-[#00A896] group-hover:text-white transition-all duration-300 shadow-sm">
+                        <Phone size={26} />
                       </div>
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-bold text-[#002147] mb-1 text-lg">Call Us</h3>
-                        <a href={`tel:${config.contact.phone}`} className="text-gray-500 font-mono text-lg hover:text-[#00A896] transition-colors">
+                        <a href={`tel:${config.contact.phone}`} className="text-gray-700 font-mono text-base font-bold hover:text-[#00A896] transition-colors" data-testid="contact-phone">
                           {config.contact.phone}
                         </a>
-                        <p className="text-gray-400 text-sm mt-1">Mon - Sat, 9am - 6pm</p>
+                        <p className="text-gray-500 text-sm mt-1">Mon - Sat, 9am - 6pm IST</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-5 group">
-                      <div className="w-12 h-12 bg-[#002147]/10 rounded-xl flex items-center justify-center shrink-0 text-[#002147] group-hover:bg-[#002147] group-hover:text-white transition-all duration-300">
-                        <Mail size={24} />
+                    {/* WhatsApp */}
+                    <div className="flex gap-5 group">
+                      <div className="w-14 h-14 bg-[#25D366]/10 rounded-xl flex items-center justify-center shrink-0 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300 shadow-sm">
+                        <MessageCircle size={26} />
                       </div>
-                      <div>
-                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Email Us</h3>
-                        <a href={`mailto:${config.contact.email}`} className="text-gray-500 hover:text-[#002147] transition-colors" data-testid="link-email">
-                          {config.contact.email}
-                        </a>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-5 group">
-                      <div className="w-12 h-12 bg-[#25D366]/10 rounded-xl flex items-center justify-center shrink-0 text-[#25D366] group-hover:bg-[#25D366] group-hover:text-white transition-all duration-300">
-                        <MessageCircle size={24} />
-                      </div>
-                      <div>
+                      <div className="flex-1">
                         <h3 className="font-bold text-[#002147] mb-1 text-lg">WhatsApp Us</h3>
                         <a 
                           href={config.social.whatsappLink}
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-gray-500 font-mono text-lg hover:text-[#25D366] transition-colors" 
-                          data-testid="link-whatsapp-number"
+                          className="text-gray-700 font-mono text-base font-bold hover:text-[#25D366] transition-colors inline-flex items-center gap-2"
+                          data-testid="contact-whatsapp"
                           aria-label="Chat with us on WhatsApp"
                         >
                           {config.contact.phone}
+                          <span className="text-xs bg-[#25D366]/20 text-[#25D366] px-2 py-0.5 rounded font-semibold">Click to Chat</span>
                         </a>
-                        <p className="text-gray-400 text-sm mt-1">Mon - Sat, 9am - 6pm IST</p>
+                        <p className="text-gray-500 text-sm mt-1">Mon - Sat, 9am - 6pm IST</p>
+                      </div>
+                    </div>
+
+                    {/* Email */}
+                    <div className="flex gap-5 group">
+                      <div className="w-14 h-14 bg-[#002147]/10 rounded-xl flex items-center justify-center shrink-0 text-[#002147] group-hover:bg-[#002147] group-hover:text-white transition-all duration-300 shadow-sm">
+                        <Mail size={26} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-bold text-[#002147] mb-1 text-lg">Email Us</h3>
+                        <a href={`mailto:${config.contact.email}`} className="text-gray-700 text-base hover:text-[#002147] transition-colors break-all" data-testid="contact-email">
+                          {config.contact.email}
+                        </a>
                       </div>
                     </div>
                   </div>

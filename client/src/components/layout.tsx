@@ -203,11 +203,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 </li>
                 <li className="flex items-center gap-3 text-gray-300">
                   <Phone className="w-5 h-5 text-brand-gold shrink-0" />
-                  <a href={`tel:${config.contact.phone}`} className="hover:text-white">{config.contact.phone}</a>
+                  <a href={`tel:${config.contact.phone}`} className="hover:text-white transition-colors" data-testid="footer-phone">{config.contact.phone}</a>
+                </li>
+                <li className="flex items-center gap-3 text-gray-300">
+                  <MessageCircle className="w-5 h-5 text-brand-green shrink-0" />
+                  <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-green transition-colors" data-testid="footer-whatsapp">
+                    {config.contact.phone}
+                  </a>
                 </li>
                 <li className="flex items-center gap-3 text-gray-300">
                   <Mail className="w-5 h-5 text-brand-gold shrink-0" />
-                  <a href={`mailto:${config.contact.email}`} className="hover:text-white">{config.contact.email}</a>
+                  <a href={`mailto:${config.contact.email}`} className="hover:text-white transition-colors" data-testid="footer-email">{config.contact.email}</a>
                 </li>
               </ul>
             </div>
