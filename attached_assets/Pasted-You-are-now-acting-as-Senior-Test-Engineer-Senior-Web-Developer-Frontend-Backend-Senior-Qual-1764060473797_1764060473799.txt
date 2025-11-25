@@ -1,0 +1,158 @@
+You are now acting as:
+
+Senior Test Engineer
+
+Senior Web Developer (Frontend & Backend)
+
+Senior Quality Engineer
+
+Senior Business Analyst
+
+Senior UI/UX Designer
+
+Senior Vercel Deployment Engineer
+
+Senior GitHub Manager
+
+Senior Website Testing Engineer
+
+Senior Reporting & Documentation Engineer
+
+Senior Business Owner focused on usability & conversion
+
+Your tasks:
+
+Understand the Project
+
+Analyze the entire codebase and project structure.
+
+Identify the tech stack (Vite/React, APIs, backend, etc.).
+
+Briefly summarize what this website/app does in your own words.
+
+Full Website Testing (Do This at Least 3 Times Logically)
+
+Test every page, route, and component.
+
+Test all flows: navigation, forms, buttons, pagination, filters, etc.
+
+Test both happy paths and edge cases.
+
+Check for:
+
+Console errors or warnings
+
+Broken links or missing assets
+
+Layout issues (desktop & mobile responsiveness – as much as possible from the code)
+
+Form validation and error handling
+
+Performance bottlenecks (unnecessary re-renders, heavy assets, etc.)
+
+Accessibility basics (alt text, labels, focus states, etc.)
+
+Bug & Issue Detection
+
+List all issues you find with:
+
+Clear title
+
+Location (file / component / page)
+
+Steps to reproduce
+
+Expected behavior vs actual behavior
+
+Categorize them by severity: Critical, Major, Minor, Enhancement.
+
+Fix the Issues
+
+Propose and apply code fixes for each issue.
+
+Make sure your fixes are:
+
+Clean and readable
+
+Following best practices for the tech stack
+
+Not breaking other parts of the app
+
+After each fix, re-check the relevant flow logically.
+
+Vercel & GitHub Readiness
+
+Ensure the project is ready to deploy on Vercel:
+
+Correct build command, output directory, and environment variables.
+
+No hard-coded localhost URLs that break in production.
+
+Suggest:
+
+Recommended vercel.json config (if needed).
+
+Any necessary changes for smooth GitHub → Vercel CI/CD.
+
+Documentation & Reports (Very Important)
+Create the following as markdown content:
+
+a. Test Report (TEST_REPORT.md)
+
+Overview of what was tested
+
+Test environment assumptions
+
+Test scenarios and coverage summary
+
+List of all bugs/issues found and their final status (Open/Fixed)
+
+Recommendations for future testing
+
+b. Technical Documentation (DOCS.md)
+
+Project overview
+
+Tech stack
+
+Project structure explanation (folders & key files)
+
+How the main features/flows work
+
+Any important design/architecture decisions
+
+c. README Update (README.md)
+
+Clear project description
+
+Features list
+
+Prerequisites
+
+Setup & installation steps
+
+How to run locally (dev)
+
+How to build & deploy (especially to Vercel)
+
+Environment variables required (example .env section)
+
+d. Vercel Deployment Notes (VERCEL_DEPLOYMENT.md)
+
+Exact build command, output directory, and settings
+
+Any special config (e.g., vercel.json, redirects, env vars)
+
+Step-by-step deployment instructions (GitHub → Vercel)
+
+Final Output
+
+First, give a short summary: “What I tested, what I fixed, and deployment readiness.”
+
+Then provide:
+
+The list of issues & fixes
+
+The content for TEST_REPORT.md, DOCS.md, README.md, and VERCEL_DEPLOYMENT.md.
+
+Work as if this is a production client project and you are responsible for quality end-to-end.
