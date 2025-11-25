@@ -189,6 +189,45 @@ export function SettingsTab() {
             </div>
         </div>
 
+        {/* Social Media Links */}
+        <div className="space-y-4 pt-4 border-t">
+          <Label className="text-gray-600 font-medium block">Social Media Links</Label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium text-sm flex items-center gap-2">
+                <svg className="w-5 h-5 text-[#1877F2]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" /></svg>
+                Facebook Link
+              </Label>
+              <Input 
+                value={localConfig.social?.facebookLink || ""}
+                onChange={(e) => setLocalConfig({
+                  ...localConfig, 
+                  social: {...localConfig.social, facebookLink: e.target.value}
+                })}
+                placeholder="https://www.facebook.com/dishatraders"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+                data-testid="input-facebook-link"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium text-sm flex items-center gap-2">
+                <svg className="w-5 h-5 text-[#E4405F]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 2c5.514 0 10 4.486 10 10s-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm3.5 12a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0zm1.5-5h1a1 1 0 110 2h-1a1 1 0 110-2z" /></svg>
+                Instagram Link
+              </Label>
+              <Input 
+                value={localConfig.social?.instagramLink || ""}
+                onChange={(e) => setLocalConfig({
+                  ...localConfig, 
+                  social: {...localConfig.social, instagramLink: e.target.value}
+                })}
+                placeholder="https://www.instagram.com/dishatraders"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+                data-testid="input-instagram-link"
+              />
+            </div>
+          </div>
+        </div>
+
         <div className="pt-4 border-t flex justify-end">
           <Button 
             onClick={handleSaveSettings} 
