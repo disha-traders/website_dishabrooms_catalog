@@ -240,6 +240,26 @@ export const dbGetBlogs = async (): Promise<Blog[]> => {
   const seededBlogs: Blog[] = [
     {
       "id": "1",
+      "title": "Manufacturing Process at Disha Traders",
+      "date": "2025-01-15",
+      "author": "Disha Traders",
+      "sections": [
+        {
+          "type": "text",
+          "content": "Watch our traditional manufacturing process where we combine eco-friendly materials with skilled craftsmanship to create durable cleaning products."
+        },
+        {
+          "type": "youtube",
+          "videoId": "9I6GgmNUyXU"
+        },
+        {
+          "type": "text",
+          "content": "Our commitment to quality ensures that every broom and brush meets the highest standards of durability and effectiveness."
+        }
+      ]
+    },
+    {
+      "id": "2",
       "title": "How Disha Brooms Are Made",
       "date": "2025-01-10",
       "author": "Disha Traders",
