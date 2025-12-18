@@ -15,7 +15,7 @@ export const config = {
     instagramLink: "https://www.instagram.com/dishatraders",
     linkedinLink: "https://www.linkedin.com/company/dishatraders",
     arataiLink: "https://www.aratai.app/dishatraders",
-    shopOnlineLink: "https://mybillbook.in/store/dishabrooms",
+    shopOnlineLink: "https://shop.dishabrooms.com",
   },
   hero: {
     mainTitle: "Premium Brooms & Cleaning Products",

@@ -96,28 +96,28 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
         
-        <div className="pt-4 border-t border-gray-50 mt-auto flex flex-col gap-2">
-           <a 
-            href={whatsappLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between text-sm font-bold text-brand-cetacean group-hover:text-brand-teal transition-colors w-full"
-          >
-            <span>Enquire Now</span>
-            <MessageCircle size={18} className="transform group-hover:scale-110 transition-transform" />
-          </a>
-          
-          {config.social.shopOnlineLink && (
+        <div className="pt-4 border-t border-gray-50 mt-auto grid grid-cols-2 gap-2">
+           {config.social.shopOnlineLink && (
             <a 
               href={config.social.shopOnlineLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-between text-sm font-bold text-[#CD7F32] group-hover:text-[#B06A26] transition-colors w-full"
+              className="flex items-center justify-center gap-2 text-sm font-bold text-[#CD7F32] border border-[#CD7F32] rounded-lg py-2 hover:bg-[#CD7F32] hover:text-white transition-all duration-300"
             >
-              <span>Shop Online</span>
-              <ArrowUpRight size={18} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              <ArrowUpRight size={16} />
+              <span>Shop</span>
             </a>
           )}
+           
+           <a 
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center justify-center gap-2 text-sm font-bold text-white bg-brand-cetacean rounded-lg py-2 hover:bg-brand-teal transition-all duration-300 ${!config.social.shopOnlineLink ? 'col-span-2' : ''}`}
+          >
+            <MessageCircle size={16} />
+            <span>Enquire</span>
+          </a>
         </div>
       </div>
     </div>
