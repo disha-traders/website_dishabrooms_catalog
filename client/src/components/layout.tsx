@@ -47,6 +47,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 {item.label}
               </Link>
             ))}
+            {config.social.shopOnlineLink && (
+              <Button 
+                asChild 
+                className="bg-[#CD7F32] hover:bg-[#B06A26] text-white rounded-full px-6 gap-2 transition-all hover:scale-105 shadow-[0_0_15px_rgba(205,127,50,0.3)]"
+              >
+                <a href={config.social.shopOnlineLink} target="_blank" rel="noopener noreferrer">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                  Shop Online
+                </a>
+              </Button>
+            )}
             <Button 
               asChild 
               className="btn-whatsapp-custom rounded-full px-6 gap-2"
@@ -86,6 +97,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   {item.label}
                 </Link>
               ))}
+              {config.social.shopOnlineLink && (
+                <a 
+                  href={config.social.shopOnlineLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-[#CD7F32] text-center text-white font-bold py-3 rounded-md mt-2 flex items-center justify-center gap-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+                  Shop Online
+                </a>
+              )}
               <a 
                 href={config.social.whatsappLink} 
                 target="_blank" 
