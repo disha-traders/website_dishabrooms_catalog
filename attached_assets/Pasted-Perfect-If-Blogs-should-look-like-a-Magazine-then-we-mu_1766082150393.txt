@@ -1,0 +1,230 @@
+Perfect 👍
+If **Blogs should look like a Magazine**, then we must design it like **Forbes / Medium / Vogue-style editorial**, not a normal company blog.
+
+Below is a **clear, senior-level magazine blog theme spec** + a **ready-to-use Replit prompt** you can directly give to Replit AI.
+
+---
+
+# 📰 MAGAZINE-STYLE BLOG THEME (FOR DISHA BROOMS)
+
+## 🎯 Design Goals
+
+* Premium
+* Editorial
+* Scroll-friendly
+* Trust-building
+* Product + Story driven (manufacturing, women workforce, sustainability)
+
+---
+
+## 🧱 1. Overall Layout (Magazine Grid)
+
+### Desktop Layout
+
+```
+--------------------------------------------------
+| HERO FEATURE ARTICLE (Big Image + Title)       |
+--------------------------------------------------
+|  Featured |  Featured |  Featured              |
+|  Card     |  Card     |  Card                  |
+--------------------------------------------------
+| Left: Blog Feed        | Right: Sidebar        |
+| (Articles list)        | (Popular, Videos)     |
+--------------------------------------------------
+```
+
+### Mobile Layout
+
+```
+Hero Article
+Featured Cards (horizontal scroll)
+Article Feed (one column)
+```
+
+---
+
+## 🖼️ 2. Hero Section (Must-Have)
+
+* Full-width image
+* Large bold headline
+* Category badge (e.g., **MANUFACTURING**, **WOMEN POWER**)
+* Author + Date
+* Read Time
+
+Example:
+
+> **How Village Women Power Disha Brooms Manufacturing**
+
+---
+
+## 🗂️ 3. Blog Categories (Magazine Style)
+
+Use **pill-style tabs** below hero:
+
+* All
+* Manufacturing
+* Women Entrepreneurs
+* Sustainability
+* Product Stories
+* Factory Life
+* Videos
+
+---
+
+## 📰 4. Blog Card Design (Editorial)
+
+Each blog card should have:
+
+* Large thumbnail
+* Category label (top-left)
+* Big title (2 lines max)
+* Short intro (2–3 lines)
+* Read time
+* “Read More →”
+
+❌ No small boring cards
+✅ Spacious, clean, bold typography
+
+---
+
+## 🎥 5. Video Blog Section (Magazine Feature)
+
+A separate section like:
+
+### 🎬 Factory Stories (Video)
+
+* Embedded YouTube / Drive video
+* Title + paragraph below
+* Looks like a news feature
+
+---
+
+## 📌 6. Sidebar (Magazine Feel)
+
+Sticky sidebar on desktop:
+
+### Sidebar Blocks:
+
+* 🔥 Popular Articles
+* 🎥 Latest Videos
+* 🛒 Shop Online Button
+* 📞 Enquiry CTA
+* 📢 WhatsApp CTA
+
+---
+
+## ✍️ 7. Article Page (Very Important)
+
+### Article Page Layout:
+
+* Big title
+* Hero image
+* Drop-cap first letter (magazine style)
+* Large line spacing
+* Pull quotes
+* Inline images
+* End with CTA
+
+Example CTA:
+
+> **Want to buy these products? → Shop Online**
+
+---
+
+## 🎨 8. Typography (Magazine Look)
+
+### Fonts (Recommended):
+
+* **Headings:** Playfair Display / Merriweather / Libre Baskerville
+* **Body:** Inter / Lato / Source Sans 3
+
+### Styling:
+
+* Headings: Bold, serif
+* Body: Clean, readable
+* Plenty of white space
+
+---
+
+## 🎨 9. Color Style
+
+* Background: White / Light cream
+* Headings: Charcoal / Dark green
+* Accents: Earthy green, brown, broom-natural tones
+* Category badges: Soft pastel
+
+---
+
+## 🧠 10. Content Tone (Editorial)
+
+Blogs should feel like:
+
+* News article
+* Storytelling
+* Interviews
+* Behind-the-scenes
+
+❌ Salesy
+✅ Informative + inspiring
+
+---
+
+# 🧠 MASTER REPLIT PROMPT (COPY–PASTE)
+
+```
+You are a Senior UI/UX Designer and Senior Frontend Engineer.
+
+Build a MAGAZINE-STYLE blog page for dishabrooms.com.
+
+Design requirements:
+- Editorial / magazine look (Forbes / Medium style)
+- Hero featured article with large image and bold headline
+- Category tabs (All, Manufacturing, Women, Sustainability, Products, Videos)
+- Blog cards with large thumbnails, category badge, title, excerpt, read time
+- Separate Video Blog section (YouTube / Google Drive embeds)
+- Sticky sidebar with:
+  - Popular articles
+  - Latest videos
+  - Shop Online button
+  - Enquiry / WhatsApp CTA
+- Article detail page with:
+  - Drop-cap first letter
+  - Wide images
+  - Pull quotes
+  - Clean typography
+  - End-of-article CTA
+
+Typography:
+- Headings: Serif (Playfair / Merriweather)
+- Body: Sans-serif (Inter / Lato)
+
+Tech:
+- Pure HTML/CSS/JS OR React (no heavy CMS)
+- Fully responsive
+- SEO friendly
+- Static deploy-ready
+
+Do NOT make it look like a basic company blog.
+It must feel like a professional online magazine.
+```
+
+---
+
+## 🚀 What I Recommend Next
+
+1. Create `/blogs` page with this theme
+2. Add **3–5 high-quality articles**
+3. Add **1 video story**
+4. Link it in header as **Blogs**
+5. Promote trust + brand story
+
+---
+
+If you want, I can:
+
+* 🎨 Design **exact UI wireframe**
+* ✍️ Write **first 5 magazine-style blog posts**
+* 🧩 Convert this into **React / Next.js**
+* 🔗 Integrate with **Shop Online + Enquiry**
+
+Just tell me 👉 **DESIGN / CONTENT / CODE**
