@@ -1,16 +1,17 @@
 import { useState, useEffect } from "react";
 import { 
-  Card, CardContent, CardHeader, CardTitle, CardDescription 
+  Card, CardContent 
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { 
-  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger 
+  Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle
 } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { 
-  Plus, Edit, Trash2, Eye, Calendar, User, FileText, Youtube, Video, X, LayoutGrid, Image as ImageIcon, ArrowUpRight
+  Plus, Edit, Trash2, Calendar, User, FileText, Youtube, Video, X, LayoutGrid, ArrowUpRight, Clock, Tag
 } from "lucide-react";
 import { Blog, BlogSection, dbGetBlogs, dbSaveBlog, dbDeleteBlog } from "@/lib/db-service";
 import { format } from "date-fns";
@@ -18,14 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
 
 /**
- * Admin Blogs Management Tab
- * 
- * Interface for creating and editing blog posts.
- * Capabilities:
- * - CRUD operations for Blogs
- * - Dynamic Section Builder (Text, YouTube, Google Drive)
- * - Validation for required fields
- * - Real-time section reordering (future)
+ * Admin Blogs Management Tab - Magazine Edition
  */
 export function BlogsTab() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -39,13 +33,26 @@ export function BlogsTab() {
     title: string;
     date: string;
     author: string;
+    category: string;
+    readTime: string;
     sections: BlogSection[];
   }>({
     title: "",
     date: format(new Date(), "yyyy-MM-dd"),
-    author: "Disha Traders",
+    author: "Disha Editorial",
+    category: "Manufacturing",
+    readTime: "5 min read",
     sections: []
   });
+
+  const categories = [
+    "Manufacturing",
+    "Women Power",
+    "Sustainability",
+    "Product Stories",
+    "Factory Life",
+    "Videos"
+  ];
 
   const fetchBlogs = async () => {
     setLoading(true);
@@ -70,6 +77,8 @@ export function BlogsTab() {
         title: blog.title,
         date: blog.date,
         author: blog.author,
+        category: blog.category || "Manufacturing",
+        readTime: blog.readTime || "5 min read",
         sections: [...blog.sections]
       });
     } else {
@@ -77,8 +86,10 @@ export function BlogsTab() {
       setFormData({
         title: "",
         date: format(new Date(), "yyyy-MM-dd"),
-        author: "Disha Traders",
-        sections: [{ type: "text", content: "" }] // Default one text section
+        author: "Disha Editorial",
+        category: "Manufacturing",
+        readTime: "5 min read",
+        sections: [{ type: "text", content: "" }]
       });
     }
     setIsDialogOpen(true);
@@ -109,15 +120,11 @@ export function BlogsTab() {
 
   const handleYoutubeUrlChange = (index: number, url: string) => {
     let videoId = url;
-    // Extract ID from various YouTube URL formats
-    // Support: youtube.com/watch?v=ID, youtu.be/ID, youtube.com/embed/ID
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match = url.match(regExp);
     if (match && match[2].length === 11) {
       videoId = match[2];
     }
-    
-    // Update the state with the extracted ID (or the original text if match failed)
     handleSectionChange(index, 'videoId', videoId);
   };
 
@@ -127,7 +134,6 @@ export function BlogsTab() {
       return;
     }
     
-    // Validate sections
     const hasEmptySections = formData.sections.some(s => {
        if (s.type === 'text') return !s.content;
        if (s.type === 'youtube') return !s.videoId;
@@ -136,28 +142,28 @@ export function BlogsTab() {
     });
 
     if (hasEmptySections) {
-       toast({ title: "Warning", description: "Some sections have empty content. Please fill them out.", variant: "destructive" });
+       toast({ title: "Warning", description: "Some sections have empty content.", variant: "destructive" });
        return;
     }
 
     try {
       await dbSaveBlog(formData, editingId || undefined);
-      toast({ title: "Success", description: `Blog ${editingId ? 'updated' : 'created'} successfully` });
+      toast({ title: "Success", description: `Story ${editingId ? 'updated' : 'published'} successfully` });
       setIsDialogOpen(false);
       fetchBlogs();
     } catch (e) {
-      toast({ title: "Error", description: "Failed to save blog", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to save story", variant: "destructive" });
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this blog?")) {
+    if (confirm("Are you sure you want to delete this story?")) {
       try {
         await dbDeleteBlog(id);
-        toast({ title: "Success", description: "Blog deleted" });
+        toast({ title: "Success", description: "Story deleted" });
         fetchBlogs();
       } catch (e) {
-        toast({ title: "Error", description: "Failed to delete blog", variant: "destructive" });
+        toast({ title: "Error", description: "Failed to delete story", variant: "destructive" });
       }
     }
   };
@@ -166,11 +172,11 @@ export function BlogsTab() {
     <div className="space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-gray-100 pb-6">
         <div>
-          <h2 className="text-3xl font-bold text-[#002147] tracking-tight">Magazine Management</h2>
-          <p className="text-muted-foreground mt-1">Curate your stories, articles, and video content</p>
+          <h2 className="text-3xl font-heading font-bold text-[#002147] tracking-tight">Magazine Management</h2>
+          <p className="text-muted-foreground mt-1 font-sans">Curate stories for the Disha Journal</p>
         </div>
-        <Button onClick={() => handleOpenDialog()} className="bg-[#00A896] hover:bg-[#008C7D] shadow-lg hover:shadow-[#00A896]/20 transition-all rounded-full px-6">
-          <Plus size={18} className="mr-2" /> Create New Story
+        <Button onClick={() => handleOpenDialog()} className="bg-[#00A896] hover:bg-[#008C7D] shadow-lg hover:shadow-[#00A896]/20 transition-all rounded-full px-6 font-heading font-bold tracking-wide">
+          <Plus size={18} className="mr-2" /> Publish New Story
         </Button>
       </div>
 
@@ -192,9 +198,9 @@ export function BlogsTab() {
            <div className="mx-auto bg-white p-6 rounded-full w-24 h-24 flex items-center justify-center mb-6 shadow-sm">
                <LayoutGrid className="text-slate-300" size={40} />
            </div>
-           <h3 className="text-2xl font-semibold text-[#002147] mb-2">No stories yet</h3>
-           <p className="text-slate-500 max-w-md mx-auto mb-8">Your digital magazine is waiting for its first story. Create a blog post to engage your audience.</p>
-           <Button onClick={() => handleOpenDialog()} variant="outline" className="border-[#00A896] text-[#00A896] hover:bg-[#00A896]/5">
+           <h3 className="text-2xl font-heading font-bold text-[#002147] mb-2">No stories yet</h3>
+           <p className="text-slate-500 max-w-md mx-auto mb-8 font-sans">Your digital magazine is waiting for its first story.</p>
+           <Button onClick={() => handleOpenDialog()} variant="outline" className="border-[#00A896] text-[#00A896] hover:bg-[#00A896]/5 font-heading font-bold">
              Create First Post
            </Button>
         </div>
@@ -204,7 +210,6 @@ export function BlogsTab() {
             <Card key={blog.id} className="group hover:translate-y-[-5px] transition-all duration-300 border-none shadow-md hover:shadow-xl overflow-hidden flex flex-col h-full bg-white rounded-2xl">
                {/* Cover Image Area */}
                <div className="h-52 bg-slate-100 relative overflow-hidden">
-                  {/* Logic: If has youtube, show thumbnail. Else generic pattern */}
                   {blog.sections.find(s => s.type === 'youtube' && s.videoId) ? (
                     <div className="relative w-full h-full">
                        <img 
@@ -220,13 +225,13 @@ export function BlogsTab() {
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-[#002147] to-[#004e8a] flex items-center justify-center relative overflow-hidden">
                         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_1px_1px,#fff_1px,transparent_0)] bg-[length:20px_20px]" />
-                        <FileText className="text-white/20 transform group-hover:scale-110 transition-transform duration-500" size={64} />
+                        <span className="text-white/20 font-heading text-6xl transform group-hover:scale-110 transition-transform duration-500">Dh</span>
                     </div>
                   )}
                   
                   {/* Hover Actions Overlay */}
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
-                      <Button size="icon" className="h-10 w-10 rounded-full bg-white text-gray-800 hover:bg-gray-100 shadow-lg hover:scale-110 transition-all" onClick={() => handleOpenDialog(blog)} title="Edit">
+                  <div className="absolute inset-0 bg-[#002147]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-3 backdrop-blur-[2px]">
+                      <Button size="icon" className="h-10 w-10 rounded-full bg-white text-[#002147] hover:bg-white/90 shadow-lg hover:scale-110 transition-all" onClick={() => handleOpenDialog(blog)} title="Edit">
                           <Edit size={16} />
                       </Button>
                       <Button size="icon" className="h-10 w-10 rounded-full bg-red-500 text-white hover:bg-red-600 shadow-lg hover:scale-110 transition-all" onClick={() => handleDelete(blog.id)} title="Delete">
@@ -236,36 +241,36 @@ export function BlogsTab() {
                </div>
                
               <CardContent className="p-6 flex-1 flex flex-col">
-                <div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-wider text-[#00A896] mb-3">
+                <div className="flex items-center gap-3 text-xs font-bold uppercase tracking-wider text-[#00A896] mb-3">
                   <span className="bg-[#00A896]/10 px-2 py-1 rounded-full">
-                     {blog.sections.some(s => s.type === 'youtube') ? 'Video Story' : 'Article'}
+                     {blog.category || "Article"}
                   </span>
-                  <span className="text-gray-400 flex items-center">
+                  <span className="text-gray-400 flex items-center font-sans">
                     <Calendar size={12} className="mr-1" />
-                    {blog.date ? format(new Date(blog.date), "MMM d, yyyy") : "Draft"}
+                    {blog.date ? format(new Date(blog.date), "MMM d") : "Draft"}
                   </span>
                 </div>
                 
-                <h3 className="text-xl font-bold text-[#002147] mb-3 line-clamp-2 leading-tight group-hover:text-[#00A896] transition-colors">
+                <h3 className="text-xl font-heading font-bold text-[#002147] mb-3 line-clamp-2 leading-tight group-hover:text-[#00A896] transition-colors">
                   {blog.title}
                 </h3>
                 
-                <div className="text-sm text-slate-500 mb-6 line-clamp-3 flex-1 leading-relaxed">
+                <div className="text-sm text-slate-500 mb-6 line-clamp-3 flex-1 leading-relaxed font-sans">
                    {blog.sections.find(s => s.type === 'text')?.content || "No text preview available..."}
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-100 mt-auto">
                     <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00A896] to-[#002147] flex items-center justify-center text-xs font-bold text-white shadow-sm">
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#00A896] to-[#002147] flex items-center justify-center text-xs font-bold text-white shadow-sm font-heading">
                             {blog.author.charAt(0)}
                         </div>
                         <div className="flex flex-col">
-                           <span className="text-xs font-bold text-[#002147]">{blog.author}</span>
-                           <span className="text-[10px] text-gray-400">Editor</span>
+                           <span className="text-xs font-bold text-[#002147] font-heading">{blog.author}</span>
+                           <span className="text-[10px] text-gray-400 font-sans uppercase tracking-wider">Editor</span>
                         </div>
                     </div>
-                     <a href={`/blogs/${blog.id}`} target="_blank" rel="noreferrer" className="text-xs font-bold text-[#00A896] hover:text-[#002147] flex items-center group/link transition-colors">
-                        READ FULL STORY <ArrowUpRight size={12} className="ml-1 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
+                     <a href={`/blogs/${blog.id}`} target="_blank" rel="noreferrer" className="text-xs font-bold text-[#00A896] hover:text-[#002147] flex items-center group/link transition-colors font-heading uppercase tracking-wide">
+                        View Story <ArrowUpRight size={12} className="ml-1 group-hover/link:translate-x-1 group-hover/link:-translate-y-1 transition-transform" />
                      </a>
                 </div>
               </CardContent>
@@ -279,16 +284,16 @@ export function BlogsTab() {
           <DialogHeader className="p-6 pb-2 bg-white border-b sticky top-0 z-10 shadow-sm">
             <div className="flex items-center justify-between">
                 <div>
-                    <DialogTitle className="text-2xl font-bold text-[#002147]">
+                    <DialogTitle className="text-2xl font-heading font-bold text-[#002147]">
                         {editingId ? "Edit Story" : "New Story"}
                     </DialogTitle>
-                    <DialogDescription className="text-gray-500 mt-1">
-                        Craft your blog post using the magazine editor below
+                    <DialogDescription className="text-gray-500 mt-1 font-sans">
+                        Craft your blog post for the Disha Magazine
                     </DialogDescription>
                 </div>
                 <div className="flex gap-2">
-                     <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="rounded-full">Cancel</Button>
-                     <Button onClick={handleSave} className="bg-[#002147] hover:bg-[#003366] rounded-full px-6 shadow-md">
+                     <Button variant="outline" onClick={() => setIsDialogOpen(false)} className="rounded-full font-heading font-bold text-xs uppercase tracking-wide">Cancel</Button>
+                     <Button onClick={handleSave} className="bg-[#002147] hover:bg-[#003366] rounded-full px-6 shadow-md font-heading font-bold text-xs uppercase tracking-wide">
                         {editingId ? 'Update Story' : 'Publish Story'}
                      </Button>
                 </div>
@@ -298,38 +303,66 @@ export function BlogsTab() {
           <div className="p-8 space-y-8 max-w-3xl mx-auto w-full">
             {/* Metadata Section */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-                <div className="flex items-center gap-2 text-sm font-semibold text-[#00A896] uppercase tracking-wider mb-2">
+                <div className="flex items-center gap-2 text-sm font-bold text-[#00A896] uppercase tracking-wider mb-2 font-heading">
                     <LayoutGrid size={16} /> Story Metadata
                 </div>
                 
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div className="space-y-2">
-                    <Label className="text-base font-medium text-gray-700">Headline</Label>
+                    <Label className="text-base font-bold text-[#002147] font-heading">Headline</Label>
                     <Input 
                       value={formData.title} 
                       onChange={(e) => setFormData({...formData, title: e.target.value})}
                       placeholder="Enter an engaging headline..." 
-                      className="text-lg font-medium p-6 h-auto bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl"
+                      className="text-lg font-heading font-bold p-6 h-auto bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl placeholder:font-sans placeholder:font-normal"
                     />
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label className="text-sm font-medium text-gray-700">Publish Date</Label>
-                        <Input 
-                          type="date" 
-                          value={formData.date} 
-                          onChange={(e) => setFormData({...formData, date: e.target.value})} 
-                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12"
-                        />
+                        <Label className="text-sm font-bold text-[#002147] font-heading">Category</Label>
+                        <Select 
+                          value={formData.category} 
+                          onValueChange={(val) => setFormData({...formData, category: val})}
+                        >
+                          <SelectTrigger className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12 font-sans">
+                            <SelectValue placeholder="Select Category" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {categories.map((cat) => (
+                              <SelectItem key={cat} value={cat} className="font-sans">{cat}</SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
+
                       <div className="space-y-2">
-                        <Label className="text-sm font-medium text-gray-700">Author Name</Label>
+                        <Label className="text-sm font-bold text-[#002147] font-heading">Author Name</Label>
                         <Input 
                           value={formData.author} 
                           onChange={(e) => setFormData({...formData, author: e.target.value})}
                           placeholder="e.g. Editorial Team" 
-                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12"
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12 font-sans"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-[#002147] font-heading">Publish Date</Label>
+                        <Input 
+                          type="date" 
+                          value={formData.date} 
+                          onChange={(e) => setFormData({...formData, date: e.target.value})} 
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12 font-sans"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label className="text-sm font-bold text-[#002147] font-heading">Read Time</Label>
+                        <Input 
+                          value={formData.readTime} 
+                          onChange={(e) => setFormData({...formData, readTime: e.target.value})}
+                          placeholder="e.g. 5 min read" 
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12 font-sans"
                         />
                       </div>
                   </div>
@@ -339,7 +372,7 @@ export function BlogsTab() {
             {/* Content Builder */}
             <div className="space-y-4">
                <div className="flex justify-between items-center sticky top-[80px] z-20 bg-white/80 backdrop-blur-md py-4 px-6 rounded-2xl border border-white/20 shadow-lg">
-                 <Label className="text-lg font-bold text-[#002147] flex items-center gap-2">
+                 <Label className="text-lg font-bold text-[#002147] flex items-center gap-2 font-heading">
                     <FileText className="text-[#00A896]" size={20} />
                     Story Content
                  </Label>
@@ -348,7 +381,7 @@ export function BlogsTab() {
                      size="sm" 
                      variant="ghost" 
                      onClick={() => handleAddSection('text')} 
-                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-[#002147]"
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-[#002147] font-heading font-bold text-xs uppercase"
                    >
                      <Plus size={14} className="mr-1.5" /> Text
                    </Button>
@@ -356,7 +389,7 @@ export function BlogsTab() {
                      size="sm" 
                      variant="ghost" 
                      onClick={() => handleAddSection('youtube')} 
-                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-red-600"
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-red-600 font-heading font-bold text-xs uppercase"
                    >
                      <Plus size={14} className="mr-1.5" /> YouTube
                    </Button>
@@ -364,7 +397,7 @@ export function BlogsTab() {
                      size="sm" 
                      variant="ghost" 
                      onClick={() => handleAddSection('gdrive')} 
-                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-blue-600"
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-blue-600 font-heading font-bold text-xs uppercase"
                    >
                      <Plus size={14} className="mr-1.5" /> Drive
                    </Button>
@@ -376,8 +409,8 @@ export function BlogsTab() {
                    <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400 group-hover:scale-110 group-hover:bg-[#00A896]/10 group-hover:text-[#00A896] transition-all">
                       <Plus size={32} />
                    </div>
-                   <h3 className="text-gray-900 font-semibold text-lg mb-1">Start Writing</h3>
-                   <p className="text-gray-500">Click to add your first content block</p>
+                   <h3 className="text-[#002147] font-heading font-bold text-lg mb-1">Start Writing</h3>
+                   <p className="text-gray-500 font-sans">Click to add your first content block</p>
                  </div>
                )}
 
@@ -404,21 +437,21 @@ export function BlogsTab() {
                      <CardContent className="p-6 pl-8">
                        {section.type === 'text' && (
                          <div className="space-y-3">
-                           <Label className="flex items-center gap-2 text-[#002147]/60 uppercase text-xs font-bold tracking-wider mb-2">
+                           <Label className="flex items-center gap-2 text-[#002147]/60 uppercase text-xs font-bold tracking-wider mb-2 font-heading">
                                 <FileText size={14}/> Text Block
                            </Label>
                            <Textarea 
                              value={section.content}
                              onChange={(e) => handleSectionChange(index, 'content', e.target.value)}
                              placeholder="Write your story content here..."
-                             className="min-h-[150px] text-base leading-relaxed border-gray-200 focus:border-[#002147] focus:ring-1 focus:ring-[#002147]/20 rounded-xl resize-y bg-transparent"
+                             className="min-h-[150px] text-base leading-relaxed border-gray-200 focus:border-[#002147] focus:ring-1 focus:ring-[#002147]/20 rounded-xl resize-y bg-transparent font-serif"
                            />
                          </div>
                        )}
 
                        {section.type === 'youtube' && (
                          <div className="space-y-4">
-                           <Label className="flex items-center gap-2 text-red-500 uppercase text-xs font-bold tracking-wider mb-2">
+                           <Label className="flex items-center gap-2 text-red-500 uppercase text-xs font-bold tracking-wider mb-2 font-heading">
                                 <Youtube size={14}/> YouTube Video
                            </Label>
                            <div className="flex flex-col sm:flex-row gap-6 items-start">
@@ -429,7 +462,7 @@ export function BlogsTab() {
                                      placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=...)"
                                      className="font-mono text-sm bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-red-500/10 focus:border-red-500 rounded-xl h-11"
                                    />
-                                   <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1">
+                                   <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1 font-sans">
                                      <div className="w-1 h-1 rounded-full bg-red-500" /> Supports full URLs or Video IDs
                                    </p>
                                </div>
@@ -448,7 +481,7 @@ export function BlogsTab() {
 
                        {section.type === 'gdrive' && (
                          <div className="space-y-3">
-                           <Label className="flex items-center gap-2 text-blue-500 uppercase text-xs font-bold tracking-wider mb-2">
+                           <Label className="flex items-center gap-2 text-blue-500 uppercase text-xs font-bold tracking-wider mb-2 font-heading">
                                 <Video size={14}/> Google Drive Video
                            </Label>
                            <Input 
@@ -457,7 +490,7 @@ export function BlogsTab() {
                              placeholder="https://drive.google.com/file/d/.../preview"
                              className="font-mono text-sm bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 rounded-xl h-11"
                            />
-                           <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1">
+                           <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1 font-sans">
                              <div className="w-1 h-1 rounded-full bg-blue-500" /> Use the <b>preview</b> link from Google Drive
                            </p>
                          </div>
