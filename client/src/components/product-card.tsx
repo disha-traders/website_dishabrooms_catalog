@@ -53,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
 
         {/* Quick Overlay on Hover */}
-        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center flex-col gap-2">
            <a 
             href={whatsappLink}
             target="_blank"
@@ -62,6 +62,16 @@ export function ProductCard({ product }: ProductCardProps) {
           >
              <MessageCircle size={16} /> Quick Enquiry
            </a>
+           {config.social.shopOnlineLink && (
+             <a 
+              href={config.social.shopOnlineLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75 bg-[#CD7F32] text-white px-6 py-2 rounded-full font-bold text-sm flex items-center gap-2 shadow-lg hover:bg-[#B06A26]"
+            >
+               <ArrowUpRight size={16} /> Shop Online
+             </a>
+           )}
         </div>
       </div>
 
@@ -86,16 +96,28 @@ export function ProductCard({ product }: ProductCardProps) {
           {product.description}
         </p>
         
-        <div className="pt-4 border-t border-gray-50 mt-auto">
+        <div className="pt-4 border-t border-gray-50 mt-auto flex flex-col gap-2">
            <a 
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-between text-sm font-bold text-brand-cetacean group-hover:text-brand-teal transition-colors"
+            className="flex items-center justify-between text-sm font-bold text-brand-cetacean group-hover:text-brand-teal transition-colors w-full"
           >
             <span>Enquire Now</span>
-            <ArrowUpRight size={18} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            <MessageCircle size={18} className="transform group-hover:scale-110 transition-transform" />
           </a>
+          
+          {config.social.shopOnlineLink && (
+            <a 
+              href={config.social.shopOnlineLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between text-sm font-bold text-[#CD7F32] group-hover:text-[#B06A26] transition-colors w-full"
+            >
+              <span>Shop Online</span>
+              <ArrowUpRight size={18} className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            </a>
+          )}
         </div>
       </div>
     </div>
