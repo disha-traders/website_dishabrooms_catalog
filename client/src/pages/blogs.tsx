@@ -162,19 +162,6 @@ export default function Blogs() {
                 {/* RIGHT: SIDEBAR */}
                 <aside className="lg:col-span-4 space-y-12 h-fit lg:sticky lg:top-24">
                   
-                  {/* Popular Articles */}
-                  <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                    <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-100">
-                       <TrendingUp size={18} className="text-[#00A896]" />
-                       <h3 className="font-bold text-[#002147] uppercase tracking-wider text-sm">Popular Reads</h3>
-                    </div>
-                    <div className="space-y-6">
-                      {popularBlogs.map(blog => (
-                        <BlogCard key={`sidebar-${blog.id}`} blog={blog} variant="sidebar" />
-                      ))}
-                    </div>
-                  </div>
-
                   {/* Shop CTA */}
                   <div className="bg-[#00A896] p-8 rounded-xl text-center relative overflow-hidden group">
                      <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
