@@ -50,8 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {config.social.shopOnlineLink && (
               <Button 
                 asChild 
-                variant="outline"
-                className="border-2 border-[#CD7F32] text-[#CD7F32] bg-transparent hover:bg-[#CD7F32] hover:text-white rounded-full px-6 gap-2 transition-all hover:scale-105"
+                className="bg-[#CD7F32] hover:bg-[#B06A26] text-white rounded-full px-6 gap-2 border-2 border-[#CD7F32] transition-all hover:scale-105 shadow-md"
               >
                 <a href={config.social.shopOnlineLink} target="_blank" rel="noopener noreferrer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
