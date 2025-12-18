@@ -5,6 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, Mail, MapPin, MessageCircle, Settings } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Global Layout Component
+ * 
+ * Handles the main site structure including:
+ * - Responsive Header with "Shop Online" and "Enquire Now" buttons
+ * - Mobile Navigation Drawer
+ * - Footer with social links and contact info
+ * - Shop Online button visibility is controlled via Admin Settings
+ * - Uses 'btn-shop-custom' and 'btn-whatsapp-custom' for consistent branding
+ */
 export function Layout({ children }: { children: React.ReactNode }) {
   const config = useConfig();
   const [location] = useLocation();

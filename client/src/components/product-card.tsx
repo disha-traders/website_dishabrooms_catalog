@@ -5,6 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { MessageCircle, ArrowUpRight, ShieldCheck } from "lucide-react";
 import { useState } from "react";
 
+/**
+ * Product Card Component
+ * 
+ * Displays individual product details in the catalog grid.
+ * Features:
+ * - Dual CTA: "Shop Online" (Secondary) and "Enquire Now" (Primary)
+ * - WhatsApp integration for direct inquiries with pre-filled message
+ * - Shop Online link is dynamic based on Admin Config
+ * - Responsive layout: Side-by-side buttons on all screens
+ */
 interface ProductCardProps {
   product: Product;
 }

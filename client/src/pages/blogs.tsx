@@ -4,6 +4,15 @@ import { Blog, dbGetBlogs } from "@/lib/db-service";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
+/**
+ * Public Blogs Listing Page
+ * 
+ * Displays a grid of all published blog posts and videos.
+ * Features:
+ * - Fetches blogs from Firebase/LocalStorage
+ * - Loading skeleton state
+ * - Responsive grid layout
+ */
 export default function Blogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);

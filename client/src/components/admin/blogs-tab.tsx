@@ -19,6 +19,16 @@ import { Blog, BlogSection, dbGetBlogs, dbSaveBlog, dbDeleteBlog } from "@/lib/d
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 
+/**
+ * Admin Blogs Management Tab
+ * 
+ * Interface for creating and editing blog posts.
+ * Capabilities:
+ * - CRUD operations for Blogs
+ * - Dynamic Section Builder (Text, YouTube, Google Drive)
+ * - Validation for required fields
+ * - Real-time section reordering (future)
+ */
 export function BlogsTab() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState(true);

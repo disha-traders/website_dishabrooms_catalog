@@ -153,7 +153,18 @@
 - Product details with pricing and specifications
 - Add products to favorites (client-side)
 
-### 2. **PDF Catalog Generation**
+### 2. **Shop Online Integration (NEW)**
+- **Dual CTA System**: "Enquire Now" for bulk/B2B and "Shop Online" for retail.
+- **Header Integration**: Prominent gradient button in navigation.
+- **Product Cards**: Direct retail purchase link on every product.
+- **Configurable**: Shop URL managed via Admin Panel.
+
+### 3. **Blogs & Media System (NEW)**
+- **Content Management**: Create rich articles with text, YouTube videos, and Drive embeds.
+- **Public Blog**: Responsive grid layout for browsing latest updates.
+- **Admin Controls**: Full CRUD capabilities for blog posts.
+
+### 4. **PDF Catalog Generation**
 - Download professional catalogs
 - Auto-organized by category
 - 6 products per page in 2x3 grid

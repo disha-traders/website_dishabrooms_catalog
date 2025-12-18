@@ -13,6 +13,16 @@ import { Button } from "@/components/ui/button";
 import { Lock, ArrowLeft, ShieldCheck } from "lucide-react";
 import { db } from "@/lib/firebase";
 
+/**
+ * Admin Dashboard Page
+ * 
+ * Protected route for site management.
+ * Features:
+ * - Secure Login (Password protected via env vars)
+ * - Tabs: Products, Categories, Blogs, Settings
+ * - Firebase Integration status check
+ * - Persistent login session via LocalStorage
+ */
 export default function Admin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");

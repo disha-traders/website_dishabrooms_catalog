@@ -8,6 +8,15 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
+/**
+ * Single Blog Post Page
+ * 
+ * Renders full blog content based on ID.
+ * Features:
+ * - Dynamic rendering of Text, YouTube, and Google Drive sections
+ * - Share functionality
+ * - Rich header with metadata
+ */
 export default function BlogPost() {
   const [, params] = useRoute("/blogs/:id");
   const [blog, setBlog] = useState<Blog | null>(null);

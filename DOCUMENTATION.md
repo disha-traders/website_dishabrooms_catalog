@@ -32,6 +32,8 @@ Disha Traders Website is a **B2B E-Commerce Catalog Platform** for cleaning prod
 | Feature | Description | Status |
 |---------|-------------|--------|
 | Product Catalog | Browse & filter 100+ products | ✅ Live |
+| Shop Online | Retail purchase link integration | ✅ Live |
+| Blog System | CMS for articles & videos | ✅ Live |
 | PDF Generation | Download catalogs | ✅ Live |
 | Admin Dashboard | Manage products & categories | ✅ Live |
 | Contact Forms | WhatsApp & Email inquiries | ✅ Live |
