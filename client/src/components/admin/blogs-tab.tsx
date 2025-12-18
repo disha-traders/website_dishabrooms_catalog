@@ -13,7 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { 
   Plus, Edit, Trash2, Calendar, User, FileText, Youtube, Video, X, LayoutGrid, ArrowUpRight, Clock, Tag
 } from "lucide-react";
-import { Blog, BlogSection, dbGetBlogs, dbSaveBlog, dbDeleteBlog } from "@/lib/db-service";
+import { Blog, BlogSection, dbGetBlogs, dbSaveBlog, dbDeleteBlog, BLOG_CATEGORIES } from "@/lib/db-service";
 import { format } from "date-fns";
 import { useToast } from "@/hooks/use-toast";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -45,14 +45,7 @@ export function BlogsTab() {
     sections: []
   });
 
-  const categories = [
-    "Manufacturing",
-    "Women Power",
-    "Sustainability",
-    "Product Stories",
-    "Factory Life",
-    "Videos"
-  ];
+  const categories = BLOG_CATEGORIES;
 
   const fetchBlogs = async () => {
     setLoading(true);

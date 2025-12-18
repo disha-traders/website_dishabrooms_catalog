@@ -8,6 +8,15 @@ const LS_CATEGORIES = "disha_categories";
 const LS_BLOGS = "disha_blogs";
 
 // Types
+export const BLOG_CATEGORIES = [
+  "Manufacturing",
+  "Women Power",
+  "Sustainability",
+  "Product Stories",
+  "Factory Life",
+  "Videos"
+];
+
 export interface Category {
   id: string;
   name: string;

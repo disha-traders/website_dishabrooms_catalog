@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout";
 import { BlogCard } from "@/components/blog-card";
-import { Blog, dbGetBlogs } from "@/lib/db-service";
+import { Blog, dbGetBlogs, BLOG_CATEGORIES } from "@/lib/db-service";
 import { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LayoutGrid, ShoppingCart, MessageCircle, PlayCircle, TrendingUp } from "lucide-react";
@@ -15,15 +15,7 @@ export default function Blogs() {
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("All");
 
-  const categories = [
-    "All",
-    "Manufacturing",
-    "Women Power",
-    "Sustainability",
-    "Product Stories",
-    "Factory Life",
-    "Videos"
-  ];
+  const categories = ["All", ...BLOG_CATEGORIES];
 
   useEffect(() => {
     async function loadBlogs() {
