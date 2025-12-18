@@ -304,32 +304,32 @@ export function BlogsTab() {
                 
                 <div className="space-y-4">
                   <div className="space-y-2">
-                    <Label className="text-base">Headline</Label>
+                    <Label className="text-base font-medium text-gray-700">Headline</Label>
                     <Input 
                       value={formData.title} 
                       onChange={(e) => setFormData({...formData, title: e.target.value})}
                       placeholder="Enter an engaging headline..." 
-                      className="text-lg font-medium p-6 bg-gray-50 border-gray-200 focus:bg-white transition-colors"
+                      className="text-lg font-medium p-6 h-auto bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl"
                     />
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-2">
-                        <Label>Publish Date</Label>
+                        <Label className="text-sm font-medium text-gray-700">Publish Date</Label>
                         <Input 
                           type="date" 
                           value={formData.date} 
                           onChange={(e) => setFormData({...formData, date: e.target.value})} 
-                          className="bg-gray-50 border-gray-200"
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label>Author Name</Label>
+                        <Label className="text-sm font-medium text-gray-700">Author Name</Label>
                         <Input 
                           value={formData.author} 
                           onChange={(e) => setFormData({...formData, author: e.target.value})}
                           placeholder="e.g. Editorial Team" 
-                          className="bg-gray-50 border-gray-200"
+                          className="bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-[#002147]/10 focus:border-[#002147] transition-all rounded-xl h-12"
                         />
                       </div>
                   </div>
@@ -338,87 +338,106 @@ export function BlogsTab() {
 
             {/* Content Builder */}
             <div className="space-y-4">
-               <div className="flex justify-between items-center sticky top-[88px] z-10 bg-gray-50/95 backdrop-blur py-4 -mx-2 px-2">
+               <div className="flex justify-between items-center sticky top-[80px] z-20 bg-white/80 backdrop-blur-md py-4 px-6 rounded-2xl border border-white/20 shadow-lg">
                  <Label className="text-lg font-bold text-[#002147] flex items-center gap-2">
                     <FileText className="text-[#00A896]" size={20} />
                     Story Content
                  </Label>
-                 <div className="flex gap-2 bg-white p-1 rounded-full shadow-sm border">
-                   <Button size="sm" variant="ghost" onClick={() => handleAddSection('text')} className="rounded-full hover:bg-slate-100">
-                     <Plus size={14} className="mr-1" /> Text Block
+                 <div className="flex gap-1 bg-gray-100 p-1.5 rounded-full shadow-inner">
+                   <Button 
+                     size="sm" 
+                     variant="ghost" 
+                     onClick={() => handleAddSection('text')} 
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-[#002147]"
+                   >
+                     <Plus size={14} className="mr-1.5" /> Text
                    </Button>
-                   <div className="w-px bg-gray-200 py-1 mx-1"></div>
-                   <Button size="sm" variant="ghost" onClick={() => handleAddSection('youtube')} className="rounded-full text-red-600 hover:bg-red-50">
-                     <Plus size={14} className="mr-1" /> YouTube
+                   <Button 
+                     size="sm" 
+                     variant="ghost" 
+                     onClick={() => handleAddSection('youtube')} 
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-red-600"
+                   >
+                     <Plus size={14} className="mr-1.5" /> YouTube
                    </Button>
-                   <Button size="sm" variant="ghost" onClick={() => handleAddSection('gdrive')} className="rounded-full text-blue-600 hover:bg-blue-50">
-                     <Plus size={14} className="mr-1" /> Drive Video
+                   <Button 
+                     size="sm" 
+                     variant="ghost" 
+                     onClick={() => handleAddSection('gdrive')} 
+                     className="rounded-full hover:bg-white hover:shadow-sm transition-all px-4 text-gray-600 hover:text-blue-600"
+                   >
+                     <Plus size={14} className="mr-1.5" /> Drive
                    </Button>
                  </div>
                </div>
 
                {formData.sections.length === 0 && (
-                 <div className="text-center py-16 bg-white rounded-2xl border-2 border-dashed border-gray-200 hover:border-[#00A896] transition-colors cursor-pointer" onClick={() => handleAddSection('text')}>
-                   <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400">
-                      <Plus size={24} />
+                 <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200 hover:border-[#00A896] hover:bg-gray-50/50 transition-all cursor-pointer group" onClick={() => handleAddSection('text')}>
+                   <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4 text-gray-400 group-hover:scale-110 group-hover:bg-[#00A896]/10 group-hover:text-[#00A896] transition-all">
+                      <Plus size={32} />
                    </div>
-                   <p className="text-gray-500 font-medium">Click to add your first content block</p>
+                   <h3 className="text-gray-900 font-semibold text-lg mb-1">Start Writing</h3>
+                   <p className="text-gray-500">Click to add your first content block</p>
                  </div>
                )}
 
                <div className="space-y-6">
                  {formData.sections.map((section, index) => (
-                   <Card key={index} className="relative border border-gray-200 shadow-sm overflow-hidden group">
-                     <div className="absolute top-0 left-0 w-1 h-full bg-[#002147] opacity-0 group-hover:opacity-100 transition-opacity" />
+                   <Card key={index} className="relative border border-gray-200 shadow-sm overflow-hidden group hover:shadow-md transition-all rounded-2xl bg-white">
+                     <div className={`absolute top-0 left-0 w-1.5 h-full transition-colors ${
+                        section.type === 'youtube' ? 'bg-red-500' : 
+                        section.type === 'gdrive' ? 'bg-blue-500' : 
+                        'bg-[#002147]'
+                     }`} />
                      
-                     <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10 bg-white/80 backdrop-blur rounded-lg p-1 shadow-sm">
+                     <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-all z-10">
                         <Button 
-                            variant="ghost" 
+                            variant="secondary" 
                             size="icon" 
-                            className="h-7 w-7 text-gray-400 hover:text-red-500"
+                            className="h-8 w-8 rounded-full shadow-sm bg-white hover:bg-red-50 text-gray-400 hover:text-red-500 border border-gray-100"
                             onClick={() => handleRemoveSection(index)}
                         >
                             <X size={14} />
                         </Button>
                      </div>
 
-                     <CardContent className="p-6">
+                     <CardContent className="p-6 pl-8">
                        {section.type === 'text' && (
                          <div className="space-y-3">
-                           <Label className="flex items-center gap-2 text-gray-500 uppercase text-xs font-bold tracking-wider">
+                           <Label className="flex items-center gap-2 text-[#002147]/60 uppercase text-xs font-bold tracking-wider mb-2">
                                 <FileText size={14}/> Text Block
                            </Label>
                            <Textarea 
                              value={section.content}
                              onChange={(e) => handleSectionChange(index, 'content', e.target.value)}
                              placeholder="Write your story content here..."
-                             className="min-h-[150px] text-base leading-relaxed border-gray-200 focus:border-[#002147] resize-y"
+                             className="min-h-[150px] text-base leading-relaxed border-gray-200 focus:border-[#002147] focus:ring-1 focus:ring-[#002147]/20 rounded-xl resize-y bg-transparent"
                            />
                          </div>
                        )}
 
                        {section.type === 'youtube' && (
-                         <div className="space-y-3">
-                           <Label className="flex items-center gap-2 text-red-500 uppercase text-xs font-bold tracking-wider">
+                         <div className="space-y-4">
+                           <Label className="flex items-center gap-2 text-red-500 uppercase text-xs font-bold tracking-wider mb-2">
                                 <Youtube size={14}/> YouTube Video
                            </Label>
-                           <div className="flex gap-4 items-start">
-                               <div className="flex-1 space-y-2">
+                           <div className="flex flex-col sm:flex-row gap-6 items-start">
+                               <div className="flex-1 space-y-3 w-full">
                                    <Input 
                                      value={section.videoId}
                                      onChange={(e) => handleYoutubeUrlChange(index, e.target.value)}
                                      placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=...)"
-                                     className="font-mono text-sm bg-gray-50 border-gray-200"
+                                     className="font-mono text-sm bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-red-500/10 focus:border-red-500 rounded-xl h-11"
                                    />
-                                   <p className="text-xs text-gray-500 flex items-center gap-1">
-                                     <Youtube size={10} /> Supports full URLs or Video IDs
+                                   <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1">
+                                     <div className="w-1 h-1 rounded-full bg-red-500" /> Supports full URLs or Video IDs
                                    </p>
                                </div>
                                {section.videoId && (
-                                   <div className="w-32 aspect-video bg-black rounded overflow-hidden shadow-sm shrink-0 hidden sm:block">
+                                   <div className="w-full sm:w-48 aspect-video bg-black rounded-xl overflow-hidden shadow-lg shrink-0 border border-gray-100 ring-2 ring-white">
                                         <img 
                                             src={`https://img.youtube.com/vi/${section.videoId}/mqdefault.jpg`} 
-                                            className="w-full h-full object-cover"
+                                            className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                                             onError={(e) => e.currentTarget.style.display = 'none'}
                                         />
                                    </div>
@@ -429,17 +448,17 @@ export function BlogsTab() {
 
                        {section.type === 'gdrive' && (
                          <div className="space-y-3">
-                           <Label className="flex items-center gap-2 text-blue-500 uppercase text-xs font-bold tracking-wider">
+                           <Label className="flex items-center gap-2 text-blue-500 uppercase text-xs font-bold tracking-wider mb-2">
                                 <Video size={14}/> Google Drive Video
                            </Label>
                            <Input 
                              value={section.embedUrl}
                              onChange={(e) => handleSectionChange(index, 'embedUrl', e.target.value)}
                              placeholder="https://drive.google.com/file/d/.../preview"
-                             className="font-mono text-sm bg-gray-50 border-gray-200"
+                             className="font-mono text-sm bg-gray-50 border-gray-200 focus:bg-white focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 rounded-xl h-11"
                            />
-                           <p className="text-xs text-gray-500">
-                             Use the <b>preview</b> link from Google Drive
+                           <p className="text-xs text-gray-500 flex items-center gap-1.5 px-1">
+                             <div className="w-1 h-1 rounded-full bg-blue-500" /> Use the <b>preview</b> link from Google Drive
                            </p>
                          </div>
                        )}
