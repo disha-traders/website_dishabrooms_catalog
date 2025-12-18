@@ -29,7 +29,7 @@
 ## 🚀 Live Demo
 
 - **Website**: [https://website-dishabrooms.vercel.app](https://website-dishabrooms.vercel.app)
-- **GitHub**: [https://github.com/disha-traders/website_dishabrooms.com](https://github.com/disha-traders/website_dishabrooms.com)
+- **GitHub**: [https://github.com/disha-traders/website_dishabrooms_catalog](https://github.com/disha-traders/website_dishabrooms_catalog)
 
 ---
 
