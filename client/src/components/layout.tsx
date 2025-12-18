@@ -50,7 +50,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {config.social.shopOnlineLink && (
               <Button 
                 asChild 
-                className="bg-gradient-to-r from-[#CD7F32] to-[#E69F50] hover:from-[#B06A26] hover:to-[#CD7F32] text-white rounded-full px-6 gap-2 border-none transition-all hover:scale-105 shadow-lg"
+                className="btn-shop-custom min-h-9 py-2 rounded-full px-6 gap-2 border-none transition-all"
               >
                 <a href={config.social.shopOnlineLink} target="_blank" rel="noopener noreferrer">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
@@ -60,7 +60,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             )}
             <Button 
               asChild 
-              className="btn-whatsapp-custom rounded-full px-6 gap-2 border-2 border-brand-green bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#128C7E] hover:to-[#075E54] border-none shadow-lg"
+              className="btn-whatsapp-custom min-h-9 py-2 rounded-full px-6 gap-2 border-none shadow-lg"
             >
               <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="w-4 h-4" />

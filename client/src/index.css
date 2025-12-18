@@ -145,6 +145,37 @@
     box-shadow: 0 2px 8px rgba(37, 211, 102, 0.35);
   }
 
+  .btn-shop-custom {
+    background: linear-gradient(135deg, #CD7F32 0%, #B06A26 100%);
+    color: #ffffff;
+    border-radius: 999px;
+    font-weight: 700;
+    padding: 0.875rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(205, 127, 50, 0.35), inset 0 1px 0 rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.1);
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-shop-custom:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(205, 127, 50, 0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+    filter: brightness(110%);
+  }
+  
+  .btn-shop-custom:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(205, 127, 50, 0.35);
+  }
+
   /* 5. Card Styling */
   .card-custom {
     background: #ffffff;
