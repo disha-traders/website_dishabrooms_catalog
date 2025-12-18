@@ -104,6 +104,14 @@ export default function Home() {
                     View Catalog
                   </Button>
                 </Link>
+                {config.social.shopOnlineLink && (
+                  <a href={config.social.shopOnlineLink} target="_blank" rel="noopener noreferrer" data-testid="link-shop-online">
+                    <Button className="h-14 px-8 rounded-full bg-[#CD7F32] hover:bg-[#B06A26] text-white font-bold text-lg shadow-[0_0_20px_rgba(205,127,50,0.3)] transition-all hover:scale-105" data-testid="button-shop-online">
+                      <Box className="w-5 h-5 mr-2" />
+                      Shop Online
+                    </Button>
+                  </a>
+                )}
                 <a href={config.social.whatsappLink} target="_blank" rel="noopener noreferrer" data-testid="link-whatsapp-inquiry">
                   <Button variant="outline" className="h-14 px-8 rounded-full border-white/20 text-white hover:bg-white/10 font-bold text-lg gap-2 backdrop-blur-sm">
                     <MessageCircle className="w-5 h-5" />

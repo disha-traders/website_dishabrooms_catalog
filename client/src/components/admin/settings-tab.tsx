@@ -339,6 +339,24 @@ export function SettingsTab() {
                 data-testid="input-aratai-link"
               />
             </div>
+            
+            {/* Shop Online Link */}
+            <div className="space-y-2">
+              <Label className="text-gray-600 font-medium text-sm flex items-center gap-2">
+                <div className="w-5 h-5 rounded bg-brand-gold text-white text-xs flex items-center justify-center font-bold">🛒</div>
+                Shop Online URL
+              </Label>
+              <Input 
+                value={localConfig.social?.shopOnlineLink || ""}
+                onChange={(e) => setLocalConfig({
+                  ...localConfig, 
+                  social: {...localConfig.social, shopOnlineLink: e.target.value}
+                })}
+                placeholder="https://mybillbook.in/store/dishabrooms"
+                className="bg-gray-50 border-gray-200 focus:bg-white transition-colors focus:border-[#00A896]"
+                data-testid="input-shop-online-link"
+              />
+            </div>
           </div>
         </div>
 

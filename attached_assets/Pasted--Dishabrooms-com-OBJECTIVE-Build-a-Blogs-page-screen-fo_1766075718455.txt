@@ -1,0 +1,201 @@
+
+
+*(Dishabrooms.com)*
+
+---
+
+## 🎯 OBJECTIVE
+
+Build a **“Blogs” page/screen** for **[www.dishabrooms.com/blogs](http://www.dishabrooms.com/blogs)** that supports:
+
+1. 🎥 Embedded **YouTube videos**
+2. 📁 Embedded **Google Drive videos**
+3. 📝 Rich **text paragraphs** (blog-style content)
+4. 📱 Fully **responsive** (mobile + desktop)
+5. 🚀 **Production-ready**, SEO-friendly, fast loading
+
+This is a **content-driven marketing page**, not an admin-heavy CMS.
+
+---
+
+## 🧱 TECH STACK (MANDATORY)
+
+* **Frontend:** React (or Next.js if preferred)
+* **Styling:** Tailwind CSS
+* **Routing:** `/blogs`
+* **Deployment:** Vercel-ready build
+* **Data Source:** Static JSON (Phase-1)
+  *(Later can be upgraded to CMS / DB)*
+
+---
+
+## 📂 REQUIRED FILE STRUCTURE
+
+```
+/src
+ ├── pages
+ │    └── Blogs.jsx   (or blogs.tsx if Next.js)
+ ├── components
+ │    ├── BlogCard.jsx
+ │    ├── VideoEmbed.jsx
+ │    └── SectionTitle.jsx
+ ├── data
+ │    └── blogs.json
+ └── styles
+      └── globals.css
+```
+
+---
+
+## 📄 BLOG DATA FORMAT (IMPORTANT)
+
+Create a file: `/data/blogs.json`
+
+Each blog entry should support **mixed content**:
+
+```json
+[
+  {
+    "id": 1,
+    "title": "How Disha Brooms Are Made",
+    "date": "2025-01-10",
+    "author": "Disha Traders",
+    "sections": [
+      {
+        "type": "text",
+        "content": "Disha Traders manufactures eco-friendly grass and coir brooms using traditional village methods..."
+      },
+      {
+        "type": "youtube",
+        "videoId": "YOUTUBE_VIDEO_ID"
+      },
+      {
+        "type": "text",
+        "content": "Our women-led workforce ensures quality, sustainability, and rural employment."
+      },
+      {
+        "type": "gdrive",
+        "embedUrl": "https://drive.google.com/file/d/FILE_ID/preview"
+      }
+    ]
+  }
+]
+```
+
+---
+
+## 🧠 PAGE BEHAVIOR LOGIC
+
+### Blogs Page (`/blogs`)
+
+* Display **blog cards** in a grid
+* Each card shows:
+
+  * Blog title
+  * Short excerpt
+  * Date
+  * “Read More” button
+
+### Blog Content Rendering
+
+* Loop through `sections[]`
+* Render based on type:
+
+  * `text` → `<p>`
+  * `youtube` → `<iframe>`
+  * `gdrive` → `<iframe>`
+
+---
+
+## 🎥 VIDEO EMBEDDING RULES
+
+### YouTube
+
+```html
+https://www.youtube.com/embed/VIDEO_ID
+```
+
+### Google Drive
+
+```html
+https://drive.google.com/file/d/FILE_ID/preview
+```
+
+* Videos must be:
+
+  * Responsive
+  * 16:9 aspect ratio
+  * Lazy loaded
+
+---
+
+## 🎨 UI / UX REQUIREMENTS
+
+* Clean MSME branding
+* Use **Tailwind**
+* Spacing optimized for reading
+* Soft shadows, rounded cards
+* Headings bold
+* Paragraphs readable (line-height ≥ 1.7)
+
+Example:
+
+* Title → `text-2xl font-bold`
+* Paragraph → `text-gray-700`
+* Cards → `rounded-xl shadow-md`
+
+---
+
+## 🔍 SEO REQUIREMENTS
+
+* Page title:
+  **“Blogs & Videos | Disha Brooms”**
+* Meta description
+* Semantic HTML (`article`, `section`, `h1–h3`)
+* Alt-friendly if images added later
+
+---
+
+## 🚀 DEPLOYMENT REQUIREMENTS
+
+* App must:
+
+  * Build without errors
+  * Be **Vercel-ready**
+  * No hardcoded localhost URLs
+* Use environment-safe imports
+* No server dependency
+
+---
+
+## 🔮 FUTURE READY (DO NOT BUILD NOW)
+
+* Admin panel for blog entry
+* CMS / DB support
+* Category filter
+* Search
+* Pagination
+
+---
+
+## ✅ FINAL EXPECTATION FROM REPLIT
+
+1. Fully working **/blogs** page
+2. JSON-driven content
+3. YouTube + Drive video playback
+4. Clean UI
+5. Production-ready code
+6. Easy to add new blogs by editing JSON
+
+---
+
+### ⚠️ IMPORTANT
+
+Do **NOT** over-engineer
+Do **NOT** add backend
+Do **NOT** add auth
+Focus on **content + speed + simplicity**
+
+ 
+
+

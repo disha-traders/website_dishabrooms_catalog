@@ -13,6 +13,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navItems = [
     { label: "Home", path: "/" },
     { label: "Products", path: "/products" },
+    { label: "Blogs", path: "/blogs" },
     { label: "About", path: "/about" },
     { label: "Contact", path: "/contact" },
   ];

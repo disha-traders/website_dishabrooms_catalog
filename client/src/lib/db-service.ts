@@ -1,10 +1,11 @@
 import { db } from "@/lib/firebase";
-import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, where, setDoc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy, where, setDoc, getDoc } from "firebase/firestore";
 import { Product, products as mockProducts, categories as defaultCategories } from "@/lib/products";
 
 // Local Storage Keys
 const LS_PRODUCTS = "disha_products";
 const LS_CATEGORIES = "disha_categories";
+const LS_BLOGS = "disha_blogs";
 
 // Types
 export interface Category {
@@ -12,6 +13,21 @@ export interface Category {
   name: string;
   description?: string;
   sortOrder: number;
+}
+
+export interface BlogSection {
+  type: 'text' | 'youtube' | 'gdrive';
+  content?: string;
+  videoId?: string;
+  embedUrl?: string;
+}
+
+export interface Blog {
+  id: string;
+  title: string;
+  date: string;
+  author: string;
+  sections: BlogSection[];
 }
 
 // Helper to check if Firebase is configured (simple check)
@@ -170,9 +186,13 @@ export const dbGetSettings = async (): Promise<any> => {
   
   if (isFirebaseAvailable()) {
     try {
-      const snapshot = await getDocs(collection(db, "settings")); // simplified fetch
-      // In real app, we fetch doc 'dishaTraders'
-      // For now, let's just return null or defaults if empty
+      const docRef = doc(db, "settings", "dishaTraders");
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        localStorage.setItem(LS_SETTINGS, JSON.stringify(data));
+        return data;
+      }
     } catch (e) {}
   }
   return null; // Let the component use its default config
@@ -189,5 +209,88 @@ export const dbSaveSettings = async (settings: any): Promise<void> => {
       // Silent fail on firebase is okay for prototype 
       console.warn("Firebase settings save failed", e);
     }
+  }
+};
+
+// --- BLOGS SERVICE ---
+
+export const dbGetBlogs = async (): Promise<Blog[]> => {
+  const localData = localStorage.getItem(LS_BLOGS);
+  
+  if (localData) {
+    return JSON.parse(localData);
+  }
+
+  if (isFirebaseAvailable()) {
+    try {
+      const q = query(collection(db, "blogs"), orderBy("date", "desc"));
+      const snapshot = await getDocs(q);
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Blog[];
+      
+      if (items.length > 0) {
+        localStorage.setItem(LS_BLOGS, JSON.stringify(items));
+        return items;
+      }
+    } catch (e) {
+      console.warn("Firebase fetch failed", e);
+    }
+  }
+
+  // Seed with default blog from requirements
+  const seededBlogs: Blog[] = [
+    {
+      "id": "1",
+      "title": "How Disha Brooms Are Made",
+      "date": "2025-01-10",
+      "author": "Disha Traders",
+      "sections": [
+        {
+          "type": "text",
+          "content": "Disha Traders manufactures eco-friendly grass and coir brooms using traditional village methods..."
+        },
+        {
+          "type": "text",
+          "content": "Our women-led workforce ensures quality, sustainability, and rural employment."
+        }
+      ]
+    }
+  ];
+  localStorage.setItem(LS_BLOGS, JSON.stringify(seededBlogs));
+  return seededBlogs;
+};
+
+export const dbGetBlogById = async (id: string): Promise<Blog | undefined> => {
+  const blogs = await dbGetBlogs();
+  return blogs.find(b => b.id === id);
+};
+
+export const dbSaveBlog = async (blog: Omit<Blog, "id">, id?: string): Promise<void> => {
+  const blogs = await dbGetBlogs();
+  
+  if (id) {
+    const updated = blogs.map(b => b.id === id ? { ...b, ...blog } : b);
+    localStorage.setItem(LS_BLOGS, JSON.stringify(updated));
+    
+    if (isFirebaseAvailable()) {
+      try { await updateDoc(doc(db, "blogs", id), blog); } catch (e) {}
+    }
+  } else {
+    const newBlog = { ...blog, id: `blog_${Date.now()}` };
+    const updated = [newBlog, ...blogs]; // Newest first
+    localStorage.setItem(LS_BLOGS, JSON.stringify(updated));
+    
+    if (isFirebaseAvailable()) {
+      try { await addDoc(collection(db, "blogs"), blog); } catch (e) {}
+    }
+  }
+};
+
+export const dbDeleteBlog = async (id: string): Promise<void> => {
+  const blogs = await dbGetBlogs();
+  const updated = blogs.filter(b => b.id !== id);
+  localStorage.setItem(LS_BLOGS, JSON.stringify(updated));
+  
+  if (isFirebaseAvailable()) {
+    try { await deleteDoc(doc(db, "blogs", id)); } catch (e) {}
   }
 };

@@ -4,6 +4,7 @@ import { AdminLayout } from "@/components/admin/admin-layout";
 import { ProductsTab } from "@/components/admin/products-tab";
 import { CategoriesTab } from "@/components/admin/categories-tab";
 import { SettingsTab, FirebaseSetupGuide } from "@/components/admin/settings-tab";
+import { BlogsTab } from "@/components/admin/blogs-tab";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -135,10 +136,16 @@ export default function Admin() {
             Categories
           </TabsTrigger>
           <TabsTrigger 
+            value="blogs" 
+            className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
+          >
+            Blogs
+          </TabsTrigger>
+          <TabsTrigger 
             value="settings"
             className="flex-1 sm:flex-none min-w-[120px] rounded-md px-4 py-2.5 font-medium text-sm transition-all data-[state=active]:bg-[#002147] data-[state=active]:text-white data-[state=active]:shadow-sm text-gray-600 hover:text-[#002147] hover:bg-gray-50"
           >
-            General Settings
+            Settings
           </TabsTrigger>
         </TabsList>
 
@@ -148,6 +155,10 @@ export default function Admin() {
 
         <TabsContent value="categories" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
           <CategoriesTab />
+        </TabsContent>
+
+        <TabsContent value="blogs" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
+          <BlogsTab />
         </TabsContent>
 
         <TabsContent value="settings" className="focus-visible:outline-none animate-in fade-in-50 duration-500 slide-in-from-bottom-2">
