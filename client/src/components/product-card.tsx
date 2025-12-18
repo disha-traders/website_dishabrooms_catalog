@@ -102,10 +102,10 @@ export function ProductCard({ product }: ProductCardProps) {
               href={config.social.shopOnlineLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 text-sm font-bold text-[#CD7F32] border border-[#CD7F32] rounded-lg py-2 hover:bg-[#CD7F32] hover:text-white transition-all duration-300"
+              className="flex items-center justify-center gap-2 text-xs font-bold text-[#CD7F32] border border-[#CD7F32] rounded-full py-2 hover:bg-[#CD7F32] hover:text-white transition-all duration-300"
             >
-              <ArrowUpRight size={16} />
-              <span>Shop</span>
+              <ArrowUpRight size={14} />
+              <span>Shop Online</span>
             </a>
           )}
            
@@ -113,10 +113,10 @@ export function ProductCard({ product }: ProductCardProps) {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className={`flex items-center justify-center gap-2 text-sm font-bold text-white bg-brand-cetacean rounded-lg py-2 hover:bg-brand-teal transition-all duration-300 ${!config.social.shopOnlineLink ? 'col-span-2' : ''}`}
+            className={`flex items-center justify-center gap-2 text-xs font-bold text-white bg-[#25D366] rounded-full py-2 hover:bg-[#128C7E] transition-all duration-300 ${!config.social.shopOnlineLink ? 'col-span-2' : ''}`}
           >
-            <MessageCircle size={16} />
-            <span>Enquire</span>
+            <MessageCircle size={14} />
+            <span>Enquire Now</span>
           </a>
         </div>
       </div>
