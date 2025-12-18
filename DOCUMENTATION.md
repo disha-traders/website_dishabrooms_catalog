@@ -575,7 +575,22 @@ Brushes → Filter by Brushes category
 - High resolution output
 - Mobile-friendly layout
 
-### 3. Contact System
+### 3. **Blog System (Magazine)**
+
+#### Public Interface
+- **Magazine Layout**: Features a "The Journal" header and a prominent "Featured Story" section for the latest post.
+- **Smart Cards**: Blog cards automatically detect YouTube videos and display high-res thumbnails with a "Watch Video" indicator.
+- **Reading Experience**: Immersive single-post view with distraction-free reading mode.
+
+#### Admin Editor
+- **Modern UI**: "Medium-style" content builder with sticky toolbar.
+- **Content Blocks**: 
+  - **Text**: Rich text areas with auto-expanding height.
+  - **YouTube**: Paste full URLs to get instant video previews.
+  - **Drive**: Embed Google Drive video links.
+- **Visual Feedback**: Color-coded sections (Red for YouTube, Blue for Drive) for easy scanning.
+
+### 4. Contact System
 
 #### Contact Form Validation
 

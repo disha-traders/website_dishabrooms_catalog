@@ -160,9 +160,10 @@
 - **Configurable**: Shop URL managed via Admin Panel.
 
 ### 3. **Blogs & Media System (NEW)**
-- **Content Management**: Create rich articles with text, YouTube videos, and Drive embeds.
-- **Public Blog**: Responsive grid layout for browsing latest updates.
-- **Admin Controls**: Full CRUD capabilities for blog posts.
+- **Magazine Style Layout**: Stunning digital magazine interface with featured stories and immersive reading experience.
+- **Rich Content Management**: Create articles with mixed media - Text blocks, YouTube videos, and Google Drive embeds.
+- **Smart YouTube Integration**: Automatically extracts high-res thumbnails from video links and displays "Watch Video" badges.
+- **Admin Controls**: Modern, drag-and-drop style editor with live previews.
 
 ### 4. **PDF Catalog Generation**
 - Download professional catalogs
