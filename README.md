@@ -159,11 +159,11 @@
 - **Product Cards**: Direct retail purchase link on every product.
 - **Configurable**: Shop URL managed via Admin Panel.
 
-### 3. **Blogs & Media System (NEW)**
+### 3. **Disha Magazine (NEW)**
 - **Magazine Style Layout**: Stunning digital magazine interface with featured stories and immersive reading experience.
 - **Rich Content Management**: Create articles with mixed media - Text blocks, YouTube videos, and Google Drive embeds.
-- **Smart YouTube Integration**: Automatically extracts high-res thumbnails from video links and displays "Watch Video" badges.
-- **Admin Controls**: Modern, drag-and-drop style editor with live previews.
+- **Category Management**: Dedicated stories for Manufacturing, Women Power, Sustainability, etc.
+- **Admin Controls**: Modern, drag-and-drop style editor with live previews and category dropdowns.
 
 ### 4. **PDF Catalog Generation**
 - Download professional catalogs
@@ -172,22 +172,23 @@
 - Professional header, hero image, and footer
 - Includes company contact details
 
-### 3. **Admin Dashboard**
+### 5. **Admin Dashboard**
 - **Login**: Password-protected access
 - **Products Tab**: Add, edit, delete products
+- **Magazine Tab**: Full blog management with rich text editor
 - **Categories Tab**: Manage product categories
 - **Settings Tab**: Configure company info, contact details, social links
 - **Firebase Integration**: Real-time data sync
 - **Offline Support**: Works with LocalStorage fallback
 
-### 4. **Contact System**
+### 6. **Contact System**
 - **WhatsApp Integration**: Direct WhatsApp chat button
 - **Email Integration**: Opens default mail client
 - **Form Validation**: Email, phone, message validation
 - **Dual Submission**: Choose WhatsApp or Email
 - **Success Feedback**: Confirmation message
 
-### 5. **Design Features**
+### 7. **Design Features**
 - **Peacock Theme**: Navy (#002147), Teal (#00A896), Bronze (#CD7F32)
 - **Mobile Responsive**: Works on all devices
 - **Smooth Animations**: Framer Motion transitions

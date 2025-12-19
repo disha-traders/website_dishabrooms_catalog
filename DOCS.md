@@ -225,7 +225,38 @@ Contact Form
 
 ---
 
-### 4. Admin Dashboard
+### 4. Disha Magazine (Blog)
+**File:** `client/src/pages/blogs.tsx` & `client/src/components/admin/blogs-tab.tsx`
+
+**Architecture:**
+- **Magazine Layout:** Editorial design with featured hero article and grid feed
+- **Rich Media Support:** Supports Text, YouTube Video, and Google Drive embeds
+- **Category System:** Manufacturing, Women Power, Sustainability, etc.
+- **Admin Editor:** Custom-built rich text editor with live block management
+
+**Data Model:**
+```typescript
+interface Blog {
+  id: string
+  title: string
+  date: string
+  author: string
+  category: string
+  readTime: string
+  sections: BlogSection[]
+}
+
+interface BlogSection {
+  type: 'text' | 'youtube' | 'gdrive'
+  content?: string
+  videoId?: string
+  embedUrl?: string
+}
+```
+
+---
+
+### 5. Admin Dashboard
 **File:** `client/src/pages/admin.tsx`
 
 **Security:**
@@ -233,7 +264,7 @@ Contact Form
 - LocalStorage session management
 - Admin password in environment variable
 
-**Three Main Tabs:**
+**Four Main Tabs:**
 
 #### Tab 1: Products Management
 - Display all products (CRUD operations)
@@ -243,13 +274,19 @@ Contact Form
 - Bulk CSV import
 - Product fields: Name, Code, Category, Price, Image URL, isActive, isFeatured, sortOrder
 
-#### Tab 2: Categories Management
-- List all categories
+#### Tab 2: Magazine Management (Blogs)
+- Full CMS capabilities
+- Create/Edit stories with rich media
+- Manage categories and metadata
+- Live preview cards
+
+#### Tab 3: Categories Management
+- List all product categories
 - Add new category
 - Delete category
 - Real-time updates to product filters
 
-#### Tab 3: Settings Management
+#### Tab 4: Settings Management
 - **Hero Section:** 5 editable titles with live preview
   - mainTitle
   - title2
@@ -266,11 +303,14 @@ Admin Page
 ├── Authentication Check
 │   ├── If not logged in: Show login form
 │   └── If logged in: Show dashboard
-├── Three Tabs:
+├── Four Tabs:
 │   ├── Products Tab
 │   │   ├── List products
 │   │   ├── CRUD operations
 │   │   └── CSV import
+│   ├── Magazine Tab
+│   │   ├── List stories
+│   │   └── Rich Text Editor
 │   ├── Categories Tab
 │   │   └── Manage categories
 │   └── Settings Tab
@@ -283,7 +323,7 @@ Admin Page
 
 ---
 
-### 5. Data Persistence Layer
+### 6. Data Persistence Layer
 **File:** `client/src/lib/db-service.ts`
 
 **Two-Tier Architecture:**
