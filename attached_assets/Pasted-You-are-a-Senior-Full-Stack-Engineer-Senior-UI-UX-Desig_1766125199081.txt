@@ -1,0 +1,121 @@
+You are a Senior Full-Stack Engineer, Senior UI/UX Designer, and Senior DevOps Engineer.
+
+OBJECTIVE
+Build and finalize a STATIC, production-ready website for dishabrooms.com (Disha Traders).
+This is NOT a Vite or React app. It must be a pure static website to avoid build failures.
+
+CRITICAL RULES
+- DO NOT use Vite, React, Next.js, or any build tool
+- DO NOT run npm build or vite build
+- DO NOT expect index.html inside any subfolder
+- The website must work by directly opening index.html
+
+PROJECT STRUCTURE (MANDATORY)
+/
+├── index.html            (ROOT – required)
+├── css/
+│   └── style.css
+├── js/
+│   └── main.js
+├── assets/
+│   ├── images/
+│   └── videos/
+├── blogs/
+│   ├── index.html        (Magazine blog listing)
+│   └── article.html     (Blog detail page)
+└── README.md
+
+DEPLOYMENT REQUIREMENTS
+- Must deploy on Vercel using "Other" framework
+- No build command
+- No output directory
+- Static serving only
+
+GLOBAL TYPOGRAPHY (VERY IMPORTANT)
+Apply ONE consistent font system across the entire website:
+
+Fonts:
+- Headings, Hero text, Buttons, Menu: Poppins
+- Body text, Paragraphs, Blog content: Inter
+
+Add Google Fonts in <head>:
+Poppins (300–800)
+Inter (300–600)
+
+Enforce fonts using global CSS (no browser defaults).
+
+HOMEPAGE REQUIREMENTS
+- Hero section similar to current dishabrooms.com
+- Large bold headline
+- CTA buttons:
+  - View Catalog
+  - WhatsApp Enquiry
+- Trust badges
+- Product highlight section
+- Clean premium layout
+
+BLOGS – MAGAZINE STYLE (MANDATORY)
+Design blogs like a professional online magazine (Forbes / Medium style):
+
+Blog Listing Page:
+- Featured hero article with large image
+- Category tabs:
+  All, Manufacturing, Women Power, Sustainability, Products, Videos
+- Editorial-style blog cards:
+  - Large thumbnail
+  - Category badge
+  - Bold headline
+  - Short excerpt
+  - Read time
+
+Blog Article Page:
+- Big hero image
+- Large title
+- Drop-cap first letter
+- Wide line spacing
+- Pull quotes
+- Inline images
+- End-of-article CTA:
+  “Shop Online” and “WhatsApp Enquiry”
+
+VIDEO BLOGS
+- Support embedded YouTube or Google Drive videos
+- Styled as magazine features
+
+SIDEBAR (DESKTOP)
+- Popular articles
+- Latest videos
+- Shop Online button
+- Enquiry CTA
+
+RESPONSIVENESS
+- Fully responsive (desktop, tablet, mobile)
+- Mobile-first layout
+- Touch-friendly buttons
+
+SEO
+- Semantic HTML
+- Proper headings
+- Meta tags
+- Fast loading
+- Clean URLs
+
+CODE QUALITY
+- Clean HTML5
+- Modular CSS
+- No inline styles
+- No unused files
+- Comment key sections
+
+ERROR PREVENTION (CRITICAL)
+- Ensure index.html exists at ROOT
+- Do not configure or reference Vite
+- Do not include vite.config.js
+- Do not include build scripts
+
+FINAL CHECKLIST
+- Website opens directly via index.html
+- No build step required
+- Fonts consistent everywhere
+- Blogs look like a magazine
+- Ready for Vercel static deployment

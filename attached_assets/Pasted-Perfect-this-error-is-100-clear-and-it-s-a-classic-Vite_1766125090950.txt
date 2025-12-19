@@ -1,0 +1,194 @@
+Perfect — this error is **100% clear**, and it’s a **classic Vite deployment mistake**.
+I’ll explain **why it’s happening** and give you **exact fixes (pick one)**.
+
+---
+
+# ❌ ERROR (Decoded Simply)
+
+```
+Could not resolve entry module "index.html"
+Error: Command "npx vite build" exited with 1
+```
+
+### What Vite is saying:
+
+👉 “I am trying to build a **Vite app**, but I cannot find `index.html` at the project root.”
+
+---
+
+## 🧠 WHY THIS IS HAPPENING (ROOT CAUSE)
+
+You have **Vite configured**, but your project is **NOT structured as a Vite app**.
+
+### Vite **REQUIRES**:
+
+```
+/index.html   ← MUST be at ROOT
+/src/main.js (or main.ts)
+```
+
+### Your project is likely:
+
+* Static website
+* OR catalog site
+* OR HTML files inside a subfolder
+* OR React code without Vite structure
+
+So when Vercel runs:
+
+```bash
+npx vite build
+```
+
+❌ it fails immediately.
+
+---
+
+# ✅ FIX OPTIONS (CHOOSE ONE — I RECOMMEND OPTION A)
+
+---
+
+## 🟢 OPTION A (RECOMMENDED): **This is a STATIC WEBSITE**
+
+👉 **DO NOT USE VITE AT ALL**
+
+### ✔ Best for:
+
+* Catalog website
+* Blogs
+* Company website
+* SEO pages
+
+### What to do:
+
+#### 1️⃣ Remove Vite config
+
+Delete (if exists):
+
+```
+vite.config.js
+package.json   (only if it exists just for Vite)
+node_modules
+```
+
+#### 2️⃣ Ensure this structure:
+
+```
+/
+├── index.html   ✅
+├── assets/
+├── images/
+├── css/
+├── js/
+```
+
+#### 3️⃣ In **Vercel → Project Settings**:
+
+* **Framework Preset:** `Other`
+* **Build Command:** ❌ leave EMPTY
+* **Output Directory:** ❌ leave EMPTY
+
+✅ Vercel will auto-serve `index.html`
+✅ No build step
+✅ No errors
+✅ Fastest & cleanest
+
+---
+
+## 🟡 OPTION B: **You WANT Vite (Proper Setup)**
+
+Then you MUST do this exactly.
+
+### Required structure:
+
+```
+/
+├── index.html   ✅ REQUIRED
+├── vite.config.js
+├── package.json
+├── src/
+│   └── main.js
+```
+
+### `index.html` (example):
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Disha Brooms</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
+```
+
+### `package.json`
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
+}
+```
+
+### Vercel settings:
+
+* **Framework:** Vite
+* **Build Command:** `npm run build`
+* **Output Directory:** `dist`
+
+⚠️ If `index.html` is missing → build WILL FAIL (what you’re seeing now)
+
+---
+
+## 🔴 OPTION C (QUICK PATCH — NOT IDEAL)
+
+If `index.html` exists but is in a folder like `/public`:
+
+Move it to:
+
+```
+/
+index.html
+```
+
+Vite **will not search subfolders** for entry.
+
+---
+
+# 🏆 SENIOR RECOMMENDATION (FOR DISHABROOMS)
+
+Given your use case:
+
+* Product catalog
+* Blogs (magazine style)
+* SEO
+* WhatsApp enquiry
+* PDF catalog
+
+👉 **OPTION A — STATIC SITE (NO VITE)**
+This avoids:
+
+* Build failures
+* CI confusion
+* Framework lock-in
+
+You do **NOT need Vite** for this website.
+
+---
+
+## ✅ WHAT TO DO RIGHT NOW (STEP-BY-STEP)
+
+Reply with **one word**, I’ll guide exact clicks:
+
+* **STATIC** → I’ll give exact Vercel + repo cleanup steps
+* **VITE** → I’ll fix structure & files for you
+
+You’re not stuck — this is a very normal issue 👍
