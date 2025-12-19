@@ -1,0 +1,115 @@
+You are a Senior DevOps Engineer and Senior Vite/Vercel Build Specialist.
+
+PROBLEM STATEMENT
+Vercel build is failing with the following error:
+
+Error:
+Could not resolve "/vercel/path0/vite.vercel.config.ts"
+Command "npx vite build -c vite.vercel.config.ts" exited with 1
+
+This indicates that the build pipeline is explicitly referencing a Vite config file
+(vite.vercel.config.ts) that DOES NOT EXIST in the repository.
+
+OBJECTIVE
+Fix the Vercel deployment so that:
+- Vite uses the correct config file
+- No non-existent config files are referenced
+- Build succeeds consistently
+- Admin Dashboard + React + Firebase architecture remains intact
+
+STRICT RULES
+- DO NOT introduce new Vite config files unless required
+- DO NOT reference vite.vercel.config.ts unless you create it
+- DO NOT convert this project to static-only
+- DO NOT remove React, Vite, Admin, or Firebase features
+
+DIAGNOSIS STEPS (MANDATORY)
+1. Inspect vercel.json (if present)
+2. Inspect Vercel build command references
+3. Inspect package.json scripts
+4. Inspect vite.config.ts
+5. Identify ANY reference to:
+   - vite.vercel.config.ts
+   - vite build -c <custom file>
+
+ROOT CAUSE TO CONFIRM
+The build command is incorrectly set to:
+  npx vite build -c vite.vercel.config.ts
+
+But the file does not exist.
+
+FIX STRATEGY (PRIMARY – PREFERRED)
+A. Remove ALL custom Vite config references
+B. Use default Vite config: vite.config.ts
+C. Use standard build command: npm run build
+
+REQUIRED FINAL CONFIGURATION
+
+1️⃣ vite.config.ts (root-level, REQUIRED)
+
+- Must exist
+- Must define correct root and output directory
+
+Use EXACTLY:
+
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  root: "client",
+  plugins: [react()],
+  build: {
+    outDir: "../dist",
+    emptyOutDir: true
+  }
+});
+
+2️⃣ package.json (root-level scripts)
+
+Ensure scripts are EXACTLY:
+
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+}
+
+NO "-c" flags.
+NO custom config references.
+
+3️⃣ vercel.json (if present)
+
+If vercel.json exists, it must be ONLY:
+
+{
+  "framework": "vite"
+}
+
+Remove:
+- buildCommand overrides
+- outputDirectory overrides
+- any reference to vite.vercel.config.ts
+
+4️⃣ Vercel Project Settings (IMPORTANT)
+
+Set:
+- Framework Preset: Vite
+- Build Command: npm run build
+- Output Directory: dist
+- Install Command: npm install
+
+Explicitly REMOVE:
+- npx vite build -c vite.vercel.config.ts
+
+VALIDATION CHECKLIST (MUST PASS)
+- client/index.html exists
+- vite.config.ts exists
+- dist/ folder generated after build
+- No references to vite.vercel.config.ts anywhere
+- npm run build succeeds locally and in Vercel
+
+FINAL OUTPUT
+- Clean commit with message:
+  "Fix Vite config and remove invalid Vercel build reference"
+- Successful Vercel deployment
+- Admin dashboard fully functional
