@@ -123,6 +123,9 @@ service cloud.firestore {
     match /categories/{document=**} {
       allow read: if true;
     }
+    match /blogs/{document=**} {
+      allow read: if true;
+    }
   }
 }
 ```
@@ -481,4 +484,4 @@ Verify meta tags present
 
 ---
 
-**Last Updated:** November 25, 2025
+**Last Updated:** December 19, 2025

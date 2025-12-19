@@ -733,6 +733,24 @@ Message        | 10+ characters    | "Min 10 characters required"
 - Description (optional)
 - Save button
 
+### Magazine (Blogs) Tab
+
+**Stories List:**
+- Magazine-style card preview
+- Edit/Delete actions
+- Featured image thumbnails
+- Video indicators
+
+**Story Editor:**
+- Title & Author fields
+- Category dropdown (Manufacturing, Women Power, etc.)
+- Read Time field
+- **Content Builder**:
+  - Add Text Blocks
+  - Add YouTube Videos (paste URL)
+  - Add Google Drive Videos
+- Live Preview in list view
+
 ### Settings Tab
 
 **Company Settings Form:**
@@ -1168,6 +1186,11 @@ const isValidMessage = (msg) => msg.trim().length >= 10
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.1.0 | 2025-12-19 | Magazine Update |
+| | | - Added "Disha Magazine" blog system |
+| | | - Admin blog management |
+| | | - Shop Online integration |
+| | | - UI Enhancements (Peacock theme) |
 | 1.0.0 | 2024-11-25 | Initial release |
 | | | - Complete product catalog |
 | | | - Admin dashboard with Firebase |
@@ -1205,6 +1228,6 @@ MIT License - See LICENSE file for details
 
 ---
 
-**Last Updated**: November 25, 2025
+**Last Updated**: December 19, 2025
 **Maintained By**: Disha Traders Development Team
-**Documentation Version**: 1.0.0
+**Documentation Version**: 1.1.0

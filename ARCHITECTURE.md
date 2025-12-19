@@ -49,6 +49,7 @@
 │  │  Firestore Database                              │ │
 │  │  ├── /products                                   │ │
 │  │  ├── /categories                                 │ │
+│  │  ├── /blogs                                      │ │
 │  │  └── /settings                                   │ │
 │  └────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────┘
@@ -99,6 +100,7 @@ Firebase Firestore
   ├── Collections
   │   ├── /products
   │   ├── /categories
+  │   ├── /blogs
   │   └── /settings
   │
   ├── Security Rules
@@ -237,6 +239,27 @@ Reset Form
 
 **Indexes:**
 - `sortOrder` - Display order
+
+#### `/blogs` Collection
+
+```javascript
+{
+  "blog_123": {
+    title: "How Village Women Power Disha...",
+    date: "2025-01-20",
+    author: "Priya Sharma",
+    category: "Women Power",
+    readTime: "6 min read",
+    sections: [
+      { type: "text", content: "..." },
+      { type: "youtube", videoId: "..." }
+    ]
+  }
+}
+```
+
+**Indexes:**
+- `date` - For sorting by newest first
 
 #### `/settings` Document
 
@@ -443,6 +466,11 @@ dbDeleteProduct(id): Promise<void>
 dbGetCategories(): Promise<Category[]>
 dbAddCategory(name): Promise<void>
 dbDeleteCategory(name): Promise<void>
+
+// Blogs
+dbGetBlogs(): Promise<Blog[]>
+dbSaveBlog(blog, id?): Promise<void>
+dbDeleteBlog(id): Promise<void>
 
 // Settings
 dbGetSettings(): Promise<Config>
