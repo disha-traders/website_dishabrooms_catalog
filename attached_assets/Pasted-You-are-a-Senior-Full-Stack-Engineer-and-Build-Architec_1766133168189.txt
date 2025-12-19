@@ -1,0 +1,80 @@
+You are a Senior Full-Stack Engineer and Build Architect.
+
+Before making any changes, analyze and clearly ANSWER the following questions
+about the current project. Do NOT refactor or modify code yet.
+
+=== ARCHITECTURE UNDERSTANDING ===
+
+1. Where is the TRUE application entry point?
+   - Is index.html at repo root or inside /client?
+   - Which file Vite actually uses as entry?
+
+2. Is this repository intended to be:
+   a) Public website only
+   b) Admin dashboard only
+   c) Combined public + admin app
+   d) Transitional / experimental setup
+
+3. What is the CURRENT Vite root?
+   - Is it configured via vite.config.ts?
+   - Or is Vercel assuming repo root?
+
+=== BUILD & DEPLOYMENT ===
+
+4. Why is Vercel running:
+   `npx vite build -c vite.vercel.config.ts`?
+   - Where is this command defined?
+   - vercel.json?
+   - Project settings?
+   - package.json?
+   - Replit config?
+
+5. Does `vite.vercel.config.ts` exist?
+   - If not, who referenced it and why?
+
+6. What is the expected build output?
+   - dist/
+   - build/
+   - client/dist/
+
+7. Is the admin dashboard REQUIRED in production
+   or can it be isolated to a subdomain?
+
+=== CODE OWNERSHIP & INTENT ===
+
+8. Which parts of the app are PUBLIC?
+   - Home
+   - Products
+   - Blogs
+
+9. Which parts are ADMIN-only?
+   - /admin route
+   - CRUD
+   - Firebase writes
+   - PDF generation
+
+10. Is Firebase meant to be:
+    - Required in production
+    - Optional (fallback to localStorage)
+    - Admin-only
+
+=== SAFETY & RISK ===
+
+11. What breaks if we:
+    a) Separate admin into another project
+    b) Keep admin and public together
+    c) Remove custom Vite configs
+
+12. Which files MUST NOT be deleted
+    because business logic depends on them?
+
+=== FINAL CONFIRMATION ===
+
+13. Based on current code,
+    which deployment model is SAFEST?
+
+    - Single repo, single Vercel project
+    - Two repos, two Vercel projects
+    - Public static + admin Vite app
+
+Answer clearly with reasoning for each.
